@@ -1,0 +1,15 @@
+Package: val
+Title: Validator for the BACPAC Minimum Data Set
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Vincent",
+           family = "Toups",
+           role = c("aut", "cre"),
+           email = "toups@email.unc.edu")
+Description: Given a specification of a set of valid data sets, build (and then execute) a validator on tabular dat.a
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+    pick a license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
