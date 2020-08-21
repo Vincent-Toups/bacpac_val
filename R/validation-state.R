@@ -1,17 +1,3 @@
-#' Create a single row check report.
-#'
-#' @param check_name - the name of the check performed
-#' @param pass - whether it passed
-#' @param message - a longer status description
-#' @param ... arguments with which to construct message as if with sprintf
-#' @return a single row tibble
-#' @export
-#' @examples
-#' check_report("all columns present",T,"All columns are present.")
-check_report <- function(check_name, pass, message, ...){
-    tibble(check_name=check_name, pass=pass, message=sprintf(message,...));
-}
-
 #' Create a new validation state
 #'
 #' @param data - the data set to validate
@@ -28,6 +14,20 @@ fresh_state <- function(data, rules, status="ok", messages=NULL, warnings=NULL){
     class(s) <- "validation-state";
 }
 
+#' Create a single row check report.
+#'
+#' @param check_name - the name of the check performed
+#' @param pass - whether it passed
+#' @param message - a longer status description
+#' @param ... arguments with which to construct message as if with sprintf
+#' @return a single row tibble
+#' @export
+#' @examples
+#' check_report("all columns present",T,"All columns are present.")
+check_report <- function(check_name, pass, message, ...){
+    tibble(check_name=check_name, pass=pass, message=sprintf(message,...));
+}
+
 #' Create a new validation state with values from a previous
 #'
 #' @param st - current state object
@@ -39,7 +39,7 @@ fresh_state <- function(data, rules, status="ok", messages=NULL, warnings=NULL){
 #' @return a validation state
 #' @export
 #' @examples
-#' fresh_state(data, rules);
+#' update_state(data, rules);
 update_state <- function(st, data=st$data, rules=st$rules, status=st$status, messages=st$messages, warnings=st$NULL){
     fresh_state(data, rules, status, messages, warnings);
 }
