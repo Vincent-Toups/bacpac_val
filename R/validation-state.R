@@ -1,7 +1,6 @@
 #' Create a new validation state
 #'
 #' @param data - the data set to validate
-#' @param rules - object containing the rules to apply
 #' @param status - the status of the validation - defaults to "ok"
 #' @param messages - data frame of messages about check status - defaults to empty
 #' @param warnings - data frame of misc messages produced during validation - defaults to empty
@@ -9,8 +8,8 @@
 #' @export
 #' @examples
 #' fresh_state(data, rules);
-fresh_state <- function(data, rules, status="ok", messages=NULL, warnings=NULL){
-    s <- list(status=status, messages=messages, warnings=warnings, data=data, rules=rules);
+fresh_state <- function(data, status="ok", messages=NULL, warnings=NULL){
+    s <- list(status=status, messages=messages, warnings=warnings, data=data);
     class(s) <- "validation-state";
 }
 
@@ -40,8 +39,8 @@ check_report <- function(check_name, pass, message, ...){
 #' @export
 #' @examples
 #' update_state(data, rules);
-update_state <- function(st, data=st$data, rules=st$rules, status=st$status, messages=st$messages, warnings=st$NULL){
-    fresh_state(data, rules, status, messages, warnings);
+update_state <- function(st, data=st$data, status=st$status, messages=st$messages, warnings=st$NULL){
+    fresh_state(data, status, messages, warnings);
 }
 
 #' Create a new validation state by updating it with new information and status
@@ -135,12 +134,12 @@ validation_chain <- function(...){
 
 #' Extract a list of domains from the rules
 #'
-#' @param validation_state object
+#' @param rules object
 #' @return the list of known domains
 #' @export
 #' @examples
 #' extract_domains(st)
-extract_domains <- function(state){
+extract_domains <- function(rules){
     domains <- state$rules$Datasets$Dataset;
     domains <- domains[!is.na(domains)];
     domains
