@@ -95,3 +95,4 @@ docs/
 
 # translation temp files
 po/*~
+.bash_history
