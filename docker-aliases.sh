@@ -3,8 +3,9 @@
 
 source secrets.sh
 
-alias bu='docker build . --build-arg linux_user_pwd=$RPW -t l1'
-alias dr='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it l1'
-alias r='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it l1 sudo -H -u rstudio /bin/bash -c "cd ~/; R"'
-alias b='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it l1 sudo -H -u rstudio /bin/bash -c "cd ~/; /bin/bash"'
-alias rss='docker run -p 8787:8787 -v `pwd`:/home/rstudio -e PASSWORD=$RPW -t l1'
+alias bu='docker build . --build-arg linux_user_pwd=$RPW -t val-dev'
+alias dr='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev'
+alias r='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev sudo -H -u rstudio /bin/bash -c "cd ~/; R"'
+alias b='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev sudo -H -u rstudio /bin/bash'
+alias build_package='docker run -v `pwd`:/home -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev sudo -H -u rstudio /bin/bash -c "cd ~/; R -e \"library(devtools); build();\""'
+alias rss='docker run -p 8787:8787 -v `pwd`:/home/rstudio -e PASSWORD=$RPW -t val-dev'
