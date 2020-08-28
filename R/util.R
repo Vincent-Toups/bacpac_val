@@ -72,3 +72,6 @@ all_true <- function(s){
     s %===% rep(T,length(s));
 }
 
+all.equal_tf <- function(a,b){
+    identical(T, all.equal(a,b));
+}

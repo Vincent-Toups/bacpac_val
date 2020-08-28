@@ -1,3 +1,5 @@
+library(tibble)
+
 #' Create a new validation state
 #'
 #' @param data - the data set to validate
@@ -11,6 +13,7 @@
 fresh_state <- function(data, status="ok", messages=NULL, warnings=NULL){
     s <- list(status=status, messages=messages, warnings=warnings, data=data);
     class(s) <- "validation-state";
+    s
 }
 
 #' Create a single row check report.
@@ -39,7 +42,7 @@ check_report <- function(check_name, pass, message, ...){
 #' @export
 #' @examples
 #' update_state(data, rules);
-update_state <- function(st, data=st$data, status=st$status, messages=st$messages, warnings=st$NULL){
+update_state <- function(st, data=st$data, status=st$status, messages=st$messages, warnings=st$warnings){
     fresh_state(data, status, messages, warnings);
 }
 
@@ -68,7 +71,7 @@ extend_state <- function(st, status, messages=NULL, warnings=NULL){
 #' @examples
 #' valid_status_p("ok")
 valid_status_p <- function(s){
-    return s %in% c("ok","continuable","halted");
+    s %in% c("ok","continuable","halted");
 }
 
 #' Test whether the status is continuable
@@ -95,9 +98,13 @@ combine_statuses <- function(sa, sb){
     stopifnot(valid_status_p(sa),
                valid_status_p(sb));
     terms <- c(sa,sb);
-    if("halted" %in% terms) "halted"
-    else if (all.equal(terms,c("ok","ok"))) "ok"
-    else "continuable";
+    if("halted" %in% terms) {
+        "halted"
+    } else if (all.equal_tf(terms,c("ok","ok"))) {
+        "ok"
+    } else {
+        "continuable"
+    };
 }
 
 #' Sequence a series of validation functions
@@ -118,9 +125,11 @@ validation_chain <- function(...){
     }
     fs <- list(...);
     n <- length(fs);
-    if(identical(n,0)) function(st) st
-    else(identical(n,1)) fs[[1]]
-    else {
+    if(identical(n,0)) {
+        function(st) { st }
+    } else if (identical(n,1)) {
+        fs[[1]]
+    } else {
         first <- fs[[1]];
         rst <- rest(fs);
         function(st){
@@ -132,15 +141,3 @@ validation_chain <- function(...){
     }
 }
 
-#' Extract a list of domains from the rules
-#'
-#' @param rules object
-#' @return the list of known domains
-#' @export
-#' @examples
-#' extract_domains(st)
-extract_domains <- function(rules){
-    domains <- state$rules$Datasets$Dataset;
-    domains <- domains[!is.na(domains)];
-    domains
-}
