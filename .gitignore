@@ -98,3 +98,4 @@ po/*~
 .bash_history
 .rstudio/*
 .local/*
+secrets.sh
