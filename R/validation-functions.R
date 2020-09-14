@@ -18,6 +18,30 @@ column_is_textual <- function(column){
     }
 }
 
+column_in_codelist<-function(column, codelist){
+    function(state){
+        the_col <- state$data[[column]];
+        the_col <- the_col[!is.na(the_col)]
+        check <- the_col %in% codelist
+        wrong <- the_col[!check] %>% distinct()
+        if(identical(sum(check), length(check))){
+            extend_state(state,
+                         "ok",
+                         check_report("Column elements in codelist",
+                                      T,
+                                      "The column %s is in the codelist.", column))
+        } else{
+            extend_state(state,
+                         "continuable",
+                         check_report("Column elements in codelist",
+                                      F,
+                                      "The column %s has values that are not in the codelist. These values were not in the codelist: (%s)", 
+                                      column, 
+                                      collapse_commas(wrong)))
+        }
+    }
+}
+
 check_domain_presence <- function(state){
     data <- state$data;
     if ("DOMAIN" %in% names(data)){
