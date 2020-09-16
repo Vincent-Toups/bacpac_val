@@ -23,7 +23,7 @@ column_in_codelist<-function(column, codelist){
         the_col <- state$data[[column]];
         the_col <- the_col[!is.na(the_col)]
         check <- the_col %in% codelist
-        wrong <- the_col[!check] %>% distinct()
+        wrong <- the_col[!check] %>% unique()
         if(identical(sum(check), length(check))){
             extend_state(state,
                          "ok",
