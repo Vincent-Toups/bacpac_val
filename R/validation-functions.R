@@ -18,6 +18,26 @@ column_is_textual <- function(column){
     }
 }
 
+column_is_numeric <- function(column){
+    s <- sprintf;
+    function(state){
+        the_col <- state$data[[column]];
+        if(class(the_col)=="numeric"){
+            extend_state(state,
+                         "ok",
+                         check_report("Column type is text",
+                                      T,
+                                      "The column %s is text", column))
+        } else {
+            extend_state(state,
+                         "continuable",
+                         check_report("Column type is text",
+                                      F,
+                                      "The column %s must be text but it appears to be %s instead.", column, class(the_col)));
+        }
+    }
+}
+
 column_in_codelist<-function(column, codelist){
     function(state){
         the_col <- state$data[[column]];
