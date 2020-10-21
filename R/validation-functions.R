@@ -38,6 +38,28 @@ column_is_numeric <- function(column){
     }
 }
 
+#Below function will not work with character columns; have to ensure column passed 'column_is_numeric' before feeding into this
+column_is_integer <- function(column){
+    s <- sprintf;
+    function(state){
+        the_col <- state$data[[column]];
+        test_vec <- the_col %% 1 == 0
+        if(FALSE %in% test_vec){
+            extend_state(state,
+                         "continuable",
+                         check_report("Column contains only integers",
+                                      F,
+                                      "The column %s can only contain integers but it has non-integer values instead.", column))
+        } else {
+            extend_state(state,
+                         "ok",
+                         check_report("Column contains only integers",
+                                      T,
+                                      "The column %s contains only integers", column));
+        }
+    }
+}
+
 column_in_codelist<-function(column, codelist){
     function(state){
         the_col <- state$data[[column]];

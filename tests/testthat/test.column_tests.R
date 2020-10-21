@@ -44,3 +44,9 @@ test_that("Test that the columns are numeric and the test function works.",
                              column_is_numeric("SEX")(dm_state)$status)
           })
 
+test_that("Test that the columns are integers and the test function works.",
+          {
+            expect_identical("ok",
+                             column_is_integer("AGE")(dm_state)$status)
+          })
+
