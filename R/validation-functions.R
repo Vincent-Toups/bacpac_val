@@ -60,6 +60,26 @@ column_is_integer <- function(column){
     }
 }
 
+column_is_float <- function(column){
+  s <- sprintf;
+  function(state){
+    the_col <- state$data[[column]];
+    if(typeof(the_col)=="double"){
+      extend_state(state,
+                   "ok",
+                   check_report("Column type is floating point",
+                                T,
+                                "The column %s is floating point", column))
+    } else {
+      extend_state(state,
+                   "continuable",
+                   check_report("Column type is floating point",
+                                F,
+                                "The column %s must be a floating point but it appears to be %s instead.", column, typeof(the_col)));
+    }
+  }
+}
+
 column_in_codelist<-function(column, codelist){
     function(state){
         the_col <- state$data[[column]];
