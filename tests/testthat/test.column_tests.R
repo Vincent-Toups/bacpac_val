@@ -17,6 +17,10 @@ test_dm <- block({
   read_csv(tempname);
 });
 
+#add a column to test_dm that is non-integer
+test_dm <- test_dm %>% 
+  mutate(non_integer_number=rnorm(150, 0, 1))
+
 ## test state functions are pure
 ## and thus we can reuse the fresh dm test state
 ## in all tests.
@@ -47,6 +51,8 @@ test_that("Test that the columns are numeric and the test function works.",
 test_that("Test that the columns are integers and the test function works.",
           {
             expect_identical("ok",
-                             column_is_integer("AGE")(dm_state)$status)
+                             column_is_integer("AGE")(dm_state)$status);
+            expect_identical("continuable",
+                             column_is_integer("non_integer_number")(dm_state)$status)
           })
 

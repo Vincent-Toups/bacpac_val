@@ -25,15 +25,15 @@ column_is_numeric <- function(column){
         if(class(the_col)=="numeric"){
             extend_state(state,
                          "ok",
-                         check_report("Column type is text",
+                         check_report("Column type is numeric",
                                       T,
-                                      "The column %s is text", column))
+                                      "The column %s is numeric", column))
         } else {
             extend_state(state,
                          "continuable",
-                         check_report("Column type is text",
+                         check_report("Column type is numeric",
                                       F,
-                                      "The column %s must be text but it appears to be %s instead.", column, class(the_col)));
+                                      "The column %s must be numeric but it appears to be %s instead.", column, class(the_col)));
         }
     }
 }
@@ -44,12 +44,15 @@ column_is_integer <- function(column){
     function(state){
         the_col <- state$data[[column]];
         test_vec <- the_col %% 1 == 0
+        falses <- which(test_vec==FALSE)
         if(FALSE %in% test_vec){
             extend_state(state,
                          "continuable",
                          check_report("Column contains only integers",
                                       F,
-                                      "The column %s can only contain integers but it has non-integer values instead.", column))
+                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indeces %s.", 
+                                      column,
+                                      falses))
         } else {
             extend_state(state,
                          "ok",
