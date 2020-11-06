@@ -14,7 +14,7 @@ context("Domain Validation Functions")
 test_dm <- block({
     tempname <- tempfile();
     write(test_data$DM, file=tempname);
-    read_csv(tempname);
+    val_read_csv(tempname);
 });
 
 ## test state functions are pure

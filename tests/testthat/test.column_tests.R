@@ -14,7 +14,7 @@ context("Column Validation Functions")
 test_dm <- block({
   tempname <- tempfile();
   write(test_data$DM, file=tempname);
-  read_csv(tempname);
+  val_read_csv(tempname);
 });
 
 #add a column to test_dm that is non-integer

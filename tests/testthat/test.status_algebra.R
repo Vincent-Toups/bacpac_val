@@ -13,7 +13,7 @@ context("Status Algebra")
 test_dm <- block({
     tempname <- tempfile();
     write(test_data$DM, file=tempname);
-    read_csv(tempname);
+    val_read_csv(tempname);
 });
 
 test_that("That our status algebra holds.",
