@@ -1,3 +1,20 @@
+library(dplyr);
+
+#' Load a data frame but keep both a parsed and unparsed version of each column (unparsed columns are preceeded in their name by "unparsed__")
+#'
+#' @param filename - file to load
+#' @return a data frame with twice the columns indicated in the file, half of which are unparsed duplicates.
+val_read_csv <- function(filename){
+    parsed <- read_csv(filename);
+    args <- list();
+    for(n in names(parsed)){
+        args[n] <- col_character();
+    }
+    unparsed <- read_csv(filename, col_types=do.call(cols, args))
+    names(unparsed) <- paste("unparsed__",names(unparsed),sep="");
+    cbind(parsed, unparsed);
+}
+
 collapse_commas <- function(s){
     paste(s,collapse=",");
 }
