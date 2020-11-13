@@ -1,5 +1,45 @@
 library(dplyr);
 
+#' Maps years to booleans indicating whether the year is a leap year
+#'
+#' @param year_number - numerical representation of the year
+#' @return T if year is a leap year, F otherwise
+leap_year <- function(year_number){
+    by_four <- year_number %% 4 == 0;
+    by_one_hundred <- year_number %% 100 == 0;
+    by_four_hundred <- year_number %% 400 == 0;
+    ly <- by_four & !by_one_hundred
+    ly[by_four_hundred] <- T;
+    ly
+}
+
+basic_month_map <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+
+#' Return the length of the given month for a given year
+#'
+#' @param month_number - the month as a number between inclusive 1 and 12
+#' @param year_number - the year
+#' @return the length of the given month
+month_len <- function(month_number, year_number){
+    basic <- basic_month_map[month_number];
+    basic[leap_year(year_number) & month_number == 2] <- 29;
+    basic    
+}
+
+#' maps vectors of year month day to booleans based on whether the day
+#' is valid for the given year and month.
+valid_day <- function(year, month, day){
+    day >= 1 & day <= month_len(month, year);
+}
+
+#' Return the unparsed column name for "name"
+#'
+#' @param name (or names)
+#' @return the unparsed name
+unparsed_column_name <- function(name){
+    paste("unparsed__",name,sep="");
+}
+
 #' Load a data frame but keep both a parsed and unparsed version of each column (unparsed columns are preceeded in their name by "unparsed__")
 #'
 #' @param filename - file to load
@@ -11,7 +51,7 @@ val_read_csv <- function(filename){
         args[n] <- col_character();
     }
     unparsed <- read_csv(filename, col_types=do.call(cols, args))
-    names(unparsed) <- paste("unparsed__",names(unparsed),sep="");
+    names(unparsed) <- unparsed_column_name(names(unparsed));
     cbind(parsed, unparsed);
 }
 
