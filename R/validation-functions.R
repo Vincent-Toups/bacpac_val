@@ -1,3 +1,67 @@
+column_is_iso8601_date <- function(column){
+    s <- sprintf;
+    p <- paste;
+    sp <- function(a,b){
+        paste(a,b,sep=" ");
+    }
+    function(state){
+        whichcc <- function(a){
+            which(a) %>% collapse_commas();
+        }
+        col <- state$data[[column]];
+        col_unparsed <- state$data[[unparsed_column_name(column)]];
+        simplified <- stringr::str_replace_all(col_unparsed,"-","");
+        year_str <-  simplified %>% stringr::str_sub(1,4);
+        simplified <- simplified %>% stringr::str_sub(5);
+        month_str <- simplified %>% stringr::str_sub(1,2);
+        simplified <- simplified %>% stringr::str_sub(3);
+        day_str <- simplified %>% stringr::str_sub(1,2);
+
+        year_len_checks <- stringr::str_length(year_str) == 4;
+        month_len_checks <- stringr::str_length(month_str) == 2;
+        day_len_checks <- stringr::str_length(day_str) == 2;
+
+        message <- if(all_true(year_len_checks)) "" else s("Incorrectly formatted years on rows %s.", whichcc(!year_str));
+        message <- if(all_true(month_len_checks))
+                   {
+                       message
+                   } else {
+                       sp(message, s("Incorrectly formatted months on rows %s.", whichcc(!month_len_checks)));
+                   };
+        message <- if(all_true(day_len_checks)){
+                       message
+                   } else {
+                       sp(message, s("Incorrectly formatted days on rows %s.", whichcc(!day_len_checks)));
+                   }
+        if(message %!==% ""){
+            return(extend_state(state,
+                                "continuable",
+                                check_report(s("Column %s is ISO8601 date compliant.", column),
+                                             F,
+                                             "There were these issues in %s: %s. Dates must be encoded per ISO8601 (YYYY-MM-DD or YYYYMMDD)", column, message)));
+        }
+        year <- as.numeric(year_str);
+        month <- as.numeric(month_str);
+        day <- as.numeric(day_str);
+
+        day_ok <- valid_day(year, month, day);
+
+        if(!all_true(day_ok)){
+            return(extend_state(state,
+                                "continuable",
+                                check_report(s("Column %s is ISO8601 date compliant.", column),
+                                             F,
+                                             "Some dates, while syntactically valid, encode invalid calendar dates. %s rows: %s", column, which(!day_ok))))
+        }
+        extend_state(state,
+                     "ok",
+                     check_report(s("Column %s is ISO8601 date compliant.", column),
+                                  T,
+                                  "All dates in %s are valid.", column));
+        
+    }
+}
+
 column_is_textual <- function(column){
     s <- sprintf;
     function(state){
