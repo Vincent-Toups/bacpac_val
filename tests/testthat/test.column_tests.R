@@ -56,6 +56,14 @@ test_that("Test that the columns are integers and the test function works.",
                              column_is_integer("non_integer_number")(dm_state)$status)
           })
 
+test_that("Test that the columns are float and the test function works.",
+          {
+            expect_identical("ok",
+                             column_is_integer("non_integer_number")(dm_state)$status);
+            expect_identical("continuable",
+                             column_is_integer("SEX")(dm_state)$status)
+          })
+
 test_that("Test that date columns are ok.",{
     expect_identical("ok",
                      column_is_iso8601_date("RFSTDTC")(dm_state)$status);
