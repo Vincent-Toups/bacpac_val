@@ -107,6 +107,55 @@ combine_statuses <- function(sa, sb){
     };
 }
 
+#' Get's the "pass" value of the last check performed
+#'
+#' @param state - the validation state object
+#' @param if_none - the result to pass back if there are no previous states
+#' @return the result of the last check
+#' @examples
+#' validation_last_check(state) -> T # when no checks performed or the last is T
+validation_last_check <- function(state,if_none=T){
+    df <- state$messages;
+    last <- nrow(df);
+    if(identical(last,0)){
+        if_none
+    } else {
+        df$pass[[last]];
+    }
+}
+
+validation_chain_builder <- function(short_circut_test){
+    function(...){
+        state_functions <- list(...);
+        if(identical(length(state_functions), 0)){
+                                        # return the identity function
+            function(state) state
+        } else {
+            function(state) {
+                for(sf in state_functions){
+                    state <- sf(state);
+                    if(short_circut_test(state)){
+                        break
+                    } 
+                }
+                state
+            }
+        }    
+    }
+}
+
+#' bailout_validation_chain - like validation_chain except evaluate
+#' short circuits on any failed check.
+#'
+#' @param ... - any number of validation functions to fuse together
+#' @return a new validation function which performs the checks in ... until one fails or halts.
+#' @examples
+#' bailout_validation_chain(c1,c2,c3) - c # if c2 fails c3 is never evaluated.
+bailout_validation_chain <- validation_chain_builder(short_circut_test=
+                                                         function(state) {
+                                                             identical(state$status,"halted") || identical(validation_last_check(state), F);
+                                                         });
+
 #' Sequence a series of validation functions
 #'
 #' @params ... 
@@ -114,30 +163,8 @@ combine_statuses <- function(sa, sb){
 #' @export
 #' @examples
 #' combine_statuses("ok","continuable") -> "continuable"
-validation_chain <- function(...){
-    rest <- function(lst){
-        ll <- length(lst);
-        if(ll==0 | ll==1) {
-            list();
-        } else {
-            lst[2:ll];
-        }
-    }
-    fs <- list(...);
-    n <- length(fs);
-    if(identical(n,0)) {
-        function(st) { st }
-    } else if (identical(n,1)) {
-        fs[[1]]
-    } else {
-        first <- fs[[1]];
-        rst <- rest(fs);
-        function(st){
-            stt <- first(st);
-            if(can_continue_p(stt)){
-                do.call(validation_chain,rst)(stt);
-            }
-        }
-    }
-}
+bailout_validation_chain <- validation_chain_builder(short_circut_test=
+                                                         function(state) {
+                                                             identical(state$status,"halted");
+                                                         });
 
