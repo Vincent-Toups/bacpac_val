@@ -62,6 +62,19 @@ column_is_iso8601_date <- function(column){
     }
 }
 
+column_exists <- function(column){
+    function(state){
+        ce <- ! is.null(state$data[[column]]);
+        extend_state(state,
+                     ifelse(ce,"ok","continuable"),
+                     check_report(sprintf("Column %s exists.", column),
+                                  ce,
+                                  ifelse(ce,"Column %s exists.",
+                                         "Column %s doesn't exist."),
+                                  column));
+    }
+}
+
 column_is_textual <- function(column){
     s <- sprintf;
     function(state){
@@ -79,6 +92,25 @@ column_is_textual <- function(column){
                                       F,
                                       "The column %s must be text but it appears to be %s instead.", column, class(the_col)));
         }
+    }
+}
+
+column_is_complete <- function(column){
+    s <- sprintf;
+    function(state){
+        the_col <- state$data[[column]];
+        nas <- is.na(the_col);
+        n_na <- sum(nas);
+        check <- identical(n_na, 0);
+        extend_state(state,
+                     ifelse(check,"ok","continuable"),
+                     check_report(sprintf("Column %s is complete.", column),
+                                  check,
+                                  ifelse(check,
+                                         sprintf("Column %s is complete.", column),
+                                         sprintf("Column %s had missing elements at these indices: %s",
+                                                 column,
+                                                 collapse_commas(which(nas))))));
     }
 }
 
@@ -124,6 +156,22 @@ column_is_integer <- function(column){
                                       "The column %s contains only integers", column));
         }
     }
+}
+
+column_in_integer_range <- function(column, values=c){
+    function(state){
+        check <- state$data[[column]] %in% values;
+        n_good <- sum(check);
+        n_bad <- sum(!check);
+        ok <- n_bad == 0;
+        extend_state(state,
+                     ifelse(ok, "ok", "continuable"),
+                     check_report(sprintf("Integer column draw from %s.", collapse_commas)(values),
+                                  ok,
+                                  ifelse(ok,"All values in the right range.".
+                                         sprintf("These columns were out of range %s.",
+                                                 collapse_commas(which(check))))));
+    }    
 }
 
 column_is_float <- function(column){
@@ -187,22 +235,31 @@ check_domain_presence <- function(state){
     }
 }
 
-check_domain_homogeneity <- function(state){
-    data <- state$data;
-    if(identical(length(unique(data$DOMAIN)),1)){
-        extend_state(state,
-                     "ok",
-                     check_report("DOMAIN column homogeneous.",
-                                  T,
-                                  "There is only one unique value in the DOMAIN column."))
-    } else {
-        extend_state(state,
-                     "halted",
-                     check_report("DOMAIN column homogeneous.",
-                                  F,
-                                  "DOMAIN column not homogenous. These values found: %s.", collapse_commas(unique(data$DOMAIN))))
+column_is_homogeneous <- function(column){
+    s <- sprintf;
+    function(state){
+        col <- state$data[[column]];
+        ucol <- unique(col);
+        nu <- length(ucol);
+        if(identical(nu==1)){
+            extend_state(state,
+                         "ok",
+                         check_report(s("%s column is homogeneous.", column),
+                                      T,
+                                      "%s column is homogeneous.", column));
+        } else {
+            extend_state(state,
+                         "continuable",
+                         check_report(s("%s column is homogeneous.", column),
+                                      F,
+                                      "%s column has %d unique elements (%s)",
+                                      nu,
+                                      collapse_commas(ucol)));
+        }
     }
 }
+
+check_domain_homogeneity <- column_is_homogeneous("DOMAIN");
 
 check_domain_known <- function(domains=unique(specification$Datasets$Dataset)){
     function(state){
