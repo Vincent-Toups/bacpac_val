@@ -1,5 +1,5 @@
 library(devtools);
-library(xlsx)
+library(readODS);
 library(tidyverse);
 
 pages <-
@@ -18,7 +18,7 @@ Documents","
 data <- list();
 
 for (page in pages){
-    data[[page]] <- read.xlsx("source_data/STDSPECS_MinimumDataset.xlsx", page) %>% as_tibble();
+    data[[page]] <- read_ods("source_data/STDSPECS_MinimumDataset.ods", page) %>% as_tibble();
 }
 
 specification <- data;
