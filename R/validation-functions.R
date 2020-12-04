@@ -280,3 +280,67 @@ mandatory_codelist_column <- function(col){
             column_is_complete(col),
             column_in_codelist(col));
 }
+
+validate_sc <- block({
+  
+  check_studyid <- block({
+    col <- "STUDYID";
+    bailout_validation_chain(
+      column_exists(col)
+      column_is_textual(col)
+      column_is_homogeneous(col)
+    )
+  });
+  
+  check_domain <- block({
+    col <- "DOMAIN";
+    bailout_validation_chain(
+      column_exists(col)
+      column_is_textual(col)
+      column_is_homogeneous(col)
+      check_domain_known(domains="SC")
+    )
+  });
+  
+  check_usubjid <- block({
+    col <- "USUBJID";
+    bailout_validation_chain(
+      column_exists(col)
+      column_is_textual(col)
+      column_is_complete(col)
+    )
+  });
+  
+  check_scseq <- block({
+    col <- "SCSEQ";
+    bailout_validation_chain(
+      column_exists(col)
+      column_is_numeric(col)
+      column_is_integer(col)
+      column_is_complete(col)
+    )
+  });
+  
+  check_sctestcd <- mandatory_codelist_column("SCTESTCD");
+  check_sctest <- mandatory_codelist_column("SCTEST");
+  
+  check_scmethod <- block({
+    col <- "SCMETHOD";
+    bailout_validation_chain(
+      column_exists(col)
+      column_is_textual(col)
+      column_in_codelist(col, (specification$Codelists %>% filter(ID=="METHOD")) %>% `[[`("Term"))
+    )
+  });
+  
+  #Other columns depend on codelists and where clause stuff, discussing on call 12/4
+  
+  validation_chain(check_studyid,
+                   check_domain,
+                   check_usubjid,
+                   check_scseq,
+                   check_sctestcd,
+                   check_sctest,
+                   check_scmethod)
+  
+})
