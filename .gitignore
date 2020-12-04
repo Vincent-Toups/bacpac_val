@@ -99,3 +99,5 @@ po/*~
 .rstudio/*
 .local/*
 secrets.sh
+
+.sudo_as_admin_successful
