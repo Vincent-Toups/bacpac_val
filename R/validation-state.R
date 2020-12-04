@@ -163,8 +163,8 @@ bailout_validation_chain <- validation_chain_builder(short_circut_test=
 #' @export
 #' @examples
 #' combine_statuses("ok","continuable") -> "continuable"
-bailout_validation_chain <- validation_chain_builder(short_circut_test=
-                                                         function(state) {
-                                                             identical(state$status,"halted");
-                                                         });
+validation_chain <- validation_chain_builder(short_circut_test=
+                                                 function(state) {
+                                                     identical(state$status,"halted");
+                                                 });
 
