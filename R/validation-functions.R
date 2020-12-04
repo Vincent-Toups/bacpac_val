@@ -194,7 +194,7 @@ column_is_float <- function(column){
   }
 }
 
-column_in_codelist<-function(column, codelist){
+column_in_codelist<-function(column, codelist=code_to_codelist(column)){
     function(state){
         the_col <- state$data[[column]];
         the_col <- the_col[!is.na(the_col)]
@@ -273,3 +273,10 @@ check_domain_known <- function(domains=unique(specification$Datasets$Dataset)){
     }
 }
 
+mandatory_codelist_column <- function(col){
+        bailout_validation_chain(
+            column_exists(col),
+            column_is_textual(col),
+            column_is_complete(col),
+            column_in_codelist(col));
+}
