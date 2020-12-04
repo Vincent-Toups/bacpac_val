@@ -55,6 +55,36 @@ val_read_csv <- function(filename){
     cbind(parsed, unparsed);
 }
 
+#' Returns the codelist (from the specification) for a given column id.
+#'
+#' @param column - the column ID to get the codelist for.
+#' @return a character array of code list values.
+column_to_codelist <- function(column){
+    sf <- specification$Codelists %>% filter(ID==column) %>% arrange(Order);
+    lst <- sf$Term;
+    if(identical(length(lst),0)){
+        stop(sprintf("Tried to get the codelist for %s but it was empty.", column))
+    } else {
+        lst;
+    }
+}
+
+#' Returns the codelist order (from the specification) for a given column id.
+#'
+#' @param column - the column ID to get the codelist for.
+#' @return a character array of code list values.
+column_to_codelist_order <- function(code){
+    sf <- specification$Codelists %>% filter(ID==code) %>% arrange(Order);
+    lst <- sf$Order;
+    if(identical(length(lst),0)){
+        stop(sprintf("Tried to get the codelist for %s but it was empty.", code))
+    } else {
+        lst;
+    }
+}
+
+
+
 collapse_commas <- function(s){
     paste(s,collapse=",");
 }
