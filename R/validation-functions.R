@@ -145,7 +145,7 @@ column_is_integer <- function(column){
                          "continuable",
                          check_report("Column contains only integers",
                                       F,
-                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indeces %s.", 
+                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indices %s.", 
                                       column,
                                       falses))
         } else {
@@ -286,8 +286,8 @@ validate_sc <- block({
   check_studyid <- block({
     col <- "STUDYID";
     bailout_validation_chain(
-      column_exists(col)
-      column_is_textual(col)
+      column_exists(col),
+      column_is_textual(col),
       column_is_homogeneous(col)
     )
   });
@@ -295,9 +295,9 @@ validate_sc <- block({
   check_domain <- block({
     col <- "DOMAIN";
     bailout_validation_chain(
-      column_exists(col)
-      column_is_textual(col)
-      column_is_homogeneous(col)
+      column_exists(col),
+      column_is_textual(col),
+      column_is_homogeneous(col),
       check_domain_known(domains="SC")
     )
   });
@@ -305,8 +305,8 @@ validate_sc <- block({
   check_usubjid <- block({
     col <- "USUBJID";
     bailout_validation_chain(
-      column_exists(col)
-      column_is_textual(col)
+      column_exists(col),
+      column_is_textual(col),
       column_is_complete(col)
     )
   });
@@ -314,9 +314,9 @@ validate_sc <- block({
   check_scseq <- block({
     col <- "SCSEQ";
     bailout_validation_chain(
-      column_exists(col)
-      column_is_numeric(col)
-      column_is_integer(col)
+      column_exists(col),
+      column_is_numeric(col),
+      column_is_integer(col),
       column_is_complete(col)
     )
   });
@@ -327,13 +327,22 @@ validate_sc <- block({
   check_scmethod <- block({
     col <- "SCMETHOD";
     bailout_validation_chain(
-      column_exists(col)
-      column_is_textual(col)
+      column_exists(col),
+      column_is_textual(col),
       column_in_codelist(col, (specification$Codelists %>% filter(ID=="METHOD")) %>% `[[`("Term"))
     )
   });
   
-  #Other columns depend on codelists and where clause stuff, discussing on call 12/4
+  #specification$sctestcd_codelists needs to be used for sctresc and sctresn
+  
+    check_sctresc <- block({
+    col <- "SCTRESC";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col)
+    )
+  })
+  
   
   validation_chain(check_studyid,
                    check_domain,

@@ -93,6 +93,25 @@ specification$qstestcd_codelists <- precalculate_question_codelists_and_types(sp
                                                                 specification$ValueLevel,
                                                                 specification$Codelists);
 
+#Below creates SC codelist similar to QS one above
+where <- specification$WhereClauses %>% 
+    filter(Variable=="SCTESTCD") %>%
+    rename(id=Value, clause=ID) %>% 
+    select(id, clause)
+
+#Create simplified value level dataset that show the codelist values
+values <- data[[4]] %>% 
+    rename(clause=`Where Clause`,
+           type=`Data Type`) %>% 
+    select(type, clause, Codelist)
+
+#Join these together
+specification$sctestcd_codelists <- where %>% 
+    left_join(values) %>% 
+    select(!clause) %>% 
+    rename(codelist=Codelist) %>% 
+    select(id, codelist, type)
+
 set_names <- c("DM","QSMD","SC");
 
 test_data <- list();
