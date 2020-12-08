@@ -596,6 +596,174 @@ validate_on_subsets <- function(validation_table, check_name=""){
 # QSDY
 # QSEVLNT
 
+validate_sc <- block({
+  
+  check_studyid <- block({
+    col <- "STUDYID";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col),
+      column_is_homogeneous(col)
+    )
+  });
+  
+  check_domain <- block({
+    col <- "DOMAIN";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col),
+      column_is_homogeneous(col),
+      check_domain_known(domains="SC")
+    )
+  });
+  
+  check_usubjid <- block({
+    col <- "USUBJID";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col),
+      column_is_complete(col)
+    )
+  });
+  
+  check_scseq <- block({
+    col <- "SCSEQ";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_numeric(col),
+      column_is_integer(col),
+      column_is_complete(col)
+    )
+  });
+  
+  check_sctestcd <- mandatory_codelist_column("SCTESTCD");
+  check_sctest <- mandatory_codelist_column("SCTEST");
+  
+  check_scmethod <- block({
+    col <- "SCMETHOD";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col),
+      column_in_codelist(col, (specification$Codelists %>% filter(ID=="METHOD")) %>% `[[`("Term"))
+    )
+  });
+  
+  #specification$sctestcd_codelists needs to be used for sctresc and sctresn
+  
+    check_sctresc <- block({
+    col <- "SCTRESC";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col)
+    )
+  })
+  
+  
+  validation_chain(check_studyid,
+                   check_domain,
+                   check_usubjid,
+                   check_scseq,
+                   check_sctestcd,
+                   check_sctest,
+                   check_scmethod)
+  
+})
+
+validate_dm <- block({
+  
+  check_studyid <- block({
+    col <- "STUDYID";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col),
+      column_is_homogeneous(col)
+    )
+  });
+  
+  check_domain <- block({
+    col <- "DOMAIN";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col),
+      column_is_homogeneous(col),
+      check_domain_known(domains='DM')
+    )
+  });
+  
+  check_usubjid <- block({
+    col <- "USUBJID";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col),
+      column_is_complete(col)
+    )
+  });
+  
+  check_rfstdtc <- block({
+    col <- "RFSTDTC";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_iso8601_date(col),
+      column_is_complete(col)
+    )
+  });
+  
+  check_rfpendtc <- block({
+    col <- "RFPENDTC";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_iso8601_date(col),
+      column_is_complete(col)
+    )
+  });
+  
+  check_brthdtc <- block({
+    col <- "BRTHDTC";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_iso8601_date(col),
+      column_is_complete(col)
+    )
+  });
+  
+  check_age <- block({
+    col <- "AGE";
+    range <- 0:120;
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_numeric(col),      
+      column_is_integer(col),
+      column_is_complete(col),
+      column_in_integer_range(col,range)
+    )
+  });
+  
+  check_sex  <- mandatory_codelist_column("SEX");
+  check_race <- mandatory_codelist_column("RACE");
+  
+  check_racemult <- block({
+    col <- "RACEMULT";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col)
+    )
+  });
+  
+  check_ethnic <- mandatory_codelist_column("ETHNIC");  
+  
+  validation_chain(check_studyid,
+                   check_domain,
+                   check_usubjid,
+                   check_rfstdtc,
+                   check_rfpendtc,
+                   check_brthdtc,
+                   check_age,
+                   check_sex,
+                   check_race,
+                   check_racemult,
+                   check_ethnic);  
+});
+
 validate_qsmd <- block({
     check_study_id <- block({
         col <- "STUDYID";
