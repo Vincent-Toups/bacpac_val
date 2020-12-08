@@ -168,7 +168,7 @@ column_in_integer_range <- function(column, values=c){
                      ifelse(ok, "ok", "continuable"),
                      check_report(sprintf("Integer column draw from %s.", collapse_commas)(values),
                                   ok,
-                                  ifelse(ok,"All values in the right range.".
+                                  ifelse(ok,"All values in the right range.",
                                          sprintf("These columns were out of range %s.",
                                                  collapse_commas(which(check))))));
     }    
@@ -217,6 +217,8 @@ column_in_codelist<-function(column, codelist=code_to_codelist(column)){
         }
     }
 }
+
+
 
 check_domain_presence <- function(state){
     data <- state$data;
@@ -279,6 +281,90 @@ mandatory_codelist_column <- function(col){
             column_is_textual(col),
             column_is_complete(col),
             column_in_codelist(col));
+}
+
+#' validate_on_subsets: accepts a table with N columns The first N-2
+#' columns are the same as column names from the data set and are used
+#' to split the data set into sub groups.
+#'
+#' The Nth column ('validation_function__')is a validation function to
+#' be applied to each matching subset. The Nth + 1 column indicates
+#' via a boolean 'required__' whether the validation function must be
+#' tested. If there is no required column it is assumed that all
+#' validation functions are required.
+#'
+#' The results are combined as if validation_chain. Furthermore, a
+#' final check confirms that each subset of the data has been
+#' validated by a validation function and that each validation
+#' function has operated on a subset if required. 
+#'
+#' 
+validate_on_subsets <- function(validation_table, check_name){
+    function(state){
+        if(is.null(validation_table$required__)){
+            validation_table$required__ <- rep(TRUE, nrow(validation_table));
+        }
+        ncol <- length(names(validation_table));
+        keys <- validation_table %>% select(1:(ncol-2));
+        if(is.null(validation_table$validation_function__)){
+            stop("Validate on subsets requires a table with a validation_function__ column in last or second to last position");
+        }
+        # join the validation table to the data table so we can easily
+        # access each validation function from the split we are about
+        # to perform
+        
+        data <- state$data %>% left_join(validation_table,by=all_of(names(keys)));
+        the_splits <- split(data, data %>% select(all_of(names(keys))));
+        print(sprintf("Split count %d", length(the_splits)));
+
+        # We want to track home many validation functions we actually
+        # use.  Since it might be an error for a validation function
+        # to be provided without being used.
+        usage_table <- list();
+        agg_keys <- validation_table %>% mutate(agg_key__ = paste(all_of(keys), collapse="..")) %>% `[[`("agg_key__");
+
+        ## we are going to just mutate the keys in this table.
+        usage_table[agg_keys] <- rep(FALSE, length(agg_keys));
+
+        
+        final_state <- Reduce(function(acc_state, sub_df){
+            agg_key <- sub_df %>%
+                mutate(agg_key__ = paste(all_of(keys), collapse="..")) %>%
+                `[[`("agg_key__") %>%
+                `[[`(1);            
+            validation_function <- sub_df$validation_function__[[1]];
+            if(validation_function) {
+                sub_data <- sub_df %>%
+                select(-validation_function__,-required__);
+                new_state <- combine_states(acc_state, validation_function(fresh_state(sub_data)));
+                print("new state")
+                usage_table[[agg_key]] <<- TRUE;
+                new_state
+            } else {
+                state
+            }            
+        }, the_splits,
+        init=state);
+
+        ## now we want to check that every validation function which
+        ## is required was actually applied.
+
+        unused_count <- validation_table %>%
+            mutate(used__=unname(usage_table) %>%
+                       unlist()) %>%
+            select(required__, used__) %>%
+            filter(required__==TRUE & used__ == FALSE) %>%
+            nrow();
+
+        unused_count_check <- unused_count == 0;
+
+        extend_state(final_state,
+                     ifelse(unused_count_check, "ok","continuable"),
+                     check_report(check_report,
+                                  unused_count_check,
+                                  ifelse(unused_count_check, "All required checks were applied.",
+                                         "Not all required checks were applied.")));
+    }
 }
 
 validate_sc <- block({
@@ -448,3 +534,74 @@ validate_dm <- block({
                    check_racemult,
                    check_ethnic);  
 });
+
+
+# STUDYID - 
+# DOMAIN
+# USUBJID
+# QSSEQ
+# QSCAT
+# QSSCAT
+# QSTESTCD
+# QSTEST
+# QSSTRESC
+# QSSTRESN
+# QSDRVFL
+# VISITNUM
+# VISIT
+# QSDTC
+# QSDY
+# QSEVLNT
+
+## validate_qsmd <- block({
+##     check_study_id <- block({
+##         col <- "STUDYID";
+##         bailout_validation_chain(
+##             column_exists(col),
+##             column_is_textual(col),
+##             column_is_homogeneous(col))
+##     });
+
+##     check_domain <- block({
+##         col <- "DOMAIN";
+##         bailout_validation_chain(
+##             column_exists(col),
+##             column_is_textual(col),
+##             column_is_homogeneous(col),
+##             check_domain_known(domains='QSMD'))
+##     });
+
+##     check_usubjid <- block({
+##         col <- "USUBJID";
+##         bailout_validation_chain(
+##             column_exists(col),
+##             column_is_textual(col),
+##             column_is_complete(col)
+##         )
+##     });
+
+##     check_qsseq <- block({
+##         col <- "QSSEQ";
+##         bailout_validation_chain(
+##             column_exists(col),
+##             column_is_integer(col),
+##             column_is_complete(col)
+##         )
+##     });
+
+
+##     check_qscat <- mandatory_codelist_column("QSCAT");
+##     check_qstestcd <- mandatory_codelist_column("QSTESTCD");
+##     check_qstest <- mandatory_codelist_column("QSTEST");
+    
+##     validation_chain(
+##         check_study_id,
+##         check_domain,
+##         check_usubjid,
+##         check_qsseq,
+##         check_qscat,
+##         check_qstestcd,
+##         check_qstest);
+## });
+
+

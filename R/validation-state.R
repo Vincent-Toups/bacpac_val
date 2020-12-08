@@ -9,7 +9,7 @@ library(tibble)
 #' @return a validation state
 #' @export
 #' @examples
-#' fresh_state(data, rules);
+#' fresh_state(data, status, messages, warnings)
 fresh_state <- function(data, status="ok", messages=NULL, warnings=NULL){
     s <- list(status=status, messages=messages, warnings=warnings, data=data);
     class(s) <- "validation-state";
@@ -105,6 +105,22 @@ combine_statuses <- function(sa, sb){
     } else {
         "continuable"
     };
+}
+
+#' Combine two states by merging their status as in combine_statuses
+#' and concatenating the tl checks and warnings onto the messages and
+#' checks in the hd object.
+#'
+#' The data attribute of the hd state is kept.
+#' @param hd the state to base the combination on
+#' @param tl the state to concatenate onto the hd
+#' @return a combined state object
+#' combine_states(hd, tl) #-> new_state
+combine_states <- function(hd, tl){
+    extend_state(hd,
+                 status=tl$status,
+                 messages=tl$messages,
+                 warnings=tl$warnings);
 }
 
 #' Get's the "pass" value of the last check performed

@@ -52,7 +52,7 @@ val_read_csv <- function(filename){
     }
     unparsed <- read_csv(filename, col_types=do.call(cols, args))
     names(unparsed) <- unparsed_column_name(names(unparsed));
-    cbind(parsed, unparsed);
+    cbind(parsed, unparsed) %>% mutate(index__=seq(nrow(parsed)));
 }
 
 #' Returns the codelist (from the specification) for a given column id.
