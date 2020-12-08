@@ -145,7 +145,7 @@ column_is_integer <- function(column){
                          "continuable",
                          check_report("Column contains only integers",
                                       F,
-                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indices %s.", 
+                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indeces %s.", 
                                       column,
                                       falses))
         } else {
@@ -299,10 +299,10 @@ mandatory_codelist_column <- function(col){
 #' function has operated on a subset if required. 
 #'
 #' 
-validate_on_subsets <- function(validation_table, check_name){
+validate_on_subsets <- function(validation_table, check_name=""){
     function(state){
         if(is.null(validation_table$required__)){
-            validation_table$required__ <- rep(TRUE, nrow(validation_table));
+            validation_table$required__ <- rep(FALSE, nrow(validation_table));
         }
         ncol <- length(names(validation_table));
         keys <- validation_table %>% select(1:(ncol-2));
@@ -333,11 +333,10 @@ validate_on_subsets <- function(validation_table, check_name){
                 `[[`("agg_key__") %>%
                 `[[`(1);            
             validation_function <- sub_df$validation_function__[[1]];
-            if(validation_function) {
+            if(!is.null(validation_function)) {
                 sub_data <- sub_df %>%
                 select(-validation_function__,-required__);
                 new_state <- combine_states(acc_state, validation_function(fresh_state(sub_data)));
-                print("new state")
                 usage_table[[agg_key]] <<- TRUE;
                 new_state
             } else {
@@ -358,183 +357,16 @@ validate_on_subsets <- function(validation_table, check_name){
 
         unused_count_check <- unused_count == 0;
 
-        extend_state(final_state,
-                     ifelse(unused_count_check, "ok","continuable"),
-                     check_report(check_report,
-                                  unused_count_check,
-                                  ifelse(unused_count_check, "All required checks were applied.",
-                                         "Not all required checks were applied.")));
+        final_state
+        ## extend_state(final_state,
+        ##              ifelse(unused_count_check, "ok","continuable"),
+        ##              check_report(check_name,
+        ##                           unused_count_check,
+        ##                           ifelse(unused_count_check, "All required checks were applied.",
+        ##                                  "Not all required checks were applied.")))
+        ;
     }
 }
-
-validate_sc <- block({
-  
-  check_studyid <- block({
-    col <- "STUDYID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col)
-    )
-  });
-  
-  check_domain <- block({
-    col <- "DOMAIN";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col),
-      check_domain_known(domains="SC")
-    )
-  });
-  
-  check_usubjid <- block({
-    col <- "USUBJID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_scseq <- block({
-    col <- "SCSEQ";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_numeric(col),
-      column_is_integer(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_sctestcd <- mandatory_codelist_column("SCTESTCD");
-  check_sctest <- mandatory_codelist_column("SCTEST");
-  
-  check_scmethod <- block({
-    col <- "SCMETHOD";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_in_codelist(col, (specification$Codelists %>% filter(ID=="METHOD")) %>% `[[`("Term"))
-    )
-  });
-  
-  #specification$sctestcd_codelists needs to be used for sctresc and sctresn
-  
-    check_sctresc <- block({
-    col <- "SCTRESC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-    )
-  })
-  
-  
-  validation_chain(check_studyid,
-                   check_domain,
-                   check_usubjid,
-                   check_scseq,
-                   check_sctestcd,
-                   check_sctest,
-                   check_scmethod)
-  
-})
-
-validate_dm <- block({
-  
-  check_studyid <- block({
-    col <- "STUDYID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col)
-    )
-  });
-  
-  check_domain <- block({
-    col <- "DOMAIN";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col),
-      check_domain_known(domains='DM')
-    )
-  });
-  
-  check_usubjid <- block({
-    col <- "USUBJID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_rfstdtc <- block({
-    col <- "RFSTDTC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_iso8601_date(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_rfpendtc <- block({
-    col <- "RFPENDTC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_iso8601_date(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_brthdtc <- block({
-    col <- "BRTHDTC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_iso8601_date(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_age <- block({
-    col <- "AGE";
-    range <- 0:120;
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_numeric(col),      
-      column_is_integer(col),
-      column_is_complete(col),
-      column_in_integer_range(col,range)
-    )
-  });
-  
-  check_sex  <- mandatory_codelist_column("SEX");
-  check_race <- mandatory_codelist_column("RACE");
-  
-  check_racemult <- block({
-    col <- "RACEMULT";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-    )
-  });
-  
-  check_ethnic <- mandatory_codelist_column("ETHNIC");  
-  
-  validation_chain(check_studyid,
-                   check_domain,
-                   check_usubjid,
-                   check_rfstdtc,
-                   check_rfpendtc,
-                   check_brthdtc,
-                   check_age,
-                   check_sex,
-                   check_race,
-                   check_racemult,
-                   check_ethnic);  
-});
-
 
 # STUDYID - 
 # DOMAIN
@@ -553,55 +385,54 @@ validate_dm <- block({
 # QSDY
 # QSEVLNT
 
-## validate_qsmd <- block({
-##     check_study_id <- block({
-##         col <- "STUDYID";
-##         bailout_validation_chain(
-##             column_exists(col),
-##             column_is_textual(col),
-##             column_is_homogeneous(col))
-##     });
+validate_qsmd <- block({
+    check_study_id <- block({
+        col <- "STUDYID";
+        bailout_validation_chain(
+            column_exists(col),
+            column_is_textual(col),
+            column_is_homogeneous(col))
+    });
 
-##     check_domain <- block({
-##         col <- "DOMAIN";
-##         bailout_validation_chain(
-##             column_exists(col),
-##             column_is_textual(col),
-##             column_is_homogeneous(col),
-##             check_domain_known(domains='QSMD'))
-##     });
+    check_domain <- block({
+        col <- "DOMAIN";
+        bailout_validation_chain(
+            column_exists(col),
+            column_is_textual(col),
+            column_is_homogeneous(col),
+            check_domain_known(domains='QSMD'))
+    });
 
-##     check_usubjid <- block({
-##         col <- "USUBJID";
-##         bailout_validation_chain(
-##             column_exists(col),
-##             column_is_textual(col),
-##             column_is_complete(col)
-##         )
-##     });
+    check_usubjid <- block({
+        col <- "USUBJID";
+        bailout_validation_chain(
+            column_exists(col),
+            column_is_textual(col),
+            column_is_complete(col)
+        )
+    });
 
-##     check_qsseq <- block({
-##         col <- "QSSEQ";
-##         bailout_validation_chain(
-##             column_exists(col),
-##             column_is_integer(col),
-##             column_is_complete(col)
-##         )
-##     });
+    check_qsseq <- block({
+        col <- "QSSEQ";
+        bailout_validation_chain(
+            column_exists(col),
+            column_is_integer(col),
+            column_is_complete(col)
+        )
+    });
 
 
-##     check_qscat <- mandatory_codelist_column("QSCAT");
-##     check_qstestcd <- mandatory_codelist_column("QSTESTCD");
-##     check_qstest <- mandatory_codelist_column("QSTEST");
+    check_qscat <- mandatory_codelist_column("QSCAT");
+    check_qstestcd <- mandatory_codelist_column("QSTESTCD");
+    check_qstest <- mandatory_codelist_column("QSTEST");
     
-##     validation_chain(
-##         check_study_id,
-##         check_domain,
-##         check_usubjid,
-##         check_qsseq,
-##         check_qscat,
-##         check_qstestcd,
-##         check_qstest);
-## });
-
+    validation_chain(
+        check_study_id,
+        check_domain,
+        check_usubjid,
+        check_qsseq,
+        check_qscat,
+        check_qstestcd,
+        check_qstest);
+});
 
