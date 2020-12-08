@@ -6,7 +6,12 @@ Authors@R:
            family = "Toups",
            role = c("aut", "cre"),
            email = "toups@email.unc.edu")
-Description: Given a specification of a set of valid data sets, build (and then execute) a validator on tabular dat.a
+Description: Given a specification of a set of valid data sets, build (and then execute) a validator on tabular data.
+Collate:
+    'rules.R'
+    'util.R'
+    'validation-state.R'
+    'validation-functions.R'
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
