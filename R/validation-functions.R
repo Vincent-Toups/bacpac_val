@@ -241,7 +241,7 @@ column_is_homogeneous <- function(column){
         col <- state$data[[column]];
         ucol <- unique(col);
         nu <- length(ucol);
-        if(identical(nu, 1)){
+        if(identical(nu, 1L)){
             extend_state(state,
                          "ok",
                          check_report(s("%s column is homogeneous.", column),
