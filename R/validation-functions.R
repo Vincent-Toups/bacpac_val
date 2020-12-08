@@ -324,25 +324,63 @@ validate_sc <- block({
   check_sctestcd <- mandatory_codelist_column("SCTESTCD");
   check_sctest <- mandatory_codelist_column("SCTEST");
   
+  #specification$sctestcd_codelists needs to be used for sctresc and sctresn, scmethod, scsorres, scsorresu, sctresu 
+  
   check_scmethod <- block({
     col <- "SCMETHOD";
     bailout_validation_chain(
       column_exists(col),
-      column_is_textual(col),
-      column_in_codelist(col, (specification$Codelists %>% filter(ID=="METHOD")) %>% `[[`("Term"))
+      column_is_textual(col)
+      #function using codelist referencing SCTESTCD here
     )
   });
   
-  #specification$sctestcd_codelists needs to be used for sctresc and sctresn
+  check_scorres <- block({
+    col <- "SCORRES";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col)
+      #function using codelist referencing SCTESTCD here
+    )
+  });
   
-    check_sctresc <- block({
+  check_scorresu <- block({
+    col <- "SCORRESU";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col)
+      #function using codelist referencing SCTESTCD here
+    )
+  });
+  
+  check_sctresc <- block({
     col <- "SCTRESC";
     bailout_validation_chain(
       column_exists(col),
       column_is_textual(col)
+      #function using codelist referencing SCTESTCD here
     )
-  })
+  });
   
+  check_sctresn <- block({
+    col <- "SCTRESN";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_numeric(col),
+      column_is_float(col)
+      #function using codelist referencing SCTESTCD here
+      )
+    });
+   
+  check_sctresu <- block({
+    col <- "SCTRESU";
+    bailout_validation_chain(
+      column_exists(col),
+      column_is_textual(col)
+      #function using codelist referencing SCTESTCD here
+     )
+   });
+    
   
   validation_chain(check_studyid,
                    check_domain,
@@ -350,7 +388,12 @@ validate_sc <- block({
                    check_scseq,
                    check_sctestcd,
                    check_sctest,
-                   check_scmethod)
+                   check_scmethod,
+                   check_scorres,
+                   check_scorresu,
+                   check_sctresc,
+                   check_sctresn,
+                   check_sctresu)
   
 })
 
