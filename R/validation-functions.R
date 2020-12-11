@@ -194,6 +194,40 @@ column_is_float <- function(column){
   }
 }
 
+#' column_covers_codelist - Returns a state function which checks
+#' whether each value in the codelist appears at least once in the column.
+#'
+#' @param column - the column to check
+#' @param codelist - the codelist to check - defaults to the codelist
+#'     implied by the column
+#' @param warn_only - when TRUE (default) only add a warning.
+#' @return the state function which performs the check
+column_covers_codelist <- function(column, codelist=code_to_codelist(column), warn_only=TRUE){
+    function(state){
+        unique_values < state$data[[column]] %>% unique();
+        checks <- codelist %in% unique_values;
+        check <- sum(checks) == length(codelist);
+        missing_values <- codelist[!checks];
+        ifelse(warn_only,
+               extend_state(state,
+                            "ok",
+                            warnings=sprintf("Not ever value in the codelist for column %s appears in the column.", column)),
+               extend_state(state,
+                            ifelse(check,"ok","continuable"),
+                            check_report(sprintf("Column %s covers codelist", column),
+                                         check,
+                                         ifelse(check, sprintf("Column %s covers codelist.", column),
+                                                sprintf("Column %s does not cover the entire codelist. These codelist values are missing: %s",
+                                                        column, collapse_commas(missing_values))))));
+    }
+}
+
+#' column_in_codelist - returns a state function which checks whether
+#' a column's values are all in a given codelistq
+#'
+#' @param column - the column to check
+#' @param codelist - the codelist to check against (defaults to the codelist implied by the column)
+#' @return a state function to perform the check
 column_in_codelist<-function(column, codelist=code_to_codelist(column)){
     function(state){
         the_col <- state$data[[column]];
