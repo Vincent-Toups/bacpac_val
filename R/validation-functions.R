@@ -317,216 +317,137 @@ mandatory_codelist_column <- function(col){
             column_in_codelist(col));
 }
 
-validate_sc <- block({
-  
-  check_studyid <- block({
-    col <- "STUDYID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col)
-    )
-  });
-  
-  check_domain <- block({
-    col <- "DOMAIN";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col),
-      check_domain_known(domains="SC")
-    )
-  });
-  
-  check_usubjid <- block({
-    col <- "USUBJID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_scseq <- block({
-    col <- "SCSEQ";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_numeric(col),
-      column_is_integer(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_sctestcd <- mandatory_codelist_column("SCTESTCD");
-  check_sctest <- mandatory_codelist_column("SCTEST");
-  
-  #specification$sctestcd_codelists needs to be used for sctresc and sctresn, scmethod, scsorres, scsorresu, sctresu 
-  
-  check_scmethod <- block({
-    col <- "SCMETHOD";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-      #function using codelist referencing SCTESTCD here
-    )
-  });
-  
-  check_scorres <- block({
-    col <- "SCORRES";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-      #function using codelist referencing SCTESTCD here
-    )
-  });
-  
-  check_scorresu <- block({
-    col <- "SCORRESU";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-      #function using codelist referencing SCTESTCD here
-    )
-  });
-  
-  check_sctresc <- block({
-    col <- "SCTRESC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-      #function using codelist referencing SCTESTCD here
-    )
-  });
-  
-  check_sctresn <- block({
-    col <- "SCTRESN";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_numeric(col),
-      column_is_float(col)
-      #function using codelist referencing SCTESTCD here
-      )
-    });
-   
-  check_sctresu <- block({
-    col <- "SCTRESU";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-      #function using codelist referencing SCTESTCD here
-     )
-   });
-    
-  
-  validation_chain(check_studyid,
-                   check_domain,
-                   check_usubjid,
-                   check_scseq,
-                   check_sctestcd,
-                   check_sctest,
-                   check_scmethod,
-                   check_scorres,
-                   check_scorresu,
-                   check_sctresc,
-                   check_sctresn,
-                   check_sctresu)
-  
-})
+#' build_subset_key_info given a validation_table return a useful
+#' breakdown of information therein.
+#'
+#' @param validation_table - a table with N+2 (or N+1) columns. The
+#'     first N are columns in a data set whose values form unique keys
+#'     which map rows of the data set to a validation function. The
+#'     next column (validation_function__) is the validation function
+#'     to apply to the subset. The last (optional column) indicates
+#'     whether the validation is required.
+#' @return a list containing a table with just the keys, a character
+#'     array of key names, and a list of key summaries - a string
+#'     containing a text description of each column and its value. It
+#'     also returns a validation_table which includes the optional
+#'     required__ column, set to all FALSE if it was missing.
+#' 
+build_subset_key_info <- function(validation_table){
+    if(column_missing(validation_table, "required__")){
+        validation_table$required__ <- rep(FALSE, nrow(validation_table));
+    }
+    ncol <- length(names(validation_table));
+    keys <- validation_table %>%
+        select(1:(ncol-2));
+    key_names <- names(keys);
+    key_summaries <- summarize_column_values(keys, key_names);
+    list(validation_table=validation_table,
+         key_names=key_names,
+         key_summaries=key_summaries);
+}
 
-validate_dm <- block({
-  
-  check_studyid <- block({
-    col <- "STUDYID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col)
-    )
-  });
-  
-  check_domain <- block({
-    col <- "DOMAIN";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_homogeneous(col),
-      check_domain_known(domains='DM')
-    )
-  });
-  
-  check_usubjid <- block({
-    col <- "USUBJID";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_rfstdtc <- block({
-    col <- "RFSTDTC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_iso8601_date(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_rfpendtc <- block({
-    col <- "RFPENDTC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_iso8601_date(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_brthdtc <- block({
-    col <- "BRTHDTC";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_iso8601_date(col),
-      column_is_complete(col)
-    )
-  });
-  
-  check_age <- block({
-    col <- "AGE";
-    range <- 0:120;
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_numeric(col),      
-      column_is_integer(col),
-      column_is_complete(col),
-      column_in_integer_range(col,range)
-    )
-  });
-  
-  check_sex  <- mandatory_codelist_column("SEX");
-  check_race <- mandatory_codelist_column("RACE");
-  
-  check_racemult <- block({
-    col <- "RACEMULT";
-    bailout_validation_chain(
-      column_exists(col),
-      column_is_textual(col)
-    )
-  });
-  
-  check_ethnic <- mandatory_codelist_column("ETHNIC");  
-  
-  validation_chain(check_studyid,
-                   check_domain,
-                   check_usubjid,
-                   check_rfstdtc,
-                   check_rfpendtc,
-                   check_brthdtc,
-                   check_age,
-                   check_sex,
-                   check_race,
-                   check_racemult,
-                   check_ethnic);  
-});
+#' all_subsets_validated - Return a validation function which confirms
+#' that each subset of rows indicated by the validation table keys
+#' actually has a corresponding check.
+#'
+#' @param validation_table - the table of validation functions
+#'     consisting of N+2 or N+1 columns. The first N columns consist
+#'     of keys into the data set you are validating while the last two
+#'     columns contain the validation functions for each subset and
+#'     whether the validation is required.
+#'
+#' @param checked_column - the column to which the validation function
+#'     corresponds. Technically any validation function whatsoever can
+#'     be invoked on any subset but typically we are validating one
+#'     column at a time. This is provided so the error message can be
+#'     more informative.
+#'
+#' @return a state function which checks whether all subsets implied
+#'     by the validation table in the source data have a corresponding
+#'     validation function.
+all_subsets_validated <- function(validation_table, checked_column){
+    info <- build_subset_key_info(validation_table);
+    keys <- info$keys;
+    key_names <- info$key_names;
+    key_summaries <- info$key_summaries;
+    
+    if(is.null(validation_table$validation_function__)){
+        stop("Validate on subsets requires a table with a validation_function__ column in last or second to last position");
+    }
+
+    function(state){
+        ## join the validation table to the data table so we can easily
+        ## access each validation function from the split we are about
+        ## to perform
+        
+        data <- state$data %>%
+            left_join(validation_table,by=all_of(key_names));
+        
+        absent_validation_function_indices <- data %>%
+            filter(is.na(validation_function__)) %>%
+            `[[`("index__");
+
+        check <- length(absent_validation_function_indices)==0;
+
+        error_message <- "This check ensures that values of the column %s are consistent with the values implied by the key columns: %s. There were failures on rows %s";
+
+        extend_state(state,
+                     ifelse(check,"ok","continuable"),
+                     check_report("All values in column %s corresponding to these indexes %s have validations.",
+                                  check,
+                                  ifelse(check, "Check passed.",
+                                         sprintf(error_message,
+                                                 checked_column,
+                                                 paste(key_names, collapse = ", "),
+                                                 collapse_commas(absent_validation_function_indices)))));        
+    }
+}
+
+#' all_validations_applied - returns a validation function which
+#' checks whether every validation in a validation table is actually
+#' applied.
+#'
+#' This is a warning condition. It may be more clear and more
+#' efficient to use column_covers_codelist for this purpose instead.
+#'
+#' @param validation_table - a table of N+2 values. N columns from the
+#'     data set form the keys which map a validation (in the Nth
+#'     column, validation_function__) to the appopriate subset. The
+#'     Nth+2 colum indicates whether the validation is required. It is
+#'     optional.
+#' @param warning_text - the warning text to add to the validation
+#'     state if this isn't true.
+#' @return the validation function.
+all_validations_applied <- function(validation_table, warning_text){
+    info <- build_subset_key_info(validation_table);
+    keys <- info$keys;
+    key_names <- info$key_names;
+    key_summaries <- info$key_summaries;
+    
+    if(is.null(validation_table$validation_function__)){
+        stop("Validate on subsets requires a table with a validation_function__ column in last or second to last position");
+    }
+
+    function(state){
+        ## join the validation table to the data table so we can easily
+        ## access each validation function from the split we are about
+        ## to perform
+
+        key_data <- state$data %>%
+            select(all_of(key_names)) %>%
+            distinct() %>% mutate(dummy__=rep(TRUE, nrow(.)));
+
+        keys %>% left_join(key_data, by=all_of(key_names));
+        missing <- keys %>% mutate(missing__=is.na(dummy__)) %>% `[[`("missing__");
+        if(sum(missing__)==0){
+            state
+        } else {
+            extend_state(state,
+                         "ok",
+                         warnings=warning_text);
+        }        
+    }
+}
 
 #' validate_on_subsets: accepts a table with N columns The first N-2
 #' columns are the same as column names from the data set and are used
@@ -545,71 +466,35 @@ validate_dm <- block({
 #'
 #' 
 validate_on_subsets <- function(validation_table, check_name=""){
+    info <- build_subset_key_info(validation_table);
+    validation_table <- info$validation_table;
+    keys <- info$keys;
+    key_names <- info$key_names;
+    key_summaries <- info$key_summaries;
+    
     function(state){
-        if(is.null(validation_table$required__)){
-            validation_table$required__ <- rep(FALSE, nrow(validation_table));
-        }
-        ncol <- length(names(validation_table));
-        keys <- validation_table %>% select(1:(ncol-2));
-        if(is.null(validation_table$validation_function__)){
-            stop("Validate on subsets requires a table with a validation_function__ column in last or second to last position");
-        }
-        # join the validation table to the data table so we can easily
-        # access each validation function from the split we are about
-        # to perform
+        ## join the validation table to the data table so we can easily
+        ## access each validation function from the split we are about
+        ## to perform
         
-        data <- state$data %>% left_join(validation_table,by=all_of(names(keys)));
-        the_splits <- split(data, data %>% select(all_of(names(keys))));
-        print(sprintf("Split count %d", length(the_splits)));
-
-        # We want to track home many validation functions we actually
-        # use.  Since it might be an error for a validation function
-        # to be provided without being used.
-        usage_table <- list();
-        agg_keys <- validation_table %>% mutate(agg_key__ = paste(all_of(keys), collapse="..")) %>% `[[`("agg_key__");
-
-        ## we are going to just mutate the keys in this table.
-        usage_table[agg_keys] <- rep(FALSE, length(agg_keys));
-
+        data <- state$data %>%
+            left_join(validation_table,by=all_of(key_names));        
+        
+        the_splits <- split(data, data %>%
+                                  select(all_of(key_names)));
         
         final_state <- Reduce(function(acc_state, sub_df){
-            agg_key <- sub_df %>%
-                mutate(agg_key__ = paste(all_of(keys), collapse="..")) %>%
-                `[[`("agg_key__") %>%
-                `[[`(1);            
             validation_function <- sub_df$validation_function__[[1]];
-            if(!is.null(validation_function)) {
-                sub_data <- sub_df %>%
+            sub_data <- sub_df %>% 
                 select(-validation_function__,-required__);
-                new_state <- combine_states(acc_state, validation_function(fresh_state(sub_data)));
-                usage_table[[agg_key]] <<- TRUE;
-                new_state
-            } else {
-                state
-            }            
+            ## we create a fresh validation state for each subset so
+            ## that we can harvest the messages, state and warning for
+            ## each.            
+            combine_states(acc_state, validation_function(fresh_state(sub_data)));               
         }, the_splits,
         init=state);
-
-        ## now we want to check that every validation function which
-        ## is required was actually applied.
-
-        unused_count <- validation_table %>%
-            mutate(used__=unname(usage_table) %>%
-                       unlist()) %>%
-            select(required__, used__) %>%
-            filter(required__==TRUE & used__ == FALSE) %>%
-            nrow();
-
-        unused_count_check <- unused_count == 0;
-
+        
         final_state
-        ## extend_state(final_state,
-        ##              ifelse(unused_count_check, "ok","continuable"),
-        ##              check_report(check_name,
-        ##                           unused_count_check,
-        ##                           ifelse(unused_count_check, "All required checks were applied.",
-        ##                                  "Not all required checks were applied.")))
-        ;
     }
 }
 
@@ -836,8 +721,21 @@ validate_qsmd <- block({
 
 
     check_qscat <- mandatory_codelist_column("QSCAT");
+    check_qsscat <- mandatory_codelist_column("QSSCAT");
     check_qstestcd <- mandatory_codelist_column("QSTESTCD");
     check_qstest <- mandatory_codelist_column("QSTEST");
+
+    check_qstestresc <- block({
+        validation_table <- specification$qstestcd_codelists %>%
+            rowwise() %>%
+            transmute(QSTESTCD=id, validation_function__=
+                                       list(ifelse(!is.na(codelist),
+                                              column_in_codelist("QSTESTRESC", get_codelist(codelist)),
+                                              column_is_textual("QSTESTRESC")))) %>%
+            ungroup();
+           
+        validate_on_subsets(validation_table, "QSTESTRESC column consistent with QSTESTCD.");
+    })
     
     validation_chain(
         check_study_id,
@@ -845,7 +743,9 @@ validate_qsmd <- block({
         check_usubjid,
         check_qsseq,
         check_qscat,
+        check_qsscat,
         check_qstestcd,
-        check_qstest);
+        check_qstest,
+        check_qstestresc);
 });
 
