@@ -1,3 +1,8 @@
+#' column_is_iso8601_date - Returns a state function which checks
+#' whether the column complies with the ISO8601 date formatting standard.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_is_iso8601_date <- function(column){
     s <- sprintf;
     p <- paste;
@@ -21,7 +26,7 @@ column_is_iso8601_date <- function(column){
         month_len_checks <- stringr::str_length(month_str) == 2;
         day_len_checks <- stringr::str_length(day_str) == 2;
 
-        message <- if(all_true(year_len_checks)) "" else s("Incorrectly formatted years on rows %s.", whichcc(!year_str));
+        message <- if(all_true(year_len_checks)) "" else s("Incorrectly formatted years on rows %s.", whichcc(!year_len_checks));
         message <- if(all_true(month_len_checks))
                    {
                        message
@@ -62,6 +67,11 @@ column_is_iso8601_date <- function(column){
     }
 }
 
+#' column_exists - Returns a state function which checks
+#' whether the column is present within the state data.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_exists <- function(column){
     function(state){
         ce <- ! is.null(state$data[[column]]);
@@ -75,6 +85,11 @@ column_exists <- function(column){
     }
 }
 
+#' column_is_textual - Returns a state function which checks
+#' whether the column's class is character, i.e. textual.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_is_textual <- function(column){
     s <- sprintf;
     function(state){
@@ -95,13 +110,18 @@ column_is_textual <- function(column){
     }
 }
 
+#' column_is_complete - Returns a state function which checks
+#' whether the column is wholly without missing values, i.e. complete.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_is_complete <- function(column){
     s <- sprintf;
     function(state){
         the_col <- state$data[[column]];
         nas <- is.na(the_col);
         n_na <- sum(nas);
-        check <- identical(n_na, 0);
+        check <- identical(n_na, 0L);
         extend_state(state,
                      ifelse(check,"ok","continuable"),
                      check_report(sprintf("Column %s is complete.", column),
@@ -114,6 +134,11 @@ column_is_complete <- function(column){
     }
 }
 
+#' column_is_numeric - Returns a state function which checks
+#' whether the column's class is numeric.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_is_numeric <- function(column){
     s <- sprintf;
     function(state){
@@ -121,19 +146,24 @@ column_is_numeric <- function(column){
         if(class(the_col)=="numeric"){
             extend_state(state,
                          "ok",
-                         check_report("Column type is text",
+                         check_report("Column type is numeric",
                                       T,
-                                      "The column %s is text", column))
+                                      "The column %s is numeric", column))
         } else {
             extend_state(state,
                          "continuable",
-                         check_report("Column type is text",
+                         check_report("Column type is numeric",
                                       F,
-                                      "The column %s must be text but it appears to be %s instead.", column, class(the_col)));
+                                      "The column %s must be numeric but it appears to be %s instead.", column, class(the_col)));
         }
     }
 }
 
+#' column_is_integer - Returns a state function which checks
+#' whether all values of the column are integral.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_is_integer <- function(column){
     s <- sprintf;
     function(state){
@@ -145,7 +175,7 @@ column_is_integer <- function(column){
                          "continuable",
                          check_report("Column contains only integers",
                                       F,
-                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indeces %s.", 
+                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indices %s.", 
                                       column,
                                       falses))
         } else {
@@ -158,15 +188,21 @@ column_is_integer <- function(column){
     }
 }
 
-column_in_integer_range <- function(column, values=c){
+#' column_in_integer_range - Returns a state function which checks
+#' whether all entries of the column are contained within the set of values.
+#'
+#' @param column - the column to check
+#' @param values - the set of values (defaults to the empty set)
+#' @return the state function which performs the check
+column_in_integer_range <- function(column, values=c()){
     function(state){
         check <- state$data[[column]] %in% values;
         n_good <- sum(check);
         n_bad <- sum(!check);
-        ok <- n_bad == 0;
+        ok <- identical(n_bad, 0L);
         extend_state(state,
                      ifelse(ok, "ok", "continuable"),
-                     check_report(sprintf("Integer column draw from %s.", collapse_commas)(values),
+                     check_report(sprintf("Integer column draw from %s.", collapse_commas(values)),
                                   ok,
                                   ifelse(ok,"All values in the right range.",
                                          sprintf("These columns were out of range %s.",
@@ -174,6 +210,11 @@ column_in_integer_range <- function(column, values=c){
     }    
 }
 
+#' column_is_float - Returns a state function which checks
+#' whether the column's type is double, i.e. floating point.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_is_float <- function(column){
   s <- sprintf;
   function(state){
@@ -202,7 +243,7 @@ column_is_float <- function(column){
 #'     implied by the column
 #' @param warn_only - when TRUE (default) only add a warning.
 #' @return the state function which performs the check
-column_covers_codelist <- function(column, codelist=code_to_codelist(column), warn_only=TRUE){
+column_covers_codelist <- function(column, codelist=column_to_codelist(column), warn_only=TRUE){
     function(state){
         unique_values < state$data[[column]] %>% unique();
         checks <- codelist %in% unique_values;
@@ -228,7 +269,7 @@ column_covers_codelist <- function(column, codelist=code_to_codelist(column), wa
 #' @param column - the column to check
 #' @param codelist - the codelist to check against (defaults to the codelist implied by the column)
 #' @return a state function to perform the check
-column_in_codelist<-function(column, codelist=code_to_codelist(column)){
+column_in_codelist<-function(column, codelist=column_to_codelist(column)){
     function(state){
         the_col <- state$data[[column]];
         the_col <- the_col[!is.na(the_col)]
@@ -252,8 +293,11 @@ column_in_codelist<-function(column, codelist=code_to_codelist(column)){
     }
 }
 
-
-
+#' check_domain_presence - Returns a state function which checks
+#' whether the column 'DOMAIN' is present within the state data.
+#'
+#' @param state - the state to check
+#' @return the state function which performs the check
 check_domain_presence <- function(state){
     data <- state$data;
     if ("DOMAIN" %in% names(data)){
@@ -271,13 +315,18 @@ check_domain_presence <- function(state){
     }
 }
 
+#' column_is_homogeneous - Returns a state function which checks
+#' whether all values of the column are the same, i.e. homogeneous.
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
 column_is_homogeneous <- function(column){
     s <- sprintf;
     function(state){
         col <- state$data[[column]];
         ucol <- unique(col);
         nu <- length(ucol);
-        if(identical(nu==1)){
+        if(identical(nu, 1L)){
             extend_state(state,
                          "ok",
                          check_report(s("%s column is homogeneous.", column),
@@ -289,6 +338,7 @@ column_is_homogeneous <- function(column){
                          check_report(s("%s column is homogeneous.", column),
                                       F,
                                       "%s column has %d unique elements (%s)",
+                                      column,
                                       nu,
                                       collapse_commas(ucol)));
         }
