@@ -69,6 +69,14 @@ column_to_codelist <- function(column){
     }
 }
 
+#' get_codelist - fetch a codelist by ID.  NB. This is an alias for
+#' column_to_codelist. Not all codelists correspond to a column but
+#' the logic for fetching the codelist is identical.
+#' 
+#' @param ID - the id the codelist
+#' @return the codelist
+get_codelist <- column_to_codelist;
+
 #' Returns the codelist order (from the specification) for a given column id.
 #'
 #' @param column - the column ID to get the codelist for.
@@ -100,6 +108,24 @@ dont_do <- function(block){
 
 read_json <- function(filename){
     jsonlite::fromJSON(filename) %>% as.data.frame();
+}
+
+has_column <- function(tbl,name){
+    name %in% names(tbl);
+}
+
+column_missing <- function(tbl, name){
+    !has_column(tbl, name);
+}
+
+#' return a string for each row which contains the column name/value
+#' pairs for each column in cols.
+summarize_column_values <- function(tbl, cols){
+    tbl %>%
+        rowwise() %>%
+        mutate(sss=paste(sprintf("(column: %s: value %s)", all_of(cols), across(all_of(cols), function(x)x)), collapse=", ")) %>%
+        ungroup() %>%
+        `[[`("sss")
 }
 
 block <- function(bod){
