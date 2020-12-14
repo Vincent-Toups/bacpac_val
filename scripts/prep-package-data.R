@@ -103,14 +103,89 @@ where <- specification$WhereClauses %>%
 values <- data[[4]] %>% 
     rename(clause=`Where Clause`,
            type=`Data Type`) %>% 
+    filter(Variable=="SCSTRESC") %>% 
     select(type, clause, Codelist)
 
 #Join these together
-specification$sctestcd_codelists <- where %>% 
-    left_join(values) %>% 
+specification$scstresc_codelists <- where %>% 
+    inner_join(values) %>% 
     select(!clause) %>% 
     rename(codelist=Codelist) %>% 
     select(id, codelist, type)
+
+#Need to do the same logic to create SC codelist lookups for:
+#SCMETHOD, SCORRES, SCORRESU, SCSTRESN, SCSTRESU
+#SCMETHOD
+values <- data[[4]] %>% 
+    rename(clause=`Where Clause`,
+           type=`Data Type`) %>% 
+    filter(Variable=="SCMETHOD") %>% 
+    select(type, clause, Codelist)
+
+#Join these together
+specification$scmethod_codelists <- where %>% 
+    inner_join(values) %>% 
+    select(!clause) %>% 
+    rename(codelist=Codelist) %>% 
+    select(id, codelist, type)
+
+#SCORRES
+values <- data[[4]] %>% 
+    rename(clause=`Where Clause`,
+           type=`Data Type`) %>% 
+    filter(Variable=="SCORRES") %>% 
+    select(type, clause, Codelist)
+
+#Join these together
+specification$scscorres_codelists <- where %>% 
+    inner_join(values) %>% 
+    select(!clause) %>% 
+    rename(codelist=Codelist) %>% 
+    select(id, codelist, type)
+
+#SCORRESU
+values <- data[[4]] %>% 
+    rename(clause=`Where Clause`,
+           type=`Data Type`) %>% 
+    filter(Variable=="SCORRESU") %>% 
+    select(type, clause, Codelist)
+
+#Join these together
+specification$scscorresu_codelists <- where %>% 
+    inner_join(values) %>% 
+    select(!clause) %>% 
+    rename(codelist=Codelist) %>% 
+    select(id, codelist, type)
+
+#SCSTRESU
+values <- data[[4]] %>% 
+    rename(clause=`Where Clause`,
+           type=`Data Type`) %>% 
+    filter(Variable=="SCSTRESU") %>% 
+    select(type, clause, Codelist)
+
+#Join these together
+specification$scstresu_codelists <- where %>% 
+    inner_join(values) %>% 
+    select(!clause) %>% 
+    rename(codelist=Codelist) %>% 
+    select(id, codelist, type)
+
+#SCSTRESN
+values <- data[[4]] %>% 
+    rename(clause=`Where Clause`,
+           type=`Data Type`) %>% 
+    filter(Variable=="SCSTRESN") %>% 
+    select(type, clause, Codelist)
+
+#Join these together
+specification$scstresn_codelists <- where %>% 
+    left_join(values) %>% 
+    select(!clause) %>% 
+    filter(!is.na(type)) %>% 
+    rename(codelist=Codelist) %>% 
+    select(id, codelist, type)
+
 
 set_names <- c("DM","QSMD","SC");
 
