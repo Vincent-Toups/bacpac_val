@@ -189,7 +189,7 @@ specification$scstresn_codelists <- where %>%
 
 set_names <- c("DM","QSMD","SC");
 
-test_data <- list();
+test_data <- list()
 
 for(ds in set_names){
     test_data[[ds]] <- read_file(sprintf("source_data/%s.csv", ds));    
