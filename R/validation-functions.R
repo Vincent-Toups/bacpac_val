@@ -548,6 +548,59 @@ validate_on_subsets <- function(validation_table, check_name=""){
     }
 }
 
+#' key_column_to_codelists - given a key column return the columns and
+#' codelists corresponding to each unique value of the key.
+#'
+#' @param key_column - a column whose values indicate the appropriate
+#'     codelist to evaluate other columns.
+#' @return a data frame with keys
+#'  key_column the column used to calculate the other values
+#'  value the value type of the column (used to key the whereclause)
+#'  value_column the column determined by the value above
+#'  codelist the codelist for the value_column values
+#'  data_type the data type for the value column
+#'  term the term 
+#'  order the order of the term
+#'
+#' @examples
+#'
+#' key_column_to_codelists("QSTESTCD") %>%
+#'  filter(value=="EDANX01" & value_column=="QSSTRESC") %>%
+#'    `[[`("term");
+#' Fetches the codelist terms for the QSSTRESC column for value = 'EDANX01' in QSTESTCD.
+#' 
+key_column_to_codelists <- function(key_column){
+    expand_where_clauses(specification$WhereClauses) %>%
+        filter(Variable==key_column) %>%
+        left_join(specification$ValueLevel, by=(c("ID"="Where Clause")), suffix=c("_wc","_vl")) %>%
+        transmute(dataset=Dataset_wc,
+                  key_column=Variable_wc,
+                  value=Value,
+                  value_column=Variable_vl,
+                  codelist=Codelist) %>%
+        left_join(specification$Codelists, by=c("codelist"="ID")) %>%
+        transmute(dataset=dataset,
+                  key_column=key_column,
+                  value=value,
+                  value_column=value_column,
+                  codelist=codelist,
+                  data_type=`Data Type`,
+                  term=Term,
+                  order=Order);
+}
+
+#' find values in key_column for which there is no where_clause
+#' mapping to a type.
+#'
+#' @param key_column - the column to inspect
+#' @return the values for which there is no where clause
+missing_where_clauses <- function(key_column){
+    terms <- specification$Codelist %>% filter(ID==key_column) %>% `[[`("Term");
+    wc_terms <- expand_where_clauses(specification$WhereClauses) %>% `[[`("Value");
+    terms[!(terms %in% wc_terms)];
+}
+
+
 # STUDYID - 
 # DOMAIN
 # USUBJID
