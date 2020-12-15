@@ -12,6 +12,9 @@ Collate:
     'util.R'
     'validation-state.R'
     'validation-functions.R'
+    'validate-sc.R'
+    'validate-dm.R'
+    'validate-qsmd.R'
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
