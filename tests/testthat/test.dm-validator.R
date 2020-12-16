@@ -22,3 +22,15 @@ test_that("Test that the DM validator just runs.",
             result <- validate_dm(fresh_state(test_dm));
             expect_identical(result, result);
           });
+
+test_that("Test that the DM validator is continuable on DM test data.",
+          {
+            result <- validate_dm(fresh_state(test_dm));
+            expect_identical(result$status, "continuable");
+          });
+
+test_that("Test that the DM validator finds exactly one test that does not pass on DM test data.",
+          {
+            result <- validate_dm(fresh_state(test_dm));
+            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 1L);
+          });
