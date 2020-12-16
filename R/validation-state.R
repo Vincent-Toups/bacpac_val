@@ -133,7 +133,7 @@ combine_states <- function(hd, tl){
 validation_last_check <- function(state,if_none=T){
     df <- state$messages;
     last <- nrow(df);
-    if(identical(last,0)){
+    if(identical(last, 0L)){
         if_none
     } else {
         df$pass[[last]];
@@ -143,7 +143,7 @@ validation_last_check <- function(state,if_none=T){
 validation_chain_builder <- function(short_circut_test){
     function(...){
         state_functions <- list(...);
-        if(identical(length(state_functions), 0)){
+        if(identical(length(state_functions), 0L)){
                                         # return the identity function
             function(state) state
         } else {
