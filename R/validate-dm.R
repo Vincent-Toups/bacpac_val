@@ -32,6 +32,7 @@ validate_dm <- block({
     #col <- "RFSTDTC";
     bailout_validation_chain(
       column_exists("RFSTDTC"),
+      column_not_empty("RFSTDTC"),
       column_is_iso8601_date("RFSTDTC"),
       column_is_complete("RFSTDTC")
     )
@@ -41,6 +42,7 @@ validate_dm <- block({
     #col <- "RFPENDTC";
     bailout_validation_chain(
       column_exists("RFPENDTC"),
+      column_not_empty("RFPENDTC"),
       column_is_iso8601_date("RFPENDTC"),
       column_is_complete("RFPENDTC")
     )
@@ -50,6 +52,7 @@ validate_dm <- block({
     #col <- "BRTHDTC";
     bailout_validation_chain(
       column_exists("BRTHDTC"),
+      column_not_empty("BRTHDTC"),
       column_is_iso8601_date("BRTHDTC"),
       column_is_complete("BRTHDTC")
     )
