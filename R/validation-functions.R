@@ -134,6 +134,27 @@ column_is_complete <- function(column){
     }
 }
 
+#' column_not_empty - Returns a state function which checks
+#' whether the column has at least one non-missing value, i.e. not empty
+#'
+#' @param column - the column to check
+#' @return the state function which performs the check
+column_not_empty <- function(column){
+  s <- sprintf;
+  function(state){
+    the_col <- state$data[[column]];
+    check <- !all_true(is.na(the_col))
+    extend_state(state,
+                 ifelse(check,"ok","continuable"),
+                 check_report(sprintf("Column %s is not empty", column),
+                              check,
+                              ifelse(check,
+                                     sprintf("Column %s has at least one non-missing value.", column),
+                                     sprintf("Column %s has zero non-missing values. It is empty.",
+                                             column))));
+  }
+}
+
 #' column_is_numeric - Returns a state function which checks
 #' whether the column's class is numeric.
 #'
