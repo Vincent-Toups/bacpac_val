@@ -188,3 +188,28 @@ all_true <- function(s){
 all.equal_tf <- function(a,b){
     identical(T, all.equal(a,b));
 }
+
+# In order to find the codelist for a question response (QSSTRESC)
+# we need to look up the QSTESTCD in the WhereClauses table
+# and then from there take the ID field and look up
+# the Codelist in the ValueLevel table.
+#
+# The Value column in the WhereClauses table contains multiple
+# WhereClauses IDs so we expand them here. This makes the Comparator
+# column redundant because IN reduces to EQ when the values are split
+# like this.
+expand_where_clauses <- function(where_clauses){
+    do.call(rbind,
+            Map(function(df){
+                values <- stringr::str_split(df$Value,",") %>%
+                    unlist() %>% 
+                    stringr::str_trim();
+                lst <- list();
+                for(n in names(df)){
+                    lst[[n]] <- rep(df[[n]][[1]], length(values));
+                }
+                lst[["Value"]] <- values;
+                do.call(tibble, lst);
+            },
+            split(where_clauses, where_clauses$ID)) %>% unname())
+}
