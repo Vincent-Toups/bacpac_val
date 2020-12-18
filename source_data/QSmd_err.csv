@@ -1,11 +1,11 @@
 "STUDYID","DOMAIN","USUBJID","QSSEQ","QSCAT","QSSCAT","QSTESTCD","QSTEST","QSSTRESC","QSSTRESN","QSDRVFL","VISITNUM","VISIT","QSDTC","QSDY","QSEVLINT","err_flag"
+"SMART","QS","SMART-01-001",10,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX53","I felt uneasy","Rarely",2.0000,,0,"Week 0","2019-12-22",1,"-P7D",0
 "SMART","QS","SMART-0201-00001",1,"Anxiety","GAD","GAD01","How often bothered by feeling nervous, anxious or on edge","More than half the days",2.0000,,0,"Week 0","2019-12-22",1,"-P2W",0
 "SMART","QS","SMART-0201-00001",2,"Anxiety","GAD","GAD02","How often bothered by not being able to stop or control worrying","More than half the days",2.0000,,0,"Week 0","2019-12-22",1,"-P2W",0
 "SMART","QS","SMART-0201-00001",3,"Anxiety","GAD","GAD2RAW","GAD-2 Raw Score",4.00,4.0000,"Y",0,"Week 0","2019-12-22",1,"-P2W",0
 "SMART","QS","SMART-0201-00001",7,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX01","I felt fearful","Never",1.0000,,0,"Week 0","2019-12-22",1,"-P7D",0
 "SMART","QS","SMART-0201-00001",8,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX40","Hard to focus on anything other than anxiety","Never",1.0000,,0,"Week 0","2019-12-22",1,"-P7D",0
 "SMART","QS","SMART-0201-00001",9,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX41","My worries overwhelm me","Always",5.0000,,0,"Week 0","2019-12-22",1,"-P7D",0
-"SMART","QS","SMART-0201-00001",10,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX53","I felt uneasy","Rarely",2.0000,,0,"Week 0","2019-12-22",1,"-P7D",0
 "SMART","QS","SMART-0201-00001",11,"Anxiety","PROMIS Emotional Distress - Anxiety","PRANX4AR","PROMIS-Anxiety 4a Raw Score",9.00,9.0000,"Y",0,"Week 0","2019-12-22",1,"-P7D",0
 "SMART","QS","SMART-0201-00001",12,"Anxiety","PROMIS Emotional Distress - Anxiety","PRANX4AT","PROMIS-Anxiety 4a T-Score",57.70,57.7000,"Y",0,"Week 0","2019-12-22",1,"-P7D",0
 "SMART","QS","SMART-0201-00001",19,"Depression","PHQ","PHQ01","How often have you had little interest or pleasure in doing things","Several days",1.0000,,0,"Week 0","2019-12-22",1,"-P2W",0
@@ -73,7 +73,6 @@
 "SMART","QS","SMART-0201-00001",138,"Widespread Pain","Widespread Pain Inventory","PNAREA6","Do you have chronic pain in the chest, abdomen, or pelvis","No",0.0000,,0,"Week 0","2019-12-22",1,,0
 "SMART","QS","SMART-0201-00001",139,"Widespread Pain","Widespread Pain Inventory","PNAREA7","Do you have chronic pain in the neck or upper back","Yes",1.0000,,0,"Week 0","2019-12-22",1,,0
 "SMART","QS","SMART-0201-00001",140,"Widespread Pain","Widespread Pain Inventory","WDSPPNUM","Widespread Pain Raw Score",5.00,5.0000,"Y",0,"Week 0","2019-12-22",1,,0
-"SMART","QS","SMART-0201-00001",4,"Anxiety","GAD","GAD01","How often bothered by feeling nervous, anxious or on edge","More than half the days",2.0000,,12,"Week 12","2020-03-09",79,"-P2W",0
 "SMART","QS","SMART-0201-00001",5,"Anxiety","GAD","GAD02","How often bothered by not being able to stop or control worrying","Several days",1.0000,,12,"Week 12","2020-03-09",79,"-P2W",0
 "SMART","QS","SMART-0201-00001",6,"Anxiety","GAD","GAD2RAW","GAD-2 Raw Score",3.00,3.0000,"Y",12,"Week 12","2020-03-09",79,"-P2W",0
 "SMART","QS","SMART-0201-00001",13,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX01","I felt fearful","Sometimes",3.0000,,12,"Week 12","2020-03-09",79,"-P7D",0
@@ -4883,9 +4882,9 @@
 "SMART","QS","SMART-0201-00033",146,"Widespread Pain","Widespread Pain Inventory","PNAREA6","Do you have chronic pain in the chest, abdomen, or pelvis","Yes",1.0000,,12,"Week 12","2019-12-07",99,,0
 "SMART","QS","SMART-0201-00033",147,"Widespread Pain","Widespread Pain Inventory","PNAREA7","Do you have chronic pain in the neck or upper back","Yes",1.0000,,12,"Week 12","2019-12-07",99,,0
 "SMART","QS","SMART-0201-00033",148,"Widespread Pain","Widespread Pain Inventory","WDSPPNUM","Widespread Pain Raw Score",6.00,6.0000,"Y",12,"Week 12","2019-12-07",99,,0
-"SMART","QS","SMART-0201-00034",1,"Anxiety","GAD","GAD01","How often bothered by feeling nervous, anxious or on edge","Not at all",0.0000,,0,"Week 0","2018-03-03",1,"-P2W",0
-"SMART","QS","SMART-0201-00034",2,"Anxiety","GAD","GAD02","How often bothered by not being able to stop or control worrying","Several days",1.0000,,0,"Week 0","2018-03-03",1,"-P2W",0
-"SMART","QS","SMART-0201-00034",3,"Anxiety","GAD","GAD2RAW","GAD-2 Raw Score",1.00,1.0000,"Y",0,"Week 0","2018-03-03",1,"-P2W",0
+"SMART","QS","SMART-0201-00034",1,"Anxiety","GAD","GAD01","How often bothered by feeling nervous, anxious or on edge","Not at all",0.0000,,0,"Week 0","03/03/2018",1,"-P2W",0
+"SMART","QS","SMART-0201-00034",2,"Anxiety","GAD","GAD02","How often bothered by not being able to stop or control worrying","Several days",1.0000,,0,"Week 0","March 3rd,",1,"-P2W",0
+"SMART","QS","SMART-0201-00034",3,"Anxiety","GAD","GAD2RAW","GAD-2 Raw Score",1.00,1.0000,"Y",0,"Week 0","03-03-2018",1,"-P2W",0
 "SMART","QS","SMART-0201-00034",7,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX01","I felt fearful","Often",4.0000,,0,"Week 0","2018-03-03",1,"-P7D",0
 "SMART","QS","SMART-0201-00034",8,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX40","Hard to focus on anything other than anxiety","Often",4.0000,,0,"Week 0","2018-03-03",1,"-P7D",0
 "SMART","QS","SMART-0201-00034",9,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX41","My worries overwhelm me","Often",4.0000,,0,"Week 0","2018-03-03",1,"-P7D",0
@@ -11990,7 +11989,6 @@
 "SMART","QS","SMART-0202-00032",1,"Anxiety","GAD","GAD01","How often bothered by feeling nervous, anxious or on edge","Several days",1.0000,,0,"Week 0","2018-03-01",1,"-P2W",0
 "SMART","QS","SMART-0202-00032",2,"Anxiety","GAD","GAD02","How often bothered by not being able to stop or control worrying","Nearly every day",3.0000,,0,"Week 0","2018-03-01",1,"-P2W",0
 "SMART","QS","SMART-0202-00032",3,"Anxiety","GAD","GAD2RAW","GAD-2 Raw Score",4.00,4.0000,"Y",0,"Week 0","2018-03-01",1,"-P2W",0
-"SMART","QS","SMART-0202-00032",7,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX01","I felt fearful","Never",1.0000,,0,"Week 0","2018-03-01",1,"-P7D",0
 "SMART","QS","SMART-0202-00032",8,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX40","Hard to focus on anything other than anxiety","Often",4.0000,,0,"Week 0","2018-03-01",1,"-P7D",0
 "SMART","QS","SMART-0202-00032",9,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX41","My worries overwhelm me","Often",4.0000,,0,"Week 0","2018-03-01",1,"-P7D",0
 "SMART","QS","SMART-0202-00032",10,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX53","I felt uneasy","Often",4.0000,,0,"Week 0","2018-03-01",1,"-P7D",0
@@ -12061,6 +12059,7 @@
 "SMART","QS","SMART-0202-00032",138,"Widespread Pain","Widespread Pain Inventory","PNAREA6","Do you have chronic pain in the chest, abdomen, or pelvis","No",0.0000,,0,"Week 0","2018-03-01",1,,0
 "SMART","QS","SMART-0202-00032",139,"Widespread Pain","Widespread Pain Inventory","PNAREA7","Do you have chronic pain in the neck or upper back","No",0.0000,,0,"Week 0","2018-03-01",1,,0
 "SMART","QS","SMART-0202-00032",140,"Widespread Pain","Widespread Pain Inventory","WDSPPNUM","Widespread Pain Raw Score",1.00,1.0000,"Y",0,"Week 0","2018-03-01",1,,0
+"SMART","QS","SMART-0202-00032",7,"Anxiety","PROMIS Emotional Distress - Anxiety","EDANX01","I felt fearful","Never",1.0000,,1,"Week 0","2018-03-01",1,"-P7D",0
 "SMART","QS","SMART-0202-00032",4,"Anxiety","GAD","GAD01","How often bothered by feeling nervous, anxious or on edge","Nearly every day",3.0000,,12,"Week 12","2018-05-20",81,"-P2W",0
 "SMART","QS","SMART-0202-00032",5,"Anxiety","GAD","GAD02","How often bothered by not being able to stop or control worrying","Not at all",0.0000,,12,"Week 12","2018-05-20",81,"-P2W",0
 "SMART","QS","SMART-0202-00032",6,"Anxiety","GAD","GAD2RAW","GAD-2 Raw Score",3.00,3.0000,"Y",12,"Week 12","2018-05-20",81,"-P2W",0
@@ -12072,7 +12071,7 @@
 "SMART","QS","SMART-0202-00032",18,"Anxiety","PROMIS Emotional Distress - Anxiety","PRANX4AT","PROMIS-Anxiety 4a T-Score",65.30,65.3000,"Y",12,"Week 12","2018-05-20",81,"-P7D",0
 "SMART","QS","SMART-0202-00032",22,"Depression","PHQ","PHQ01","How often have you had little interest or pleasure in doing things","Not at all",0.0000,,12,"Week 12","2018-05-20",81,"-P2W",0
 "SMART","QS","SMART-0202-00032",23,"Depression","PHQ","PHQ02","How often have you been feeling down, depressed, or hopeless","Not at all",0.0000,,12,"Week 12","2018-05-20",81,"-P2W",0
-"SMART","QS","SMART-0202-00032",24,"Depression","PHQ","PHQ2RAW","PHQ-2 Raw Score",0.00,0.0000,"Y",12,"Week 12","2018-05-20",81,"-P2W",0
+"SMART","QS","SMART-0202-00032",24,"Depression","PHQ","PHQ2RAW","PHQ-2 Raw Score",0.00,0.0000,"Y",12,"WEEK 1","2018-05-20",81,"-P2W",0
 "SMART","QS","SMART-0202-00032",31,"Depression","PROMIS Emotional Distress - Depression","EDDEP04","I felt worthless","Often",4.0000,,12,"Week 12","2018-05-20",81,"-P7D",0
 "SMART","QS","SMART-0202-00032",32,"Depression","PROMIS Emotional Distress - Depression","EDDEP06","I felt helpless","Rarely",2.0000,,12,"Week 12","2018-05-20",81,"-P7D",0
 "SMART","QS","SMART-0202-00032",33,"Depression","PROMIS Emotional Distress - Depression","EDDEP29","I felt depressed","Always",5.0000,,12,"Week 12","2018-05-20",81,"-P7D",0
@@ -13329,7 +13328,7 @@
 "SMART","QS","SMART-0202-00041",11,"Anxiety","PROMIS Emotional Distress - Anxiety","PRANX4AR","PROMIS-Anxiety 4a Raw Score",9.00,9.0000,"Y",0,"Week 0","2019-01-04",1,"-P7D",0
 "SMART","QS","SMART-0202-00041",12,"Anxiety","PROMIS Emotional Distress - Anxiety","PRANX4AT","PROMIS-Anxiety 4a T-Score",57.70,57.7000,"Y",0,"Week 0","2019-01-04",1,"-P7D",0
 "SMART","QS","SMART-0202-00041",19,"Depression","PHQ","PHQ01","How often have you had little interest or pleasure in doing things","Not at all",0.0000,,0,"Week 0","2019-01-04",1,"-P2W",0
-"SMART","QS","SMART-0202-00041",20,"Depression","PHQ","PHQ02","How often have you been feeling down, depressed, or hopeless","Nearly every day",3.0000,,0,"Week 0","2019-01-04",1,"-P2W",0
+"SMART","QS","SMART-0202-00041",20,"Depression","PROMIS Pain Interference","PHQ02","How often have you been feeling down, depressed, or hopeless","Nearly every day",3.0000,,0,"Week 0","2019-01-04",1,"-P2W",0
 "SMART","QS","SMART-0202-00041",21,"Depression","PHQ","PHQ2RAW","PHQ-2 Raw Score",3.00,3.0000,"Y",0,"Week 0","2019-01-04",1,"-P2W",0
 "SMART","QS","SMART-0202-00041",25,"Depression","PROMIS Emotional Distress - Depression","EDDEP04","I felt worthless","Rarely",2.0000,,0,"Week 0","2019-01-04",1,"-P7D",0
 "SMART","QS","SMART-0202-00041",26,"Depression","PROMIS Emotional Distress - Depression","EDDEP06","I felt helpless","Always",5.0000,,0,"Week 0","2019-01-04",1,"-P7D",0
@@ -18912,7 +18911,7 @@
 "SMART","QS","SMART-0203-00028",82,"Pain Location","Radicular Low Back Pain","RADLBP2","Has back pain spread below your knee","No",0.0000,,12,"Week 12","2019-05-25",87,"-P2W",0
 "SMART","QS","SMART-0203-00028",85,"Pain Somatization","Abbreviated Pain Somatization","PSOM1","How much have you been bothered by stomach pain","Bothered a lot",3.0000,,12,"Week 12","2019-05-25",87,"-P4W",0
 "SMART","QS","SMART-0203-00028",86,"Pain Somatization","Abbreviated Pain Somatization","PSOM2","How much have you been bothered by headaches","Bothered a lot",3.0000,,12,"Week 12","2019-05-25",87,"-P4W",0
-"SMART","QS","SMART-0203-00028",88,"Patient Satisfaction","Patient Global Impression of Change","PGIC1","My overall pain since the start of the study (treatment)","Much worse",5.0000,,12,"Week 12","2019-05-25",87,"Study start",0
+"SMART","QS","SMART-0203-00028",88,"Patient Satisfaction","Patient Global Impression of Change","LBPDF02","My overall pain since the start of the study (treatment)","Much worse",5.0000,,12,"Week 12","2019-05-25",87,"Study start",0
 "SMART","QS","SMART-0203-00028",97,"Physical Function","PROMIS Physical Function","PFA11","Able to do chores such as vacuuming or yard work","Without any difficulty",5.0000,,12,"Week 12","2019-05-25",87,,0
 "SMART","QS","SMART-0203-00028",98,"Physical Function","PROMIS Physical Function","PFA21","Able to go up and down stairs at a normal pace","With much difficulty",2.0000,,12,"Week 12","2019-05-25",87,,0
 "SMART","QS","SMART-0203-00028",99,"Physical Function","PROMIS Physical Function","PFA23","Able to go for a walk of at least 15 minutes","With much difficulty",2.0000,,12,"Week 12","2019-05-25",87,,0
@@ -22158,7 +22157,7 @@
 "SMART","QS","SMART-0203-00050",64,"Pain Intensity and Interference","PEG","PEG2","How pain has interfered with your enjoyment of life",6,6.0000,,12,"Week 12","2020-01-21",80,"-P1W",0
 "SMART","QS","SMART-0203-00050",65,"Pain Intensity and Interference","PEG","PEG3","How pain has interfered with your general activity",2,2.0000,,12,"Week 12","2020-01-21",80,"-P1W",0
 "SMART","QS","SMART-0203-00050",66,"Pain Intensity and Interference","PEG","PEGSCORE","PEG averaged score",2.67,2.6667,"Y",12,"Week 12","2020-01-21",80,"-P1W",0
-"SMART","QS","SMART-0203-00050",73,"Pain Interference","PROMIS Pain Interference","PAININ22","How much did pain interfere with work around the home","Somewhat",3.0000,,12,"Week 12","2020-01-21",80,"-P7D",0
+"SMART","QS","SMART-0203-00050",73,"Pain Interference","PROMIS Pain Interference","PAININ22","How much did pain interfere with work around the home","Somewhat",3.0000,"Y",12,"Week 12","2020-01-21",80,"-P7D",0
 "SMART","QS","SMART-0203-00050",74,"Pain Interference","PROMIS Pain Interference","PAININ31","How much did pain interfere with social activities","Somewhat",3.0000,,12,"Week 12","2020-01-21",80,"-P7D",0
 "SMART","QS","SMART-0203-00050",75,"Pain Interference","PROMIS Pain Interference","PAININ34","How much did pain interfere with household chores","Somewhat",3.0000,,12,"Week 12","2020-01-21",80,"-P7D",0
 "SMART","QS","SMART-0203-00050",76,"Pain Interference","PROMIS Pain Interference","PAININ9","How much did pain interfere with your day to day activities","Quite a bit",4.0000,,12,"Week 12","2020-01-21",80,"-P7D",0
@@ -22197,6 +22196,7 @@
 "SMART","QS","SMART-0203-00050",144,"Widespread Pain","Widespread Pain Inventory","PNAREA4","Do you have chronic pain in the right buttock, leg, or foot","Yes",1.0000,,12,"Week 12","2020-01-21",80,,0
 "SMART","QS","SMART-0203-00050",145,"Widespread Pain","Widespread Pain Inventory","PNAREA5","Do you have chronic pain in the left buttock, leg, or foot","Yes",1.0000,,12,"Week 12","2020-01-21",80,,0
 "SMART","QS","SMART-0203-00050",146,"Widespread Pain","Widespread Pain Inventory","PNAREA6","Do you have chronic pain in the chest, abdomen, or pelvis","No",0.0000,,12,"Week 12","2020-01-21",80,,0
-"SMART","QS","SMART-0203-00050",147,"Widespread Pain","Widespread Pain Inventory","PNAREA7","Do you have chronic pain in the neck or upper back","No",0.0000,,12,"Week 12","2020-01-21",80,,0
+"SMART","QS","SMART-0203-00050",147,"Widespread Pain","Widespread Pain Inventory","PNAREA7","How often have you used any recreational drugs","No",0.0000,,12,"Week 12","2020-01-21",80,,0
 "SMART","QS","SMART-0203-00050",148,"Widespread Pain","Widespread Pain Inventory","WDSPPNUM","Widespread Pain Raw Score",4.00,4.0000,"Y",12,"Week 12","2020-01-21",80,,0
+"SMART","QS","SMART.001.001",4,"Anxiety","GAD","GAD01","How often bothered by feeling nervous, anxious or on edge","More than half the days",2.0000,,12,"Week 12","2020-03-09",79,"-P2W",0
 

@@ -1,14 +1,13 @@
 "STUDYID","DOMAIN","USUBJID","SCSEQ","SCTESTCD","SCTEST","SCMETHOD","SCORRES","SCORRESU","SCSTRESC","SCSTRESN","SCSTRESU"
+"SMART","SC","SMART-01-001",10,"EMPSTAT","Current Employment Status",,,,"Part-time employment",".",
 "SMART","SC","SMART-0201-00001",1,"BPDISAB","Ever Applied for or Received Disability Insurance for Pain",,,,"Yes",".",
 "SMART","SC","SMART-0201-00001",2,"BPLWSUIT","Ever Involved in Lawsuit or Legal Claim Related to Back Problem",,,,"Yes",".",
 "SMART","SC","SMART-0201-00001",3,"BPMORE","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"Yes",".",
-"SMART","SC","SMART-0201-00001",4,"BPSURG","Ever Had Low Back Operation",,,,"No",".",
 "SMART","SC","SMART-0201-00001",5,"BPSURGSF","Any Back Operations Involve a Spinal Fusion",,,,"Does not apply",".",
 "SMART","SC","SMART-0201-00001",6,"BPSURGTM","When was Last Back Operation",,,,"Does not apply",".",
 "SMART","SC","SMART-0201-00001",7,"BPUNEMP","Ever Unemployed for 1 or More Months Due to Low Back Pain",,,,"Does not apply",".",
 "SMART","SC","SMART-0201-00001",8,"BPWKCOMP","Ever Filed or Awarded Workers Comp for Back Problem",,,,"Yes",".",
 "SMART","SC","SMART-0201-00001",9,"EDLEVEL","Highest Level of Education Completed",,,,"Some secondary school or high school education",".",
-"SMART","SC","SMART-0201-00001",10,"EMPSTAT","Current Employment Status",,,,"Part-time employment",".",
 "SMART","SC","SMART-0201-00001",11,"GENIDENT","Gender Identity",,"Transgender Female",,"Female",".",
 "SMART","SC","SMART-0201-00001",12,"HEIGHT","Height at Baseline","SELF-REPORTED",234.8,"CM",234.8,234.8,"CM"
 "SMART","SC","SMART-0201-00001",13,"HHINCOME","Annual Household Income from All Sources",,,,"$75,000 to $99,999",".",
@@ -333,7 +332,7 @@
 "SMART","SC","SMART-0201-00020",9,"EDLEVEL","Highest Level of Education Completed",,,,"High school or secondary school degree complete",".",
 "SMART","SC","SMART-0201-00020",10,"EMPSTAT","Current Employment Status",,,,"Full-time employment",".",
 "SMART","SC","SMART-0201-00020",11,"GENIDENT","Gender Identity",,"Transgender Female",,"Female",".",
-"SMART","SC","SMART-0201-00020",12,"HEIGHT","Height at Baseline","MEASURED",193,"CM",193,193.0,"CM"
+"SMART","SC","SMART-0201-00020",12,"HEIGHT","Height at Baseline",,193,"CM",193,193.0,"CM"
 "SMART","SC","SMART-0201-00020",13,"HHINCOME","Annual Household Income from All Sources",,,,"$25,000 to $34,999",".",
 "SMART","SC","SMART-0201-00020",14,"HHNUM","Number of People Living in Household",,,,2,2.0,
 "SMART","SC","SMART-0201-00020",15,"MARISTAT","Current Relationship Status",,,,"Divorced",".",
@@ -724,12 +723,12 @@
 "SMART","SC","SMART-0201-00043",9,"EDLEVEL","Highest Level of Education Completed",,,,"High school or secondary school degree complete",".",
 "SMART","SC","SMART-0201-00043",10,"EMPSTAT","Current Employment Status",,,,"Full-time employment",".",
 "SMART","SC","SMART-0201-00043",11,"GENIDENT","Gender Identity",,"Transgender Female",,"Female",".",
-"SMART","SC","SMART-0201-00043",12,"HEIGHT","Height at Baseline","MEASURED",187.8,"CM",187.8,187.8,"CM"
+"SMART","SC","SMART-0201-00043",12,"HEIGHT","Height at Baseline","MEASURED",187.8,"LB",187.8,187.8,"CM"
 "SMART","SC","SMART-0201-00043",13,"HHINCOME","Annual Household Income from All Sources",,,,"$50,000 to $74,999",".",
 "SMART","SC","SMART-0201-00043",14,"HHNUM","Number of People Living in Household",,,,3,3.0,
 "SMART","SC","SMART-0201-00043",15,"MARISTAT","Current Relationship Status",,,,"Domestic partner",".",
 "SMART","SC","SMART-0201-00043",16,"PAINDUR","Duration of Type of Pain for which Enrolled in Study (Months)",,,,"25 Months",25.0,
-"SMART","SC","SMART-0201-00043",17,"WEIGHT","Weight at Baseline","SELF-REPORTED",66.9,"KG",66.9,66.9,"KG"
+"SMART","SC","SMART-0201-00043",17,"WEIGHT","Weight at Baseline","SELF-REPORTED",66.9,"CM",66.9,66.9,"KG"
 "SMART","SC","SMART-0201-00044",1,"BPDISAB","Ever Applied for or Received Disability Insurance for Pain",,,,"No",".",
 "SMART","SC","SMART-0201-00044",2,"BPLWSUIT","Ever Involved in Lawsuit or Legal Claim Related to Back Problem",,,,"No",".",
 "SMART","SC","SMART-0201-00044",3,"BPMORE","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"No",".",
@@ -1047,7 +1046,7 @@
 "SMART","SC","SMART-0202-00012",9,"EDLEVEL","Highest Level of Education Completed",,,,"High school or secondary school degree complete",".",
 "SMART","SC","SMART-0202-00012",10,"EMPSTAT","Current Employment Status",,,,"Part-time employment",".",
 "SMART","SC","SMART-0202-00012",11,"GENIDENT","Gender Identity",,"Male",,"Male",".",
-"SMART","SC","SMART-0202-00012",12,"HEIGHT","Height at Baseline","MEASURED",73.4,"IN",186.4,186.4,"CM"
+"SMART","SC","SMART-0202-00012",12,"HEIGHT","Height at Baseline","MEASURED","Sixty-four","IN",186.4,186.4,"CM"
 "SMART","SC","SMART-0202-00012",13,"HHINCOME","Annual Household Income from All Sources",,,,"$75,000 to $99,999",".",
 "SMART","SC","SMART-0202-00012",14,"HHNUM","Number of People Living in Household",,,,2,2.0,
 "SMART","SC","SMART-0202-00012",15,"MARISTAT","Current Relationship Status",,,,"Divorced",".",
@@ -1200,7 +1199,7 @@
 "SMART","SC","SMART-0202-00021",9,"EDLEVEL","Highest Level of Education Completed",,,,"High school or secondary school degree complete",".",
 "SMART","SC","SMART-0202-00021",10,"EMPSTAT","Current Employment Status",,,,"Part-time employment",".",
 "SMART","SC","SMART-0202-00021",11,"GENIDENT","Gender Identity",,"Unknown",,"Unknown",".",
-"SMART","SC","SMART-0202-00021",12,"HEIGHT","Height at Baseline","SELF-REPORTED",78.2,"IN",198.6,198.6,"CM"
+"SMART","SC","SMART-0202-00021",11,"HEIGHT","Height at Baseline","SELF-REPORTED",78.2,"IN",198.6,198.6,"CM"
 "SMART","SC","SMART-0202-00021",13,"HHINCOME","Annual Household Income from All Sources",,,,"$50,000 to $74,999",".",
 "SMART","SC","SMART-0202-00021",14,"HHNUM","Number of People Living in Household",,,,1,1.0,
 "SMART","SC","SMART-0202-00021",15,"MARISTAT","Current Relationship Status",,,,"Separated",".",
@@ -1412,7 +1411,7 @@
 "SMART","SC","SMART-0202-00033",17,"WEIGHT","Weight at Baseline","MEASURED",68.1,"KG",68.1,68.1,"KG"
 "SMART","SC","SMART-0202-00034",1,"BPDISAB","Ever Applied for or Received Disability Insurance for Pain",,,,"Yes",".",
 "SMART","SC","SMART-0202-00034",2,"BPLWSUIT","Ever Involved in Lawsuit or Legal Claim Related to Back Problem",,,,"Yes",".",
-"SMART","SC","SMART-0202-00034",3,"BPMORE","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"No",".",
+"SMART","SC","SMART-0202-00034",3,"BPLWSUIT","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"No",".",
 "SMART","SC","SMART-0202-00034",4,"BPSURG","Ever Had Low Back Operation",,,,"No",".",
 "SMART","SC","SMART-0202-00034",5,"BPSURGSF","Any Back Operations Involve a Spinal Fusion",,,,"Does not apply",".",
 "SMART","SC","SMART-0202-00034",6,"BPSURGTM","When was Last Back Operation",,,,"Does not apply",".",
@@ -1529,23 +1528,23 @@
 "SMART","SC","SMART-0202-00040",15,"MARISTAT","Current Relationship Status",,,,"Separated",".",
 "SMART","SC","SMART-0202-00040",16,"PAINDUR","Duration of Type of Pain for which Enrolled in Study (Months)",,,,"23 Months",23.0,
 "SMART","SC","SMART-0202-00040",17,"WEIGHT","Weight at Baseline","SELF-REPORTED",65.5,"KG",65.5,65.5,"KG"
-"SMART","SC","SMART-0202-00041",1,"BPDISAB","Ever Applied for or Received Disability Insurance for Pain",,,,"No",".",
-"SMART","SC","SMART-0202-00041",2,"BPLWSUIT","Ever Involved in Lawsuit or Legal Claim Related to Back Problem",,,,"No",".",
-"SMART","SC","SMART-0202-00041",3,"BPMORE","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"Yes",".",
-"SMART","SC","SMART-0202-00041",4,"BPSURG","Ever Had Low Back Operation",,,,"Yes, more than one operation",".",
-"SMART","SC","SMART-0202-00041",5,"BPSURGSF","Any Back Operations Involve a Spinal Fusion",,,,"Does not apply",".",
-"SMART","SC","SMART-0202-00041",6,"BPSURGTM","When was Last Back Operation",,,,"Does not apply",".",
-"SMART","SC","SMART-0202-00041",7,"BPUNEMP","Ever Unemployed for 1 or More Months Due to Low Back Pain",,,,"Yes",".",
-"SMART","SC","SMART-0202-00041",8,"BPWKCOMP","Ever Filed or Awarded Workers Comp for Back Problem",,,,"Does not apply",".",
-"SMART","SC","SMART-0202-00041",9,"EDLEVEL","Highest Level of Education Completed",,,,"High school or secondary school degree complete",".",
-"SMART","SC","SMART-0202-00041",10,"EMPSTAT","Current Employment Status",,,,"Part-time employment",".",
-"SMART","SC","SMART-0202-00041",11,"GENIDENT","Gender Identity",,"Unknown",,"Unknown",".",
-"SMART","SC","SMART-0202-00041",12,"HEIGHT","Height at Baseline","MEASURED",210.5,"CM",210.5,210.5,"CM"
-"SMART","SC","SMART-0202-00041",13,"HHINCOME","Annual Household Income from All Sources",,,,"$50,000 to $74,999",".",
-"SMART","SC","SMART-0202-00041",14,"HHNUM","Number of People Living in Household",,,,2,2.0,
-"SMART","SC","SMART-0202-00041",15,"MARISTAT","Current Relationship Status",,,,"Divorced",".",
-"SMART","SC","SMART-0202-00041",16,"PAINDUR","Duration of Type of Pain for which Enrolled in Study (Months)",,,,"30 Months",30.0,
-"SMART","SC","SMART-0202-00041",17,"WEIGHT","Weight at Baseline","MEASURED",68.5,"KG",68.5,68.5,"KG"
+"SMART","SC","SMART-0202-00041",1,"BPDISAB","Ever Applied for or Received Disability Insurance for Pain",,,,1,".",
+"SMART","SC","SMART-0202-00041",2,"BPLWSUIT","Ever Involved in Lawsuit or Legal Claim Related to Back Problem",,,,"Does not apply",".",
+"SMART","SC","SMART-0202-00041",3,"BPMORE","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"Don't know",".",
+"SMART","SC","SMART-0202-00041",4,"BPSURG","Ever Had Low Back Operation",,,,3,".",
+"SMART","SC","SMART-0202-00041",5,"BPSURGSF","Any Back Operations Involve a Spinal Fusion",,,,"Yes, more than one",".",
+"SMART","SC","SMART-0202-00041",6,"BPSURGTM","When was Last Back Operation",,,,"Less than 3 months",".",
+"SMART","SC","SMART-0202-00041",7,"BPUNEMP","Ever Unemployed for 1 or More Months Due to Low Back Pain",,,,"Multiple times",".",
+"SMART","SC","SMART-0202-00041",8,"BPWKCOMP","Ever Filed or Awarded Workers Comp for Back Problem",,,,2,".",
+"SMART","SC","SMART-0202-00041",9,"EDLEVEL","Highest Level of Education Completed",,,,"Master's degree",".",
+"SMART","SC","SMART-0202-00041",10,"EMPSTAT","Current Employment Status",,,,"Multiple jobs",".",
+"SMART","SC","SMART-0202-00041",11,"GENIDENT","Gender Identity",,"Unknown",,"Transgender",".",
+"SMART","SC","SMART-0202-00041",12,"HEIGHT","Height at Baseline","MEASURED",210.5,"CM","Two-hundred",210.5,"CM"
+"SMART","SC","SMART-0202-00041",13,"HHINCOME","Annual Household Income from All Sources",,,,70000,".",
+"SMART","SC","SMART-0202-00041",14,"HHNUM","Number of People Living in Household",,,,"More than 2",2.0,
+"SMART","SC","SMART-0202-00041",15,"MARISTAT","Current Relationship Status",,,,"Single",".",
+"SMART","SC","SMART-0202-00041",16,"PAINDUR","Duration of Type of Pain for which Enrolled in Study (Months)",,,,"More than 3 months",30.0,
+"SMART","SC","SMART-0202-00041",17,"WEIGHT","Weight at Baseline","MEASURED",68.5,"KG","175 pounds",68.5,"KG"
 "SMART","SC","SMART-0202-00042",1,"BPDISAB","Ever Applied for or Received Disability Insurance for Pain",,,,"No",".",
 "SMART","SC","SMART-0202-00042",2,"BPLWSUIT","Ever Involved in Lawsuit or Legal Claim Related to Back Problem",,,,"Yes",".",
 "SMART","SC","SMART-0202-00042",3,"BPMORE","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"No",".",
@@ -2199,7 +2198,7 @@
 "SMART","SC","SMART-0203-00030",5,"BPSURGSF","Any Back Operations Involve a Spinal Fusion",,,,"Does not apply",".",
 "SMART","SC","SMART-0203-00030",6,"BPSURGTM","When was Last Back Operation",,,,"Does not apply",".",
 "SMART","SC","SMART-0203-00030",7,"BPUNEMP","Ever Unemployed for 1 or More Months Due to Low Back Pain",,,,"Does not apply",".",
-"SMART","SC","SMART-0203-00030",8,"BPWKCOMP","Ever Filed or Awarded Workers Comp for Back Problem",,,,"No",".",
+"SMART","SC","SMART-0203-00030",8,"BPWKCOMP","Ever Filed or Awarded Workers Comp for Back Problem","SELF-REPORTED",,,"No",".",
 "SMART","SC","SMART-0203-00030",9,"EDLEVEL","Highest Level of Education Completed",,,,"College or baccalaureate degree complete",".",
 "SMART","SC","SMART-0203-00030",10,"EMPSTAT","Current Employment Status",,,,"Full-time employment",".",
 "SMART","SC","SMART-0203-00030",11,"GENIDENT","Gender Identity",,"Unknown",,"Unknown",".",
@@ -2232,7 +2231,7 @@
 "SMART","SC","SMART-0203-00032",4,"BPSURG","Ever Had Low Back Operation",,,,"Yes, more than one operation",".",
 "SMART","SC","SMART-0203-00032",5,"BPSURGSF","Any Back Operations Involve a Spinal Fusion",,,,"Does not apply",".",
 "SMART","SC","SMART-0203-00032",6,"BPSURGTM","When was Last Back Operation",,,,"Does not apply",".",
-"SMART","SC","SMART-0203-00032",7,"BPUNEMP","Ever Unemployed for 1 or More Months Due to Low Back Pain",,,,"No",".",
+"SMART","SC","SMART-0203-00032",7,"BPUNEMP","When was Last Back Operation",,,,"No",".",
 "SMART","SC","SMART-0203-00032",8,"BPWKCOMP","Ever Filed or Awarded Workers Comp for Back Problem",,,,"Yes",".",
 "SMART","SC","SMART-0203-00032",9,"EDLEVEL","Highest Level of Education Completed",,,,"Did not complete secondary school or less than high school",".",
 "SMART","SC","SMART-0203-00032",10,"EMPSTAT","Current Employment Status",,,,"Part-time employment",".",
@@ -2356,7 +2355,7 @@
 "SMART","SC","SMART-0203-00039",9,"EDLEVEL","Highest Level of Education Completed",,,,"Did not complete secondary school or less than high school",".",
 "SMART","SC","SMART-0203-00039",10,"EMPSTAT","Current Employment Status",,,,"Not employed",".",
 "SMART","SC","SMART-0203-00039",11,"GENIDENT","Gender Identity",,"Transgender Female",,"Female",".",
-"SMART","SC","SMART-0203-00039",12,"HEIGHT","Height at Baseline","SELF-REPORTED",236.9,"CM",236.9,236.9,"CM"
+"SMART","SC","SMART-0203-00039",12,"HEIGHT","Height at Baseline","SELF-REPORTED",236.9,"CM",65.7,65.7,"CM"
 "SMART","SC","SMART-0203-00039",13,"HHINCOME","Annual Household Income from All Sources",,,,"$150,000 to $199,999",".",
 "SMART","SC","SMART-0203-00039",14,"HHNUM","Number of People Living in Household",,,,5,5.0,
 "SMART","SC","SMART-0203-00039",15,"MARISTAT","Current Relationship Status",,,,"Domestic partner",".",
@@ -2412,7 +2411,7 @@
 "SMART","SC","SMART-0203-00042",14,"HHNUM","Number of People Living in Household",,,,3,3.0,
 "SMART","SC","SMART-0203-00042",15,"MARISTAT","Current Relationship Status",,,,"Never married",".",
 "SMART","SC","SMART-0203-00042",16,"PAINDUR","Duration of Type of Pain for which Enrolled in Study (Months)",,,,"22 Months",22.0,
-"SMART","SC","SMART-0203-00042",17,"WEIGHT","Weight at Baseline","MEASURED",71.4,"KG",71.4,71.4,"KG"
+"SMART","SC","SMART-0203-00042",17,"WEIGHT","Weight at Baseline","MEASURED",71.4,"KG",71.4,71.4,"LB"
 "SMART","SC","SMART-0203-00043",1,"BPDISAB","Ever Applied for or Received Disability Insurance for Pain",,,,"No",".",
 "SMART","SC","SMART-0203-00043",2,"BPLWSUIT","Ever Involved in Lawsuit or Legal Claim Related to Back Problem",,,,"No",".",
 "SMART","SC","SMART-0203-00043",3,"BPMORE","Low Back Pain More Severe than Pain in Other Parts of Body",,,,"Yes",".",
@@ -2549,4 +2548,5 @@
 "SMART","SC","SMART-0203-00050",15,"MARISTAT","Current Relationship Status",,,,"Married",".",
 "SMART","SC","SMART-0203-00050",16,"PAINDUR","Duration of Type of Pain for which Enrolled in Study (Months)",,,,"20 Months",20.0,
 "SMART","SC","SMART-0203-00050",17,"WEIGHT","Weight at Baseline","MEASURED",64.6,"KG",64.6,64.6,"KG"
+"SMART","SC","SMART.001.001",4,"BPSURG","Ever Had Low Back Operation",,,,"No",".",
 
