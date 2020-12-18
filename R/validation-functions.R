@@ -580,6 +580,7 @@ validate_on_subsets <- function(validation_table, check_name=""){
 #'  value_column the column determined by the value above
 #'  codelist the codelist for the value_column values
 #'  data_type the data type for the value column
+#'  text_format additional format information in the case of text fields
 #'  term the term 
 #'  order the order of the term
 #'
@@ -597,7 +598,9 @@ key_column_to_codelists <- function(key_column){
         transmute(dataset=Dataset_wc,
                   key_column=Variable_wc,
                   value=Value,
+                  value_level_datatype=`Data Type`,
                   value_column=Variable_vl,
+                  text_format=Format,
                   codelist=Codelist) %>%
         left_join(specification$Codelists, by=c("codelist"="ID")) %>%
         transmute(dataset=dataset,
@@ -605,9 +608,10 @@ key_column_to_codelists <- function(key_column){
                   value=value,
                   value_column=value_column,
                   codelist=codelist,
-                  data_type=`Data Type`,
+                  data_type=coalesce(`Data Type`, value_level_datatype),                  
                   term=Term,
-                  order=Order);
+                  text_format=text_format,
+                  order=Order) %>% distinct();
 }
 
 #' find values in key_column for which there is no where_clause
