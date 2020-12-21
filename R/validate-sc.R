@@ -42,36 +42,42 @@ validate_sc <- block({
   check_sctest <- mandatory_codelist_column("SCTEST");
   
   check_scmethod <- block({
-    validation_table <- specification$scmethod_codelists %>%
+    col="SCMETHOD"
+    validation_table <- key_column_to_codelists("SCTESTCD") %>% 
+      filter(value_column==col) %>% 
       rowwise() %>%
-      transmute(SCTESTCD=id, validation_function__=
-                  list(ifelse(!is.na(codelist),
-                              column_in_codelist("SCMETHOD", get_codelist(codelist)),
-                              column_is_textual("SCMETHOD")))) %>%
+      transmute(SCTESTCD=value, codelists=term, validation_function__=
+                  list(ifelse(!is.na(codelists),
+                              column_in_codelist(col, codelists),
+                              column_is_textual(col)))) %>%
       ungroup();
     
     validate_on_subsets(validation_table, "SCMETHOD column consistent with SCTESTCD.");
   })
   
   check_scorres <- block({
-    validation_table <- specification$scscorres_codelists %>%
+    col="SCORRES"
+    validation_table <- key_column_to_codelists("SCTESTCD") %>% 
+      filter(value_column==col) %>% 
       rowwise() %>%
-      transmute(SCTESTCD=id, validation_function__=
-                  list(ifelse(!is.na(codelist),
-                              column_in_codelist("SCORRES", get_codelist(codelist)),
-                              column_is_textual("SCORRES")))) %>%
+      transmute(SCTESTCD=value, codelists=term, validation_function__=
+                  list(ifelse(!is.na(codelists),
+                              column_in_codelist(col, codelists),
+                              column_is_textual(col)))) %>%
       ungroup();
     
     validate_on_subsets(validation_table, "SCORRES column consistent with SCTESTCD.");
   })
   
   check_scorresu <- block({
-    validation_table <- specification$scscorresu_codelists %>%
+    col="SCORRESU"
+    validation_table <- key_column_to_codelists("SCTESTCD") %>% 
+      filter(value_column==col) %>% 
       rowwise() %>%
-      transmute(SCTESTCD=id, validation_function__=
-                  list(ifelse(!is.na(codelist),
-                              column_in_codelist("SCORRESU", get_codelist(codelist)),
-                              column_is_textual("SCORRESU")))) %>%
+      transmute(SCTESTCD=value, codelists=term, validation_function__=
+                  list(ifelse(!is.na(codelists),
+                              column_in_codelist(col, codelists),
+                              column_is_textual(col)))) %>%
       ungroup();
     
     validate_on_subsets(validation_table, "SCORRESU column consistent with SCTESTCD.");
@@ -79,36 +85,42 @@ validate_sc <- block({
   
   
   check_scstresc <- block({
-    validation_table <- specification$scstresc_codelists %>%
+    col="SCSTRESC"
+    validation_table <- key_column_to_codelists("SCTESTCD") %>% 
+      filter(value_column==col) %>% 
       rowwise() %>%
-      transmute(SCTESTCD=id, validation_function__=
-                  list(ifelse(!is.na(codelist),
-                              column_in_codelist("SCSTRESC", get_codelist(codelist)),
-                              column_is_textual("SCSTRESC")))) %>%
+      transmute(SCTESTCD=value, codelists=term, validation_function__=
+                  list(ifelse(!is.na(codelists),
+                              column_in_codelist(col, codelists),
+                              column_is_textual(col)))) %>%
       ungroup();
     
     validate_on_subsets(validation_table, "SCSTRESC column consistent with SCTESTCD.");
   })
   
   check_scstresn <- block({
-    validation_table <- specification$scstresn_codelists %>%
+    col="SCSTRESN"
+    validation_table <- key_column_to_codelists("SCTESTCD") %>% 
+      filter(value_column==col) %>% 
       rowwise() %>%
-      transmute(SCTESTCD=id, validation_function__=
-                  list(ifelse(!is.na(codelist),
-                              column_in_codelist("SCSTRESN", get_codelist(codelist)),
-                              column_is_textual("SCSTRESN")))) %>%
+      transmute(SCTESTCD=value, codelists=term, validation_function__=
+                  list(ifelse(!is.na(codelists),
+                              column_in_codelist(col, codelists),
+                              column_is_float(col)))) %>%
       ungroup();
     
     validate_on_subsets(validation_table, "SCSTRESN column consistent with SCTESTCD.");
   })
   
   check_scstresu <- block({
-    validation_table <- specification$scstresu_codelists %>%
+    col="SCSTRESU"
+    validation_table <- key_column_to_codelists("SCTESTCD") %>% 
+      filter(value_column==col) %>% 
       rowwise() %>%
-      transmute(SCTESTCD=id, validation_function__=
-                  list(ifelse(!is.na(codelist),
-                              column_in_codelist("SCSTRESU", get_codelist(codelist)),
-                              column_is_textual("SCSTRESU")))) %>%
+      transmute(SCTESTCD=value, codelists=term, validation_function__=
+                  list(ifelse(!is.na(codelists),
+                              column_in_codelist(col, codelists),
+                              column_is_textual(col)))) %>%
       ungroup();
     
     validate_on_subsets(validation_table, "SCSTRESU column consistent with SCTESTCD.");
