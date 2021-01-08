@@ -56,7 +56,7 @@ column_is_iso8601_date <- function(column){
                                 "continuable",
                                 check_report(s("Column %s is ISO8601 date compliant.", column),
                                              F,
-                                             "Some dates, while syntactically valid, encode invalid calendar dates. %s rows: %s", column, which(!day_ok))))
+                                             "Some dates, while syntactically valid, encode invalid calendar dates. %s rows: %s", column, which(!day_ok))));
         }
         extend_state(state,
                      "ok",
@@ -196,7 +196,7 @@ column_is_integer <- function(column){
                          "continuable",
                          check_report("Column contains only integers",
                                       F,
-                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at indices %s.", 
+                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at these indices: %s.", 
                                       column,
                                       falses))
         } else {
@@ -226,8 +226,8 @@ column_in_integer_range <- function(column, values=c()){
                      check_report(sprintf("Integer column draw from %s.", collapse_commas(values)),
                                   ok,
                                   ifelse(ok,"All values in the right range.",
-                                         sprintf("These columns were out of range %s.",
-                                                 collapse_commas(which(check))))));
+                                         sprintf("Out of range values appear at these indices: %s.",
+                                                 collapse_commas(which(!check))))));
     }    
 }
 
