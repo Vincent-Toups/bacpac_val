@@ -29,7 +29,7 @@ month_len <- function(month_number, year_number){
 #' maps vectors of year month day to booleans based on whether the day
 #' is valid for the given year and month.
 valid_day <- function(year, month, day){
-    day >= 1 & day <= month_len(month, year);
+    month >=1 & month <= 12 & day >= 1 & day <= month_len(month, year);
 }
 
 #' Return the unparsed column name for "name"
@@ -46,11 +46,7 @@ unparsed_column_name <- function(name){
 #' @return a data frame with twice the columns indicated in the file, half of which are unparsed duplicates.
 val_read_csv <- function(filename){
     parsed <- read_csv(filename);
-    args <- list();
-    for(n in names(parsed)){
-        args[n] <- col_character();
-    }
-    unparsed <- read_csv(filename, col_types=do.call(cols, args))
+    unparsed <- read_csv(filename, col_types = cols(.default = "c"))
     names(unparsed) <- unparsed_column_name(names(unparsed));
     cbind(parsed, unparsed) %>% mutate(index__=seq(nrow(parsed)));
 }
