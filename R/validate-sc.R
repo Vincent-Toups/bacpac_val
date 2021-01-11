@@ -42,7 +42,7 @@ validate_sc <- block({
   check_sctest <- mandatory_codelist_column("SCTEST");
   
   check_scmethod <- block({
-    col="SCMETHOD"
+    col <- "SCMETHOD"
     validation_table <- key_column_to_codelists("SCTESTCD") %>% 
       filter(value_column==col) %>% 
       rowwise() %>%
@@ -56,7 +56,7 @@ validate_sc <- block({
   })
   
   check_scorres <- block({
-    col="SCORRES"
+    col <- "SCORRES"
     validation_table <- key_column_to_codelists("SCTESTCD") %>% 
       filter(value_column==col) %>% 
       rowwise() %>%
@@ -70,7 +70,7 @@ validate_sc <- block({
   })
   
   check_scorresu <- block({
-    col="SCORRESU"
+    col <- "SCORRESU"
     validation_table <- key_column_to_codelists("SCTESTCD") %>% 
       filter(value_column==col) %>% 
       rowwise() %>%
@@ -85,7 +85,7 @@ validate_sc <- block({
   
   
   check_scstresc <- block({
-    col="SCSTRESC"
+    col <- "SCSTRESC"
     validation_table <- key_column_to_codelists("SCTESTCD") %>% 
       filter(value_column==col) %>% 
       rowwise() %>%
@@ -99,7 +99,7 @@ validate_sc <- block({
   })
   
   check_scstresn <- block({
-    col="SCSTRESN"
+    col <- "SCSTRESN"
     validation_table <- key_column_to_codelists("SCTESTCD") %>% 
       filter(value_column==col) %>% 
       rowwise() %>%
@@ -113,7 +113,7 @@ validate_sc <- block({
   })
   
   check_scstresu <- block({
-    col="SCSTRESU"
+    col <- "SCSTRESU"
     validation_table <- key_column_to_codelists("SCTESTCD") %>% 
       filter(value_column==col) %>% 
       rowwise() %>%
