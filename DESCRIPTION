@@ -8,6 +8,8 @@ Authors@R:
            email = "toups@email.unc.edu")
 Description: Given a specification of a set of valid data sets, build (and then execute) a validator on tabular data.
 Collate:
+    'val-package.R'
+    'RcppExports.R'
     'rules.R'
     'util.R'
     'validation-state.R'
@@ -25,8 +27,11 @@ Imports:
     readr,
     stringr,
     magrittr,
-    dplyr
+    dplyr,
+    Rcpp
 Depends: 
     R (>= 2.10)
 Suggests: 
     testthat
+LinkingTo: 
+    Rcpp
