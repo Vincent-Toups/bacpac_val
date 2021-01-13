@@ -40,16 +40,21 @@ validate_qsmd <- block({
     check_qstestcd <- mandatory_codelist_column("QSTESTCD");
     check_qstest <- mandatory_codelist_column("QSTEST");
 
-    check_qstestresc <- block({
-        validation_table <- specification$qstestcd_codelists %>%
+    check_qsstresc <- block({
+        col <- "QSSTRESC"
+        validation_table <- key_column_to_codelists("QSTESTCD") %>%
+            filter(value_column == col) %>%
+            transmute(QSTESTCD=value, codelist=codelist, text_format=text_format) %>%
+            distinct() %>%
             rowwise() %>%
-            transmute(QSTESTCD=id, validation_function__=
-                                       list(ifelse(!is.na(codelist),
-                                              column_in_codelist("QSTESTRESC", get_codelist(codelist)),
-                                              column_is_textual("QSTESTRESC")))) %>%
+            transmute(QSTESTCD=QSTESTCD,
+                      validation_function__ =
+                          list(ifelse(!is.na(codelist),
+                                      column_in_codelist(col, get_codelist(codelist)),
+                                      text_column_matches_format(col,text_format)))) %>%
             ungroup();
-           
-        validate_on_subsets(validation_table, "QSTESTRESC column consistent with QSTESTCD.");
+                                                 
+        validate_on_subsets(validation_table, "QSSTRESC column consistent with QSTESTCD.");
     })
     
     validation_chain(
@@ -61,6 +66,6 @@ validate_qsmd <- block({
         check_qsscat,
         check_qstestcd,
         check_qstest,
-        check_qstestresc);
+        check_qsstresc);
 });
 
