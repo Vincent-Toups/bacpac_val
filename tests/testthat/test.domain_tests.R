@@ -17,6 +17,8 @@ test_dm <- block({
     val_read_csv(tempname);
 });
 
+bad_test_dm <- test_dm %>% select(-DOMAIN);
+
 ## test state functions are pure
 ## and thus we can reuse the fresh dm test state
 ## in all tests.
@@ -27,6 +29,8 @@ dm_state <- fresh_state(test_dm, "ok");
 validation_dip_data <- function(validation_state,f){
     update_state(validation_state, data=f(validation_state$data));
 }
+
+
 
 
 test_that("That the DM domain is known and that the test function works.",
@@ -40,8 +44,5 @@ test_that("Test that the domain exists test function works.",
               expect_identical("ok",
                         check_domain_presence(dm_state)$status);
               expect_identical("halted",
-                               check_domain_presence(dm_state)$status)
+                               check_domain_presence(fresh_state(bad_test_dm,"ok"))$status)
           })
-
-
-
