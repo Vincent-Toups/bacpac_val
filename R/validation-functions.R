@@ -1,3 +1,34 @@
+#' check_iso8601_durations - validate that a set of strings encode ISO 8601 durations
+#' of the following sort: P3Y2M1DT1H3M5S
+#'
+#' @param s - a character array of values (NAs are propagated)
+#' @return - a boolean array
+check_iso8601_durations <- function(s){
+    if(!identical(typeof(s),typeof(""))){
+        stop("check_iso8601_durations requires a character array argument.");
+    }
+    s <- toupper(s); ## the standard is case insensitve but the parser
+                     ## only validates uppercase for simplicity.
+    check_ISO8601_durations_cpp(s);
+}
+
+column_is_iso8601_duration <- function(column){
+    s <- sprintf;
+    function(state){
+        col <- state$data[[unparsed_column_name(column)]];
+        check <- check_iso8601_durations(col);
+        bad_count <- sum(check == FALSE, na.rm = TRUE);
+        indexes <- state$data[["index__"]][which(check == FALSE)];
+        ok = bad_count == 0;
+        extend_state(state,
+                     ifelse(ok, "ok", "continuable"),
+                     check_report(s("Column (or column subset) %s contains ISO 8601 durations.", column),
+                                  ok,
+                                  ifelse(ok,"Column (or column subset) %s contains ISO 8601 durations.",
+                                         s("These columsn (%s) are not valid ISO 8601 Durations. The proper format is PnYnMnDTnHnMnS where n is an integer for all entries except the smallest non-zero one and where zero entries may be ellided unless the result would be P. If there are no non-zero hours, minutes or seconds, then these may be removed and if so, the trailing T must also be removed.", collapse_commas(indexes)))));
+    }
+}
+
 #' column_is_iso8601_date - Returns a state function which checks
 #' whether the column complies with the ISO8601 date formatting standard.
 #'
@@ -107,6 +138,60 @@ column_is_textual <- function(column){
                                       F,
                                       "The column %s must be text but it appears to be %s instead.", column, class(the_col)));
         }
+    }
+}
+
+column_is_specified_decimal <- function(column, spec){
+    if(!identical(length(spec),as.integer(1))){
+        stop("column_is_specified_decimal can only accept one format to enforce.");
+    }
+    r <- stringr::str_match(spec, "^([0-9])+\\.([0-9]+)$");
+    dim(r) <- 3;
+    if(identical(is.na(r[[1]]),TRUE)){
+        stop(sprintf("Invalid format for a specified decimal: %s", spec));
+    }
+    la <- as.numeric(r[[2]]);
+    lb <- as.numeric(r[[3]]);
+    function(state){
+        colinfo <- state$data[[unparsed_column_name(column)]] %>%
+            str_split("\\.");
+        colinfo <- Map(str_length, colinfo);
+        
+
+        piece_length <- Map(length, colinfo) %>% unlist();
+        valid_piece_lengths <- piece_length %in% c(1,2);
+        a <- Map(function(x){x[[1]]}, colinfo);
+        b <- Map(function(x){ifelse(length(x>1),x[[2]],0)}, colinfo);
+        check <- a <= la && b <= lb && valid_piece_lengths;
+        bad_indices <- state$data[["index__"]][which(check == FALSE)];
+        all_ok <- sum(check) == length(check);
+        extend_state(state,
+                     ifelse(all_ok, "ok", "continuable"),
+                     check_report(sprintf("Column (or subset of a column) %s is consistent with a specified decimal like : %s.", column, spec),
+                                  all_ok,
+                                  ifelse(all_ok, "All values in spec.", sprintf("These rows are out of spec (%s).", collapse_commas(bad_indices)))));
+    }
+}
+
+valid_decimal_spec <- function(s){
+    !is.na(stringr::str_match(s, "^([0-9])+\\.([0-9]+)$")[[1]])
+}
+
+
+#' text_column_matches_format parses the text column column and checks
+#' it against `format`
+#'
+#' @param column - the column of interest
+#' @param format - the text format of interest. Presently:
+#'  (b).(a) - a number with b digits before a dot and a digits after
+#'  ISO8601 - an ISO8601 duration.
+text_column_matches_format <- function(column, format){
+    if(format == "ISO8601"){
+        column_is_iso8601_duration(column);
+    } else if(valid_decimal_spec(format)) {
+        column_is_specified_decimal(column, format);
+    } else {
+        column_is_textual(column);
     }
 }
 
