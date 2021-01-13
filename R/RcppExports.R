@@ -2,7 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
-check_ISO8601_durations <- function(putative_duration_strings) {
-    .Call('_val_check_ISO8601_durations', PACKAGE = 'val', putative_duration_strings)
+check_ISO8601_durations_cpp <- function(putative_duration_strings) {
+    .Call('_val_check_ISO8601_durations_cpp', PACKAGE = 'val', putative_duration_strings)
 }
 

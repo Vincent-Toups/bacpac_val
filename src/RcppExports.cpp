@@ -5,20 +5,20 @@
 
 using namespace Rcpp;
 
-// check_ISO8601_durations
-LogicalVector check_ISO8601_durations(StringVector putative_duration_strings);
-RcppExport SEXP _val_check_ISO8601_durations(SEXP putative_duration_stringsSEXP) {
+// check_ISO8601_durations_cpp
+LogicalVector check_ISO8601_durations_cpp(StringVector putative_duration_strings);
+RcppExport SEXP _val_check_ISO8601_durations_cpp(SEXP putative_duration_stringsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< StringVector >::type putative_duration_strings(putative_duration_stringsSEXP);
-    rcpp_result_gen = Rcpp::wrap(check_ISO8601_durations(putative_duration_strings));
+    rcpp_result_gen = Rcpp::wrap(check_ISO8601_durations_cpp(putative_duration_strings));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_val_check_ISO8601_durations", (DL_FUNC) &_val_check_ISO8601_durations, 1},
+    {"_val_check_ISO8601_durations_cpp", (DL_FUNC) &_val_check_ISO8601_durations_cpp, 1},
     {NULL, NULL, 0}
 };
 
