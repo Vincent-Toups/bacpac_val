@@ -124,9 +124,7 @@ summarize_column_values <- function(tbl, cols){
         `[[`("sss")
 }
 
-block <- function(bod){
-    eval(substitute(function()b,c(b=quote(bod))))()
-}
+block <- block <- gtools::defmacro(bl,expr=(function()bl)());
 
 `%not-in%` <- function(x,table){
     !(x %in% table);
