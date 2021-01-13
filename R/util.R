@@ -45,8 +45,8 @@ unparsed_column_name <- function(name){
 #' @param filename - file to load
 #' @return a data frame with twice the columns indicated in the file, half of which are unparsed duplicates.
 val_read_csv <- function(filename){
-    parsed <- read_csv(filename);
-    unparsed <- read_csv(filename, col_types = cols(.default = "c"))
+    parsed <- readr::read_csv(filename);
+    unparsed <- readr::read_csv(filename, col_types = readr::cols(.default = "c"))
     names(unparsed) <- unparsed_column_name(names(unparsed));
     cbind(parsed, unparsed) %>% mutate(index__=seq(nrow(parsed)));
 }
