@@ -632,15 +632,24 @@ validate_on_subsets <- function(validation_table, check_name=""){
         ## join the validation table to the data table so we can easily
         ## access each validation function from the split we are about
         ## to perform
+
+        key_names <- key_names;
+        validation_table <- validation_table;
+        keys <- keys;
+        key_summaries <- key_summaries;        
         
         data <- state$data %>%
-            left_join(validation_table,by=all_of(key_names));        
+            inner_join(validation_table,by=all_of(key_names));        
         
         the_splits <- split(data, data %>%
                                   select(all_of(key_names)));
-        
+
+        print(key_names);
         final_state <- Reduce(function(acc_state, sub_df){
             validation_function <- sub_df$validation_function__[[1]];
+            if(typeof(validation_function)!="closure"){
+                stop(sprintf("Can't find a validation function for the sub data frame (head) \n%s", (paste(capture.output(sub_df %>% head(10)),collapse="\n"))));
+            }
             sub_data <- sub_df %>% 
                 select(-validation_function__,-required__);
             ## we create a fresh validation state for each subset so
