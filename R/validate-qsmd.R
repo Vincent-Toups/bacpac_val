@@ -56,6 +56,15 @@ validate_qsmd <- block({
                                                  
         validate_on_subsets(validation_table, "QSSTRESC column consistent with QSTESTCD.");
     })
+
+    check_qsstresn <- bailout_validation_chain(column_is_complete("QSSTRESN"),column_is_float("QSSTRESN"));
+    check_qsdrvfl <- bailout_validation_chain(column_is_complete("QSDRVFL"), column_is_textual("QSDRVFL"));
+    check_visitnum <- bailout_validation_chain(column_is_complete("VISITNUM"), column_is_specified_decimal("VISITNUM","5.1"));
+    check_visit <- bailout_validation_chain(column_is_complete("VISIT"), column_is_textual("VISIT"));
+    check_qsdtc <- bailout_validation_chain(column_is_complete("QSDTC"), column_is_iso8601_date("QSDTC"));
+    check_qsdy <- bailout_validation_chain(column_is_complete("QSDY"), column_is_integer("QSDY"));
+    check_qsevlnt <- bailout_validation_chain(column_is_complete("QSEVLNT"), column_is_textual("QSEVLNT"));
+    
     
     validation_chain(
         check_study_id,
@@ -66,6 +75,13 @@ validate_qsmd <- block({
         check_qsscat,
         check_qstestcd,
         check_qstest,
-        check_qsstresc);
+        check_qsstresc,
+        check_qsstresn,
+        check_qsdrvfl,
+        check_visitnum,
+        check_visit,
+        check_qsdtc,
+        check_qsdy,
+        check_qsevlnt);
 });
 
