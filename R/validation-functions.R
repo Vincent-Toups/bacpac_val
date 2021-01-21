@@ -161,7 +161,7 @@ column_is_specified_decimal <- function(column, spec){
         piece_length <- Map(length, colinfo) %>% unlist();
         valid_piece_lengths <- piece_length %in% c(1,2);
         a <- Map(function(x){x[[1]]}, colinfo);
-        b <- Map(function(x){ifelse(length(x>1),x[[2]],0)}, colinfo);
+        b <- Map(function(x){ifelse(length(x)>1,x[[2]],0)}, colinfo);
         check <- a <= la && b <= lb && valid_piece_lengths;
         bad_indices <- state$data[["index__"]][which(check == FALSE)];
         all_ok <- sum(check) == length(check);
@@ -213,9 +213,9 @@ column_is_complete <- function(column){
                                   check,
                                   ifelse(check,
                                          sprintf("Column %s is complete.", column),
-                                         sprintf("Column %s had missing elements at these indices: %s",
+                                         sprintf("Column %s had missing elements at (least) these indices: %s",
                                                  column,
-                                                 collapse_commas(which(nas))))));
+                                                 collapse_commas(which(nas) %>% head(15))))));
     }
 }
 
@@ -453,7 +453,7 @@ column_is_homogeneous <- function(column){
 
 check_domain_homogeneity <- column_is_homogeneous("DOMAIN");
 
-check_domain_known <- function(domains=unique(specification$Datasets$Dataset)){
+check_domain_known <- function(domains=c("QS","DM","SC")){
     function(state){
         domain <- unique(state$data$DOMAIN);
         if(domain %in% domains)
