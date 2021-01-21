@@ -3,7 +3,7 @@ library(val)
 library(readr)
 library(dplyr)
 
-context("Test the QSMD validator (partial so far).")
+context("Test the QSMD validator.")
 
 ## NB - we encode our test data as a string to avoid the complexity of
 ## persisting it as a table of some kind.
@@ -17,10 +17,16 @@ test_qsmd <- block({
     val_read_csv(tempname);
 });
 
-test_that("Test that the (partial) QSMD validator just runs.",
+test_that("Test that the QSMD validator just runs.",
           {
               result <- validate_qsmd(fresh_state(test_qsmd));
               expect_identical(result, result);
+          });
+
+test_that("Test that the QSMD validator produces zero errors on a good data set.",
+          {
+              result <- validate_qsmd(fresh_state(test_qsmd));
+              expect_identical(0, sum(result$messages$pass == FALSE));
           });
 
 

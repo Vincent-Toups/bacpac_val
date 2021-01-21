@@ -1,3 +1,23 @@
+build_validation_table <- function(key_column, check_column){
+    key_column <- key_column;
+    check_column <- check_column;
+    rows <- key_column_to_codelists(key_column) %>%
+        filter(value_column == check_column) %>%
+        select(value, codelist, data_type, text_format) %>% 
+        distinct();
+    do.call(rbind, Map(function(i){
+        l <- list();
+        l[[key_column]] <- rows$value[[i]];
+        codelist <- rows$codelist[[i]];
+        codelist_vals <- get_codelist(codelist);
+        text_format <- rows$text_format[[i]];
+        l$validation_function__ <- list(ifelse(!is.na(codelist),
+                                               column_in_codelist(check_column, codelist_vals, codelist),
+                                               text_column_matches_format(check_column,text_format)))
+        as_tibble(l);        
+    }, seq(nrow(rows))));
+}
+
 validate_qsmd <- block({
     check_study_id <- block({
         col <- "STUDYID";
@@ -40,22 +60,12 @@ validate_qsmd <- block({
     check_qstestcd <- mandatory_codelist_column("QSTESTCD");
     check_qstest <- mandatory_codelist_column("QSTEST");
 
-    check_qsstresc <- block({
-        col <- "QSSTRESC"
-        validation_table <- key_column_to_codelists("QSTESTCD") %>%
-            filter(value_column == col) %>%
-            transmute(QSTESTCD=value, codelist=codelist, text_format=text_format) %>%
-            distinct() %>%
-            rowwise() %>%
-            transmute(QSTESTCD=QSTESTCD,
-                      validation_function__ =
-                          list(ifelse(!is.na(codelist),
-                                      column_in_codelist(col, get_codelist(codelist)),
-                                      text_column_matches_format(col,text_format)))) %>%
-            ungroup();
-                                                 
-        validate_on_subsets(validation_table, "QSSTRESC column consistent with QSTESTCD.");
-    })
+    check_qsstresc <- check_simple_dependent_column("QSTESTCD","QSSTRESC");
+    ## block({
+    ##     col <- "QSSTRESC"
+    ##     validation_table <- build_validation_table("QSTESTCD", "QSSTRESC");                                                 
+    ##     validate_on_subsets(validation_table, "QSSTRESC column consistent with QSTESTCD.");
+    ## })
 
     check_qsstresn <- bailout_validation_chain(column_is_complete("QSSTRESN"),column_is_float("QSSTRESN"));
     check_qsdrvfl <- bailout_validation_chain(column_is_complete("QSDRVFL"), column_is_textual("QSDRVFL"));
