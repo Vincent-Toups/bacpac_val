@@ -13,7 +13,7 @@ validate_qsmd <- block({
             column_exists(col),
             column_is_textual(col),
             column_is_homogeneous(col),
-            check_domain_known(domains='QSMD'))
+            check_domain_known(domains='QS'))
     });
 
     check_usubjid <- block({
