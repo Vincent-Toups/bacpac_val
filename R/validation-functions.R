@@ -375,26 +375,48 @@ column_covers_codelist <- function(column, codelist=column_to_codelist(column), 
 #' @param column - the column to check
 #' @param codelist - the codelist to check against (defaults to the codelist implied by the column)
 #' @return a state function to perform the check
-column_in_codelist<-function(column, codelist=column_to_codelist(column)){
+column_in_codelist<-function(column, codelist=column_to_codelist(column), codelist_name=FALSE){
     function(state){
         the_col <- state$data[[column]];
         the_col <- the_col[!is.na(the_col)]
         check <- the_col %in% codelist
         wrong <- the_col[!check] %>% unique()
+        check_name <- if(!identical(codelist_name,FALSE)){
+                          sprintf("Column elements in codelist named %s.", codelist_name)
+                      } else {
+                          sprintf("Column elements in codelist.")
+                      };
         if(identical(sum(check), length(check))){
+            extended_message <- if(!identical(codelist_name,FALSE)){
+                                    sprintf("The column %s is in the codelist %s.", column, codelist_name)
+                                } else {
+                                    sprintf("The column %s is in the codelist.", column)
+                                }
             extend_state(state,
                          "ok",
-                         check_report("Column elements in codelist",
+                         check_report(check_name,
                                       T,
-                                      "The column %s is in the codelist.", column))
+                                      extended_message))
         } else{
+            print(codelist_name);
+            msg <- if(!identical(codelist_name,FALSE)){
+                       sprintf("The column %s has values that are not in the codelist named %s. These values were not in the codelist: (%s). The codelist: (%s)", 
+                               column,
+                               codelist_name,
+                               collapse_commas(wrong),
+                               collapse_commas(codelist))
+                   } else {
+                       sprintf("The column %s has values that are not in the codelist. These values were not in the codelist: (%s). The codelist: (%s)", 
+                               column, 
+                               collapse_commas(wrong),
+                               collapse_commas(codelist))
+                   };
+            print(msg);
             extend_state(state,
                          "continuable",
-                         check_report("Column elements in codelist",
+                         check_report(check_name,
                                       F,
-                                      "The column %s has values that are not in the codelist. These values were not in the codelist: (%s)", 
-                                      column, 
-                                      collapse_commas(wrong)))
+                                      msg))
         }
     }
 }
@@ -644,24 +666,68 @@ validate_on_subsets <- function(validation_table, check_name=""){
         the_splits <- split(data, data %>%
                                   select(all_of(key_names)));
 
-        print(key_names);
         final_state <- Reduce(function(acc_state, sub_df){
             validation_function <- sub_df$validation_function__[[1]];
             if(typeof(validation_function)!="closure"){
                 stop(sprintf("Can't find a validation function for the sub data frame (head) \n%s", (paste(capture.output(sub_df %>% head(10)),collapse="\n"))));
             }
+            key_values <- sub_df %>% select(all_of(key_names)) %>% distinct();
+            if(nrow(key_values) != 1){
+                .GlobalEnv$irritant <- key_values;
+                .GlobalEnv$irritant_sub_df <- sub_df;
+                stop("Each sub_df should have but one unique set of keys. See global irritant.")
+            }
+            prefix_message <- Map(function(nm){
+                sprintf("%s = %s", nm, key_values[[nm]][[1]]);
+            }, names(key_values)) %>% unlist() %>% paste(collapse = ", ") %>% sprintf("(context: %s)",.);            
+            
             sub_data <- sub_df %>% 
                 select(-validation_function__,-required__);
             ## we create a fresh validation state for each subset so
             ## that we can harvest the messages, state and warning for
             ## each.            
-            combine_states(acc_state, validation_function(fresh_state(sub_data)));               
+            combine_states(acc_state, validation_function(fresh_state(sub_data)) %>% prefix_messages(prefix_message));               
         }, the_splits,
         init=state);
+        
         
         final_state
     }
 }
+
+
+#' build a validator for the common case where one column of
+#' codelisted and formatted values depends on the values of another.
+#'
+#' @param key_column - the column which determines the appropriate
+#'     check
+#' @param check_column - the column to check
+#' @param check_name - an additional informative name for the whole
+#'     check before performed
+#' @return a validation function which splits its data by key_column
+#'     and applies a standard set of checks based on the specification
+#'     to the resulting sub data frames before merging the results.
+check_simple_dependent_column <- function(key_column, check_column, check_name=sprintf("Check that %s is consistent with %s.", check_column, key_column)){
+    key_column <- key_column;
+    check_column <- check_column;
+    rows <- key_column_to_codelists(key_column) %>%
+        filter(value_column == check_column) %>%
+        select(value, codelist, data_type, text_format) %>% 
+        distinct();
+    validation_table <- do.call(rbind, Map(function(i){
+        l <- list();
+        l[[key_column]] <- rows$value[[i]];
+        codelist <- rows$codelist[[i]];
+        codelist_vals <- get_codelist(codelist);
+        text_format <- rows$text_format[[i]];
+        l$validation_function__ <- list(ifelse(!is.na(codelist),
+                                               column_in_codelist(check_column, codelist_vals, codelist),
+                                               text_column_matches_format(check_column,text_format)))
+        as_tibble(l);        
+    }, seq(nrow(rows))));
+    validate_on_subsets(validation_table, check_name);
+}
+
 
 #' key_column_to_codelists - given a key column return the columns and
 #' codelists corresponding to each unique value of the key.

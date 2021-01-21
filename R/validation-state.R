@@ -184,3 +184,11 @@ validation_chain <- validation_chain_builder(short_circut_test=
                                                      identical(state$status,"halted");
                                                  });
 
+#' Prefix all the messages in a validation state with a prefix string
+#' @param state - the validation state
+#' @param prefix - the message to prefix the strings with
+#' @return a new validation state
+prefix_messages <- function(validation_state, prefix){
+    validation_state$messages <- validation_state$messages %>% mutate(message=paste(prefix,message,sep=" "));
+    validation_state    
+}
