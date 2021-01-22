@@ -22,3 +22,9 @@ test_that("Test that the SC validator just runs.",
             result <- validate_sc(fresh_state(test_sc));
             expect_identical(result, result);
           });
+
+test_that("Test that the SC validator returns zero errors on the test data set.",
+          {
+            result <- validate_sc(fresh_state(test_sc));
+            expect_identical(0, sum(!result$messages$pass));
+          });
