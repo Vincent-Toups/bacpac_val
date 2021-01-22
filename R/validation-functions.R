@@ -186,7 +186,9 @@ valid_decimal_spec <- function(s){
 #'  (b).(a) - a number with b digits before a dot and a digits after
 #'  ISO8601 - an ISO8601 duration.
 text_column_matches_format <- function(column, format){
-    if(format == "ISO8601"){
+    if(is.na(format)){
+        column_is_textual(column);
+    } else if(format == "ISO8601"){
         column_is_iso8601_duration(column);
     } else if(valid_decimal_spec(format)) {
         column_is_specified_decimal(column, format);
@@ -398,7 +400,7 @@ column_in_codelist<-function(column, codelist=column_to_codelist(column), codeli
                                       T,
                                       extended_message))
         } else{
-            print(codelist_name);
+            #print(codelist_name);
             msg <- if(!identical(codelist_name,FALSE)){
                        sprintf("The column %s has values that are not in the codelist named %s. These values were not in the codelist: (%s). The codelist: (%s)", 
                                column,
@@ -411,7 +413,7 @@ column_in_codelist<-function(column, codelist=column_to_codelist(column), codeli
                                collapse_commas(wrong),
                                collapse_commas(codelist))
                    };
-            print(msg);
+            #print(msg);
             extend_state(state,
                          "continuable",
                          check_report(check_name,
