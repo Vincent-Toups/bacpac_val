@@ -1,72 +1,72 @@
 validate_dm <- block({
   
   check_studyid <- block({
-    #col <- "STUDYID";
+    col <- "STUDYID";
     bailout_validation_chain(
-      column_exists("STUDYID"),
-      column_is_textual("STUDYID"),
-      column_is_homogeneous("STUDYID")
+      column_exists(col),
+      column_is_textual(col),
+      column_is_homogeneous(col)
     )
   });
   
   check_domain <- block({
-    #col <- "DOMAIN";
+    col <- "DOMAIN";
     bailout_validation_chain(
-      column_exists("DOMAIN"),
-      column_is_textual("DOMAIN"),
-      column_is_homogeneous("DOMAIN"),
+      column_exists(col),
+      column_is_textual(col),
+      column_is_homogeneous(col),
       check_domain_known(domains='DM')
     )
   });
   
   check_usubjid <- block({
-    #col <- "USUBJID";
+    col <- "USUBJID";
     bailout_validation_chain(
-      column_exists("USUBJID"),
-      column_is_textual("USUBJID"),
-      column_is_complete("USUBJID")
+      column_exists(col),
+      column_is_textual(col),
+      column_is_complete(col)
     )
   });
   
   check_rfstdtc <- block({
-    #col <- "RFSTDTC";
+    col <- "RFSTDTC";
     bailout_validation_chain(
-      column_exists("RFSTDTC"),
-      column_not_empty("RFSTDTC"),
-      column_is_iso8601_date("RFSTDTC"),
-      column_is_complete("RFSTDTC")
+      column_exists(col),
+      column_not_empty(col),
+      column_is_iso8601_date(col),
+      column_is_complete(col)
     )
   });
   
   check_rfpendtc <- block({
-    #col <- "RFPENDTC";
+    col <- "RFPENDTC";
     bailout_validation_chain(
-      column_exists("RFPENDTC"),
-      column_not_empty("RFPENDTC"),
-      column_is_iso8601_date("RFPENDTC"),
-      column_is_complete("RFPENDTC")
+      column_exists(col),
+      column_not_empty(col),
+      column_is_iso8601_date(col),
+      column_is_complete(col)
     )
   });
   
   check_brthdtc <- block({
-    #col <- "BRTHDTC";
+    col <- "BRTHDTC";
     bailout_validation_chain(
-      column_exists("BRTHDTC"),
-      column_not_empty("BRTHDTC"),
-      column_is_iso8601_date("BRTHDTC"),
-      column_is_complete("BRTHDTC")
+      column_exists(col),
+      column_not_empty(col),
+      column_is_iso8601_date(col),
+      column_is_complete(col)
     )
   });
   
   check_age <- block({
-    #col <- "AGE";
-    #range <- 0:120;
+    col <- "AGE";
+    range <- 0:120;
     bailout_validation_chain(
-      column_exists("AGE"),
-      column_is_numeric("AGE"),      
-      column_is_integer("AGE"),
-      column_is_complete("AGE"),
-      column_in_integer_range("AGE",0:120)
+      column_exists(col),
+      column_is_numeric(col),      
+      column_is_integer(col),
+      column_is_complete(col),
+      column_in_integer_range(col,range)
     )
   });
   
@@ -74,10 +74,10 @@ validate_dm <- block({
   check_race <- mandatory_codelist_column("RACE");
   
   check_racemult <- block({
-    #col <- "RACEMULT";
+    col <- "RACEMULT";
     bailout_validation_chain(
-      column_exists("RACEMULT"),
-      column_is_textual("RACEMULT")
+      column_exists(col),
+      column_is_textual(col)
     )
   });
   
