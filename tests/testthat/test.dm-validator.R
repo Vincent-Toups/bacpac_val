@@ -26,13 +26,13 @@ test_that("Test that the DM validator just runs.",
 test_that("Test that the DM validator is continuable on DM test data.",
           {
             result <- validate_dm(fresh_state(test_dm));
-            expect_identical(result$status, "continuable");
+            expect_identical(result$status, "ok");
           });
 
 test_that("Test that the DM validator finds exactly one test that does not pass on DM test data.",
           {
             result <- validate_dm(fresh_state(test_dm));
-            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 1L);
+            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 0L);
           });
 
 ## Case Test 1
@@ -67,10 +67,10 @@ test_dm$SEX[2] <- "F"
 test_dm$RACE[2] <- "Caucasian"
 test_dm$ETHNIC[2] <- "Hispanic"
 
-test_that("Test that the DM validator finds exactly 6 tests that do not pass on DM test data (Case Test 2).",
+test_that("Test that the DM validator finds exactly 5 tests that do not pass on DM test data (Case Test 2).",
           {
             result <- validate_dm(fresh_state(test_dm));
-            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 6L);
+            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 5L);
           });
 
 ## Case Test 3
@@ -87,10 +87,10 @@ test_dm$SEX[3] <- "M"
 test_dm$RACE[3] <- "W"
 test_dm$ETHNIC[3] <- "Latino"
 
-test_that("Test that the DM validator finds exactly 6 tests that do not pass on DM test data (Case Test 3).",
+test_that("Test that the DM validator finds exactly 5 tests that do not pass on DM test data (Case Test 3).",
           {
             result <- validate_dm(fresh_state(test_dm));
-            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 6L);
+            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 5L);
           });
 
 ## Case Test 4
@@ -107,10 +107,10 @@ test_dm$SEX[4] <- "INTERSEX"
 test_dm$RACE[4] <- "BLACK"
 test_dm$ETHNIC[4] <- "UNKNOWN"
 
-test_that("Test that the DM validator finds exactly 6 tests that do not pass on DM test data (Case Test 4).",
+test_that("Test that the DM validator finds exactly 5 tests that do not pass on DM test data (Case Test 4).",
           {
             result <- validate_dm(fresh_state(test_dm));
-            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 6L);
+            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 5L);
           });
 
 ## Case Test 5
@@ -138,8 +138,8 @@ test_dm$RACE[6] <- "Alaska Native"
 test_dm$ETHNIC[5] <- "not reported"
 test_dm$ETHNIC[6] <- "Not Hispanic"
 
-test_that("Test that the DM validator finds exactly 7 tests that do not pass on DM test data (Case Test 5).",
+test_that("Test that the DM validator finds exactly 6 tests that do not pass on DM test data (Case Test 5).",
           {
             result <- validate_dm(fresh_state(test_dm));
-            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 7L);
+            expect_identical(result$messages %>% filter(!pass) %>% nrow(), 6L);
           });
