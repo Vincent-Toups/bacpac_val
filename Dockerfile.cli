@@ -1,0 +1,6 @@
+FROM val-dev
+COPY val_0.0.0.9000.tar.gz /
+RUN R -e "devtools::install_local('/val_0.0.0.9000.tar.gz');"
+COPY scripts/cli.R /usr/bin/validate
+RUN chmod u+x /usr/bin/validate
+CMD /bin/bash

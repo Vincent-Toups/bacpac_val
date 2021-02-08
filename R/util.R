@@ -193,6 +193,7 @@ all.equal_tf <- function(a,b){
 # column redundant because IN reduces to EQ when the values are split
 # like this.
 expand_where_clauses <- function(where_clauses){
+    where_clauses <- where_clauses;
     do.call(rbind,
             Map(function(df){
                 values <- stringr::str_split(df$Value,",") %>%

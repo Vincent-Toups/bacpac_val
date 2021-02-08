@@ -24,7 +24,7 @@ column_is_iso8601_duration <- function(column){
                      ifelse(ok, "ok", "continuable"),
                      check_report(s("Column (or column subset) %s contains ISO 8601 durations.", column),
                                   ok,
-                                  ifelse(ok,"Column (or column subset) %s contains ISO 8601 durations.",
+                                  ifelse(ok,sprintf("Column (or column subset) %s contains ISO 8601 durations.", column),
                                          s("These columsn (%s) are not valid ISO 8601 Durations. The proper format is PnYnMnDTnHnMnS where n is an integer for all entries except the smallest non-zero one and where zero entries may be ellided unless the result would be P. If there are no non-zero hours, minutes or seconds, then these may be removed and if so, the trailing T must also be removed.", collapse_commas(indexes)))));
     }
 }
@@ -154,8 +154,8 @@ column_is_specified_decimal <- function(column, spec){
     lb <- as.numeric(r[[3]]);
     function(state){
         colinfo <- state$data[[unparsed_column_name(column)]] %>%
-            str_split("\\.");
-        colinfo <- Map(str_length, colinfo);
+            stringr::str_split("\\.");
+        colinfo <- Map(stringr::str_length, colinfo);
         
 
         piece_length <- Map(length, colinfo) %>% unlist();
@@ -709,7 +709,9 @@ validate_on_subsets <- function(validation_table, check_name=""){
 #' @return a validation function which splits its data by key_column
 #'     and applies a standard set of checks based on the specification
 #'     to the resulting sub data frames before merging the results.
-check_simple_dependent_column <- function(key_column, check_column, check_name=sprintf("Check that %s is consistent with %s.", check_column, key_column)){
+check_simple_dependent_column <- function(key_column,
+                                          check_column,
+                                          check_name=sprintf("Check that %s is consistent with %s.", check_column, key_column)){
     key_column <- key_column;
     check_column <- check_column;
     rows <- key_column_to_codelists(key_column) %>%

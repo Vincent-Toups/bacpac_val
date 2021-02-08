@@ -195,7 +195,7 @@ for(ds in set_names){
     test_data[[ds]] <- read_file(sprintf("source_data/%s.csv", ds));    
 }
 
-use_data(test_data, specification, internal=TRUE, overwrite=TRUE);
+use_data(test_data, specification, overwrite=TRUE);
 
 
 

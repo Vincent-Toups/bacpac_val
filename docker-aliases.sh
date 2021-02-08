@@ -3,9 +3,17 @@
 
 source secrets.sh
 
+function build_package(){
+    TMPD=`mktemp -d`
+    docker run -v $TMPD:/tmp/package-target -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev sudo -H -u rstudio /bin/bash -c "cd ~/; R -e 'library(devtools); build(path=\"/tmp/package-target\");'"
+    FILE=`ls -1 $TMPD/  | head -n 1`
+    cp $TMPD/$FILE ./`date | tr ' :' '_' | tr -s '_'`_$FILE
+    rm -rf $TMPD
+}
+
 alias bu='docker build . --build-arg linux_user_pwd=$RPW -t val-dev'
 alias dr='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev'
 alias r='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev sudo -H -u rstudio /bin/bash -c "cd ~/; R"'
 alias b='docker run -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev sudo -H -u rstudio /bin/bash'
-alias build_package='docker run -v `pwd`:/home -v `pwd`:/home/rstudio -e PASSWORD=$RPW -it val-dev sudo -H -u rstudio /bin/bash -c "cd ~/; R -e \"library(devtools); build();\""'
 alias rss='docker run -p 8787:8787 -v `pwd`:/home/rstudio -e PASSWORD=$RPW -t val-dev'
+
