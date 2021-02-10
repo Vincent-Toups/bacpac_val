@@ -18,6 +18,7 @@ test_dm <- block({
 });
 
 bad_test_dm <- test_dm %>% select(-DOMAIN);
+bad_domain_test_dm <- test_dm %>% mutate(DOMAIN = "dm");
 
 ## test state functions are pure
 ## and thus we can reuse the fresh dm test state
@@ -30,13 +31,12 @@ validation_dip_data <- function(validation_state,f){
     update_state(validation_state, data=f(validation_state$data));
 }
 
-
-
-
 test_that("That the DM domain is known and that the test function works.",
           {
-              expect_identical("ok",
-                        check_domain_known()(dm_state)$status);
+            expect_identical("ok",
+                            check_domain_known()(dm_state)$status);
+            expect_identical("halted",
+                             check_domain_known()(fresh_state(bad_domain_test_dm,"ok"))$status);
           })
 
 test_that("Test that the domain exists test function works.",
