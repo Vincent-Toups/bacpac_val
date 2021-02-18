@@ -24,8 +24,10 @@ column_is_iso8601_duration <- function(column){
                      ifelse(ok, "ok", "continuable"),
                      check_report(s("Column (or column subset) %s contains ISO 8601 durations.", column),
                                   ok,
-                                  ifelse(ok,sprintf("Column (or column subset) %s contains ISO 8601 durations.", column),
-                                         s("These columsn (%s) are not valid ISO 8601 Durations. The proper format is PnYnMnDTnHnMnS where n is an integer for all entries except the smallest non-zero one and where zero entries may be ellided unless the result would be P. If there are no non-zero hours, minutes or seconds, then these may be removed and if so, the trailing T must also be removed.", collapse_commas(indexes)))));
+                                  ifelse(ok,
+                                         sprintf("Column (or column subset) %s contains ISO 8601 durations.", column),
+                                         s("Some values of column (or column subset) %s are not valid ISO 8601 Durations. The proper format is PnYnMnDTnHnMnS where n is an integer for all entries except the smallest non-zero one and where zero entries may be ellided unless the result would be P. If there are no non-zero hours, minutes or seconds, then these may be removed and if so, the trailing T must also be removed.", column)),
+                                  collapse_commas(indexes)));
     }
 }
 
@@ -74,7 +76,8 @@ column_is_iso8601_date <- function(column){
                                 "continuable",
                                 check_report(s("Column %s is ISO8601 date compliant.", column),
                                              F,
-                                             "There were these issues in %s: %s. Dates must be encoded per ISO8601 (YYYY-MM-DD or YYYYMMDD)", column, message)));
+                                             s("There were these issues in %s: Dates must be encoded per ISO8601 (YYYY-MM-DD or YYYYMMDD)", column),
+                                             message)));
         }
         year <- as.numeric(year_str);
         month <- as.numeric(month_str);
@@ -87,13 +90,15 @@ column_is_iso8601_date <- function(column){
                                 "continuable",
                                 check_report(s("Column %s is ISO8601 date compliant.", column),
                                              F,
-                                             "Some dates, while syntactically valid, encode invalid calendar dates. %s rows: %s", column, which(!day_ok))));
+                                             s("Some dates, while syntactically valid, encode invalid calendar dates in %s", column),
+                                             which(!day_ok))));
         }
         extend_state(state,
                      "ok",
                      check_report(s("Column %s is ISO8601 date compliant.", column),
                                   T,
-                                  "All dates in %s are valid.", column));
+                                  s("All dates in %s are valid.", column),
+                                  NA));
         
     }
 }
@@ -110,9 +115,10 @@ column_exists <- function(column){
                      ifelse(ce,"ok","continuable"),
                      check_report(sprintf("Column %s exists.", column),
                                   ce,
-                                  ifelse(ce,"Column %s exists.",
-                                         "Column %s doesn't exist."),
-                                  column));
+                                  ifelse(ce,
+                                         sprintf("Column %s exists.", column),
+                                         sprintf("Column %s doesn't exist.", column)),
+                                  NA));
     }
 }
 
@@ -130,13 +136,15 @@ column_is_textual <- function(column){
                          "ok",
                          check_report("Column type is text",
                                       T,
-                                      "The column %s is text", column))
+                                      s("The column %s is text", column),
+                                      NA));
         } else {
             extend_state(state,
                          "continuable",
                          check_report("Column type is text",
                                       F,
-                                      "The column %s must be text but it appears to be %s instead.", column, class(the_col)));
+                                      s("The column %s must be text but it appears to be %s instead.", column, class(the_col)),
+                                      NA));
         }
     }
 }
@@ -169,7 +177,10 @@ column_is_specified_decimal <- function(column, spec){
                      ifelse(all_ok, "ok", "continuable"),
                      check_report(sprintf("Column (or subset of a column) %s is consistent with a specified decimal like : %s.", column, spec),
                                   all_ok,
-                                  ifelse(all_ok, "All values in spec.", sprintf("These rows are out of spec (%s).", collapse_commas(bad_indices)))));
+                                  ifelse(all_ok,
+                                         "All values in spec.",
+                                         "Some rows are out of spec."),
+                                  collapse_commas(bad_indices)));
     }
 }
 
@@ -215,9 +226,10 @@ column_is_complete <- function(column){
                                   check,
                                   ifelse(check,
                                          sprintf("Column %s is complete.", column),
-                                         sprintf("Column %s had missing elements at (least) these indices: %s",
-                                                 column,
-                                                 collapse_commas(which(nas) %>% head(15))))));
+                                         sprintf("Column %s has missing elements.", column)),
+                                  ifelse(check,
+                                         NA,
+                                         collapse_commas(which(nas)))));
     }
 }
 
@@ -237,8 +249,8 @@ column_not_empty <- function(column){
                               check,
                               ifelse(check,
                                      sprintf("Column %s has at least one non-missing value.", column),
-                                     sprintf("Column %s has zero non-missing values. It is empty.",
-                                             column))));
+                                     sprintf("Column %s has zero non-missing values. It is empty.", column)),
+                              NA));
   }
 }
 
@@ -256,13 +268,15 @@ column_is_numeric <- function(column){
                          "ok",
                          check_report("Column type is numeric",
                                       T,
-                                      "The column %s is numeric", column))
+                                      s("The column %s is numeric", column),
+                                      NA));
         } else {
             extend_state(state,
                          "continuable",
                          check_report("Column type is numeric",
                                       F,
-                                      "The column %s must be numeric but it appears to be %s instead.", column, class(the_col)));
+                                      s("The column %s must be numeric but it appears to be %s instead.", column, class(the_col)),
+                                      NA));
         }
     }
 }
@@ -283,15 +297,15 @@ column_is_integer <- function(column){
                          "continuable",
                          check_report("Column contains only integers",
                                       F,
-                                      "The column %s can only contain integers but it has non-integer values instead. Non-integer values appear at these indices: %s.", 
-                                      column,
-                                      falses))
+                                      s("The column %s should only contain integers but it has non-integer values.", column),
+                                      collapse_commas(falses)));
         } else {
             extend_state(state,
                          "ok",
                          check_report("Column contains only integers",
                                       T,
-                                      "The column %s contains only integers", column));
+                                      s("The column %s contains only integers", column),
+                                      NA));
         }
     }
 }
@@ -310,11 +324,14 @@ column_in_integer_range <- function(column, values=c()){
         ok <- identical(n_bad, 0L);
         extend_state(state,
                      ifelse(ok, "ok", "continuable"),
-                     check_report(sprintf("Integer column draw from %s.", collapse_commas(values)),
+                     check_report(sprintf("Column %s drawn from the integers %s.", column, collapse_commas(values)),
                                   ok,
-                                  ifelse(ok,"All values in the right range.",
-                                         sprintf("Out of range values appear at these indices: %s.",
-                                                 collapse_commas(which(!check))))));
+                                  ifelse(ok,
+                                         "All values in the right range.",
+                                         "Out of range values are present."),
+                                  ifelse(ok,
+                                         NA,
+                                         collapse_commas(which(!check)))));
     }    
 }
 
@@ -332,13 +349,15 @@ column_is_float <- function(column){
                    "ok",
                    check_report("Column type is floating point",
                                 T,
-                                "The column %s is floating point", column))
+                                s("The column %s is floating point", column),
+                                NA));
     } else {
       extend_state(state,
                    "continuable",
                    check_report("Column type is floating point",
                                 F,
-                                "The column %s must be a floating point but it appears to be %s instead.", column, typeof(the_col)));
+                                s("The column %s must be a floating point but it appears to be %s instead.", column, typeof(the_col)),
+                                NA));
     }
   }
 }
@@ -360,14 +379,15 @@ column_covers_codelist <- function(column, codelist=column_to_codelist(column), 
         ifelse(warn_only,
                extend_state(state,
                             "ok",
-                            warnings=sprintf("Not ever value in the codelist for column %s appears in the column.", column)),
+                            warnings=sprintf("Not every value in the codelist for column %s appears in the column.", column)),
                extend_state(state,
                             ifelse(check,"ok","continuable"),
                             check_report(sprintf("Column %s covers codelist", column),
                                          check,
-                                         ifelse(check, sprintf("Column %s covers codelist.", column),
-                                                sprintf("Column %s does not cover the entire codelist. These codelist values are missing: %s",
-                                                        column, collapse_commas(missing_values))))));
+                                         ifelse(check,
+                                                sprintf("Column %s covers codelist.", column),
+                                                sprintf("Column %s does not cover the entire codelist. These codelist values are missing: %s", column, collapse_commas(missing_values))),
+                                         NA)));
     }
 }
 
@@ -398,7 +418,8 @@ column_in_codelist<-function(column, codelist=column_to_codelist(column), codeli
                          "ok",
                          check_report(check_name,
                                       T,
-                                      extended_message))
+                                      extended_message,
+                                      NA));
         } else{
             #print(codelist_name);
             msg <- if(!identical(codelist_name,FALSE)){
@@ -418,7 +439,8 @@ column_in_codelist<-function(column, codelist=column_to_codelist(column), codeli
                          "continuable",
                          check_report(check_name,
                                       F,
-                                      msg))
+                                      msg,
+                                      NA))
         }
     }
 }
@@ -435,13 +457,15 @@ check_domain_presence <- function(state){
                      "ok",
                      check_report("DOMAIN column present.",
                                   T,
-                                  "There is a DOMAIN column."));
+                                  "There is a DOMAIN column.",
+                                  NA));
     } else {
         extend_state(state,
                      "halted",
                      check_report("DOMAIN column present.",
                                   F,
-                                  "There is not a DOMAIN column. Can't check a data set without knowing its DOMAIN."))
+                                  "There is not a DOMAIN column. Can't check a data set without knowing its DOMAIN.",
+                                  NA));
     }
 }
 
@@ -461,16 +485,15 @@ column_is_homogeneous <- function(column){
                          "ok",
                          check_report(s("%s column is homogeneous.", column),
                                       T,
-                                      "%s column is homogeneous.", column));
+                                      s("%s column is homogeneous.", column),
+                                      NA));
         } else {
             extend_state(state,
                          "continuable",
                          check_report(s("%s column is homogeneous.", column),
                                       F,
-                                      "%s column has %d unique elements (%s)",
-                                      column,
-                                      nu,
-                                      collapse_commas(ucol)));
+                                      s("%s column has %d unique elements (%s).", column, nu, collapse_commas(ucol)),
+                                      NA));
         }
     }
 }
@@ -480,12 +503,20 @@ check_domain_homogeneity <- column_is_homogeneous("DOMAIN");
 check_domain_known <- function(domains=c("QS","DM","SC")){
     function(state){
         domain <- unique(state$data$DOMAIN);
-        if(domain %in% domains)
-            extend_state(state, "ok",
-                         check_report("Known DOMAIN", T, "Domain %s is valid.", domain))
-        else extend_state(state, "halted",
-                          check_report("Known DOMAIN", F, "Domain %s is not valid (valid domains %s).",domain,
-                                       collapse_commas(domains)));
+        if(domain %in% domains){
+          extend_state(state, "ok",
+                       check_report("Known DOMAIN",
+                                    T,
+                                    sprintf("Domain %s is valid.", domain),
+                                    NA));
+        }
+        else{
+          extend_state(state, "halted",
+                       check_report("Known DOMAIN",
+                                    F,
+                                    sprintf("Domain %s is not valid (valid domains %s).", domain, collapse_commas(domains)),
+                                    NA));
+        } 
     }
 }
 
@@ -569,17 +600,16 @@ all_subsets_validated <- function(validation_table, checked_column){
 
         check <- length(absent_validation_function_indices)==0;
 
-        error_message <- "This check ensures that values of the column %s are consistent with the values implied by the key columns: %s. There were failures on rows %s";
+        error_message <- "This check ensures that values of the column %s are consistent with the values implied by the key columns: %s. There were failures.";
 
         extend_state(state,
                      ifelse(check,"ok","continuable"),
                      check_report("All values in column %s corresponding to these indexes %s have validations.",
                                   check,
-                                  ifelse(check, "Check passed.",
-                                         sprintf(error_message,
-                                                 checked_column,
-                                                 paste(key_names, collapse = ", "),
-                                                 collapse_commas(absent_validation_function_indices)))));        
+                                  ifelse(check,
+                                         "Check passed.",
+                                         sprintf(error_message, checked_column, paste(key_names, collapse = ", "))),
+                                  collapse_commas(absent_validation_function_indices)));        
     }
 }
 
