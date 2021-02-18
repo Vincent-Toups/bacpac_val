@@ -1,0 +1,5 @@
+^\.rstudio$
+^rstudio$
+^scripts$
+^.*\.tar\.gz$
+
