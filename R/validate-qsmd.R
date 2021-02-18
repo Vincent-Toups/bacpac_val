@@ -2,9 +2,9 @@ build_validation_table <- function(key_column, check_column){
     key_column <- key_column;
     check_column <- check_column;
     rows <- key_column_to_codelists(key_column) %>%
-        filter(value_column == check_column) %>%
-        select(value, codelist, data_type, text_format) %>% 
-        distinct();
+        dplyr::filter(value_column == check_column) %>%
+        dplyr::select(value, codelist, data_type, text_format) %>% 
+        dplyr::distinct();
     do.call(rbind, Map(function(i){
         l <- list();
         l[[key_column]] <- rows$value[[i]];

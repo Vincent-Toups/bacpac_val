@@ -1,4 +1,4 @@
-library(tibble)
+
 
 #' Create a new validation state
 #'
@@ -26,8 +26,8 @@ fresh_state <- function(data, status="ok", messages=NULL, warnings=NULL){
 #' @export
 #' @examples
 #' check_report("all columns present",T,"All columns are present.")
-check_report <- function(check_name, pass, message, error_rows){
-    tibble(check_name=check_name, pass=pass, message=message, error_rows=error_rows);
+check_report <- function(check_name, pass, message, ...){
+    tibble::tibble(check_name=check_name, pass=pass, message=sprintf(message,...));
 }
 
 #' Create a new validation state with values from a previous
@@ -174,7 +174,7 @@ bailout_validation_chain <- validation_chain_builder(short_circut_test=
 
 #' Sequence a series of validation functions
 #'
-#' @params ... 
+#' @param ... 
 #' @return a validation function
 #' @export
 #' @examples
@@ -189,6 +189,6 @@ validation_chain <- validation_chain_builder(short_circut_test=
 #' @param prefix - the message to prefix the strings with
 #' @return a new validation state
 prefix_messages <- function(validation_state, prefix){
-    validation_state$messages <- validation_state$messages %>% mutate(message=paste(prefix,message,sep=" "));
+    validation_state$messages <- validation_state$messages %>% dplyr::mutate(message=paste(prefix,message,sep=" "));
     validation_state    
 }

@@ -8,6 +8,9 @@ Authors@R:
            email = "toups@email.unc.edu")
 Description: Given a specification of a set of valid data sets, build (and then execute) a validator on tabular data.
 Collate:
+    'utils-pipe.R'
+    'spec-json.R'
+    'prep-spec.R'
     'val-package.R'
     'RcppExports.R'
     'rules.R'

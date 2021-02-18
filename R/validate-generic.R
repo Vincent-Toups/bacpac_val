@@ -8,6 +8,7 @@ validation_function_dispatch_table <-
 #'     indicating the domain validator to apply.
 #' @return a validation state object containing $messages and
 #'     $warnings. If $messages is empty then the set passes.
+#' @export
 validate_generic <- function(dataset){
     if(!("DOMAIN" %in% names(dataset))){
         stop("Can't validate a data set which does not have a DOMAIN column.")

@@ -549,7 +549,7 @@ build_subset_key_info <- function(validation_table){
     }
     ncol <- length(names(validation_table));
     keys <- validation_table %>%
-        select(1:(ncol-2));
+        dplyr::select(1:(ncol-2));
     key_names <- names(keys);
     key_summaries <- summarize_column_values(keys, key_names);
     list(validation_table=validation_table,
@@ -592,10 +592,10 @@ all_subsets_validated <- function(validation_table, checked_column){
         ## to perform
         
         data <- state$data %>%
-            left_join(validation_table,by=all_of(key_names));
+            dplyr::left_join(validation_table,by=dplyr::all_of(key_names));
         
         absent_validation_function_indices <- data %>%
-            filter(is.na(validation_function__)) %>%
+            dplyr::filter(is.na(validation_function__)) %>%
             `[[`("index__");
 
         check <- length(absent_validation_function_indices)==0;
@@ -644,11 +644,11 @@ all_validations_applied <- function(validation_table, warning_text){
         ## to perform
 
         key_data <- state$data %>%
-            select(all_of(key_names)) %>%
-            distinct() %>% mutate(dummy__=rep(TRUE, nrow(.)));
+            dplyr::select(dplyr::all_of(key_names)) %>%
+            dplyr::distinct() %>% dplyr::mutate(dummy__=rep(TRUE, nrow(.)));
 
-        keys %>% left_join(key_data, by=all_of(key_names));
-        missing <- keys %>% mutate(missing__=is.na(dummy__)) %>% `[[`("missing__");
+        keys %>% dplyr::left_join(key_data, by=dplyr::all_of(key_names));
+        missing <- keys %>% dplyr::mutate(missing__=is.na(dummy__)) %>% `[[`("missing__");
         if(sum(missing__)==0){
             state
         } else {
@@ -693,17 +693,17 @@ validate_on_subsets <- function(validation_table, check_name=""){
         key_summaries <- key_summaries;        
         
         data <- state$data %>%
-            inner_join(validation_table,by=all_of(key_names));        
+            dplyr::inner_join(validation_table,by=dplyr::all_of(key_names));        
         
         the_splits <- split(data, data %>%
-                                  select(all_of(key_names)));
+                                  dplyr::select(dplyr::all_of(key_names)));
 
         final_state <- Reduce(function(acc_state, sub_df){
             validation_function <- sub_df$validation_function__[[1]];
             if(typeof(validation_function)!="closure"){
                 stop(sprintf("Can't find a validation function for the sub data frame (head) \n%s", (paste(capture.output(sub_df %>% head(10)),collapse="\n"))));
             }
-            key_values <- sub_df %>% select(all_of(key_names)) %>% distinct();
+            key_values <- sub_df %>% dplyr::select(dplyr::all_of(key_names)) %>% dplyr::distinct();
             if(nrow(key_values) != 1){
                 .GlobalEnv$irritant <- key_values;
                 .GlobalEnv$irritant_sub_df <- sub_df;
@@ -714,7 +714,7 @@ validate_on_subsets <- function(validation_table, check_name=""){
             }, names(key_values)) %>% unlist() %>% paste(collapse = ", ") %>% sprintf("(context: %s)",.);            
             
             sub_data <- sub_df %>% 
-                select(-validation_function__,-required__);
+                dplyr::select(-validation_function__,-required__);
             ## we create a fresh validation state for each subset so
             ## that we can harvest the messages, state and warning for
             ## each.            
@@ -745,9 +745,9 @@ check_simple_dependent_column <- function(key_column,
     key_column <- key_column;
     check_column <- check_column;
     rows <- key_column_to_codelists(key_column) %>%
-        filter(value_column == check_column) %>%
-        select(value, codelist, data_type, text_format) %>% 
-        distinct();
+        dplyr::filter(value_column == check_column) %>%
+        dplyr::select(value, codelist, data_type, text_format) %>% 
+        dplyr::distinct();
     validation_table <- do.call(rbind, Map(function(i){
         l <- list();
         l[[key_column]] <- rows$value[[i]];
@@ -786,9 +786,9 @@ check_simple_dependent_column <- function(key_column,
 #' Fetches the codelist terms for the QSSTRESC column for value = 'EDANX01' in QSTESTCD.
 #' 
 key_column_to_codelists <- function(key_column){
-    expand_where_clauses(specification$WhereClauses) %>%
-        filter(Variable==key_column) %>%
-        left_join(specification$ValueLevel, by=(c("ID"="Where Clause")), suffix=c("_wc","_vl")) %>%
+    expand_where_clauses(bt_specification$WhereClauses) %>%
+        dplyr::filter(Variable==key_column) %>%
+        dplyr::left_join(bt_specification$ValueLevel, by=(c("ID"="Where Clause")), suffix=c("_wc","_vl")) %>%
         transmute(dataset=Dataset_wc,
                   key_column=Variable_wc,
                   value=Value,
@@ -796,7 +796,7 @@ key_column_to_codelists <- function(key_column){
                   value_column=Variable_vl,
                   text_format=Format,
                   codelist=Codelist) %>%
-        left_join(specification$Codelists, by=c("codelist"="ID")) %>%
+        dplyr::left_join(bt_specification$Codelists, by=c("codelist"="ID")) %>%
         transmute(dataset=dataset,
                   key_column=key_column,
                   value=value,
@@ -805,7 +805,7 @@ key_column_to_codelists <- function(key_column){
                   data_type=coalesce(`Data Type`, value_level_datatype),                  
                   term=Term,
                   text_format=text_format,
-                  order=Order) %>% distinct();
+                  order=Order) %>% dplyr::distinct();
 }
 
 #' find values in key_column for which there is no where_clause
@@ -814,7 +814,7 @@ key_column_to_codelists <- function(key_column){
 #' @param key_column - the column to inspect
 #' @return the values for which there is no where clause
 missing_where_clauses <- function(key_column){
-    terms <- specification$Codelist %>% filter(ID==key_column) %>% `[[`("Term");
-    wc_terms <- expand_where_clauses(specification$WhereClauses) %>% `[[`("Value");
+    terms <- bt_specification$Codelist %>% dplyr::filter(ID==key_column) %>% `[[`("Term");
+    wc_terms <- expand_where_clauses(bt_specification$WhereClauses) %>% `[[`("Value");
     terms[!(terms %in% wc_terms)];
 }

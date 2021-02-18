@@ -1,5 +1,6 @@
 library(dplyr);
 
+
 #' Maps years to booleans indicating whether the year is a leap year
 #'
 #' @param year_number - numerical representation of the year
@@ -44,11 +45,12 @@ unparsed_column_name <- function(name){
 #'
 #' @param filename - file to load
 #' @return a data frame with twice the columns indicated in the file, half of which are unparsed duplicates.
+#' @export
 val_read_csv <- function(filename){
     parsed <- readr::read_csv(filename);
     unparsed <- readr::read_csv(filename, col_types = readr::cols(.default = "c"))
     names(unparsed) <- unparsed_column_name(names(unparsed));
-    cbind(parsed, unparsed) %>% mutate(index__=seq(nrow(parsed)));
+    cbind(parsed, unparsed) %>% dplyr::mutate(index__=seq(nrow(parsed)));
 }
 
 #' Returns the codelist (from the specification) for a given column id.
@@ -56,7 +58,7 @@ val_read_csv <- function(filename){
 #' @param column - the column ID to get the codelist for.
 #' @return a character array of code list values.
 column_to_codelist <- function(column){
-    sf <- specification$Codelists %>% filter(ID==column) %>% arrange(Order);
+    sf <- bt_specification$Codelists %>% dplyr::filter(ID==column) %>% dplyr::arrange(Order);
     lst <- sf$Term;
     if(identical(length(lst),0)){
         stop(sprintf("Tried to get the codelist for %s but it was empty.", column))
@@ -78,7 +80,7 @@ get_codelist <- column_to_codelist;
 #' @param column - the column ID to get the codelist for.
 #' @return a character array of code list values.
 column_to_codelist_order <- function(code){
-    sf <- specification$Codelists %>% filter(ID==code) %>% arrange(Order);
+    sf <- bt_specification$Codelists %>% dplyr::filter(ID==code) %>% dplyr::arrange(Order);
     lst <- sf$Order;
     if(identical(length(lst),0)){
         stop(sprintf("Tried to get the codelist for %s but it was empty.", code))
@@ -118,9 +120,9 @@ column_missing <- function(tbl, name){
 #' pairs for each column in cols.
 summarize_column_values <- function(tbl, cols){
     tbl %>%
-        rowwise() %>%
-        mutate(sss=paste(sprintf("(column: %s: value %s)", all_of(cols), across(all_of(cols), function(x)x)), collapse=", ")) %>%
-        ungroup() %>%
+        dplyr::rowwise() %>%
+        dplyr::mutate(sss=paste(sprintf("(column: %s: value %s)", dplyr::all_of(cols), dplyr::across(dplyr::all_of(cols), function(x)x)), collapse=", ")) %>%
+        dplyr::ungroup() %>%
         `[[`("sss")
 }
 
