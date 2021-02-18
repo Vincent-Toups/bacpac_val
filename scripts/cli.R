@@ -1,6 +1,7 @@
-#!/bin/Rscript
+#!/usr/local/bin/Rscript
 
 library(val);
+library(readr);
 
 args <- commandArgs(trailingOnly=TRUE);
 
