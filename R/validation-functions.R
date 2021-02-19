@@ -27,7 +27,7 @@ column_is_iso8601_duration <- function(column){
                                   ifelse(ok,
                                          sprintf("Column (or column subset) %s contains ISO 8601 durations.", column),
                                          s("Some values of column (or column subset) %s are not valid ISO 8601 Durations. The proper format is PnYnMnDTnHnMnS where n is an integer for all entries except the smallest non-zero one and where zero entries may be ellided unless the result would be P. If there are no non-zero hours, minutes or seconds, then these may be removed and if so, the trailing T must also be removed.", column)),
-                                  collapse_commas(indexes)));
+                                  collapse_commas(indexes %>% sort() %>% head(10))));
     }
 }
 
@@ -44,7 +44,7 @@ column_is_iso8601_date <- function(column){
     }
     function(state){
         whichcc <- function(a){
-            which(a) %>% collapse_commas();
+          state$data[["index__"]][which(a)] %>% sort() %>% head(10) %>% collapse_commas();
         }
         col <- state$data[[column]];
         col_unparsed <- state$data[[unparsed_column_name(column)]];
@@ -91,7 +91,7 @@ column_is_iso8601_date <- function(column){
                                 check_report(s("Column %s is ISO8601 date compliant.", column),
                                              F,
                                              s("Some dates, while syntactically valid, encode invalid calendar dates in %s", column),
-                                             which(!day_ok))));
+                                             whichcc(!day_ok))));
         }
         extend_state(state,
                      "ok",
@@ -180,7 +180,7 @@ column_is_specified_decimal <- function(column, spec){
                                   ifelse(all_ok,
                                          "All values in spec.",
                                          "Some rows are out of spec."),
-                                  collapse_commas(bad_indices)));
+                                  collapse_commas(bad_indices %>% sort() %>% head(10))));
     }
 }
 
@@ -229,7 +229,7 @@ column_is_complete <- function(column){
                                          sprintf("Column %s has missing elements.", column)),
                                   ifelse(check,
                                          NA,
-                                         collapse_commas(which(nas)))));
+                                         collapse_commas(state$data[["index__"]][which(nas)] %>% sort() %>% head(10)))));
     }
 }
 
@@ -298,7 +298,7 @@ column_is_integer <- function(column){
                          check_report("Column contains only integers",
                                       F,
                                       s("The column %s should only contain integers but it has non-integer values.", column),
-                                      collapse_commas(falses)));
+                                      collapse_commas(state$data[["index__"]][falses] %>% sort() %>% head(10))));
         } else {
             extend_state(state,
                          "ok",
@@ -331,7 +331,7 @@ column_in_integer_range <- function(column, values=c()){
                                          "Out of range values are present."),
                                   ifelse(ok,
                                          NA,
-                                         collapse_commas(which(!check)))));
+                                         collapse_commas(state$data[["index__"]][which(!check)] %>% sort() %>% head(10)))));
     }    
 }
 
@@ -440,7 +440,7 @@ column_in_codelist<-function(column, codelist=column_to_codelist(column), codeli
                          check_report(check_name,
                                       F,
                                       msg,
-                                      NA))
+                                      collapse_commas(state$data[["index__"]][which(!check)] %>% sort() %>% head(10))));
         }
     }
 }
@@ -609,7 +609,7 @@ all_subsets_validated <- function(validation_table, checked_column){
                                   ifelse(check,
                                          "Check passed.",
                                          sprintf(error_message, checked_column, paste(key_names, collapse = ", "))),
-                                  collapse_commas(absent_validation_function_indices)));        
+                                  collapse_commas(absent_validation_function_indices %>% sort() %>% head(10))));        
     }
 }
 
