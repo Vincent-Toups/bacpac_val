@@ -17,6 +17,36 @@ Dockerfile.
     > r ## run r
     > rss ## run an r studio server on port 8787
     
+Building the Package
+--------------------
+
+    > source docker-aliases.sh
+    > build_package
+    
+Command Line Interface
+----------------------
+
+There is a dockerified command line interface. To build the CLI you
+first need to build the package itself as above and then:
+
+    > docker build . -f Dockerfile.cli -t valci
+    
+You can invoke this at the command line like this:
+
+    > ./scripts/val.sh INPUT-FILENAME OUTPUT-FILENAME
+    
+You can copy the val script ot your path or add the appropriate
+directory, eg:
+
+    > sudo cp ./scripts/val.sh /usr/local/bin/val
+    
+And then access the validation script from anywhere. Alternatively,
+you can install the package locally and put the script `scripts/cli.R`
+somewhere on your path.
+
+    > R -e "devtools::install_local('val_0.0.0.9000.tar.gz')"
+    > sudo cp ./scripts/cli.R /usr/local/bin/val 
+
 Running Tests
 -------------
 
