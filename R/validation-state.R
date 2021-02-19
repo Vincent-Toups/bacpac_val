@@ -21,13 +21,13 @@ fresh_state <- function(data, status="ok", messages=NULL, warnings=NULL){
 #' @param check_name - the name of the check performed
 #' @param pass - whether it passed
 #' @param message - a longer status description
-#' @param error_rows - row indices where the test fails
+#' @param row_numbers - row indices where the test fails
 #' @return a single row tibble
 #' @export
 #' @examples
 #' check_report("all columns present",T,"All columns are present.")
-check_report <- function(check_name, pass, message, ...){
-    tibble::tibble(check_name=check_name, pass=pass, message=sprintf(message,...));
+check_report <- function(check_name, pass, message, row_numbers){
+    tibble::tibble(check_name=check_name, pass=pass, message=message, row_numbers=row_numbers);
 }
 
 #' Create a new validation state with values from a previous
