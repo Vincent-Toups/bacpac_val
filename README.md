@@ -23,6 +23,16 @@ Building the Package
     > source docker-aliases.sh
     > build_package
     
+Shiny Interface (Bare Bones)
+----------------------------
+
+A shiny interface to the validator can be started by running:
+
+    > ./scripts/val-shiny.sh <port-number>
+    
+This script builds an appropriate docker container in the background,
+so you will need to run `build_package` first.
+    
 Command Line Interface
 ----------------------
 
