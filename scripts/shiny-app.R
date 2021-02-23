@@ -1,4 +1,5 @@
 library(shiny);
+library(shinyjs);
 library(val);
 library(readr);
 
@@ -19,7 +20,8 @@ ui <- fluidPage(
     mainPanel(
 
       # Output: Histogram ----
-      tableOutput("contents")
+        disabled(downloadButton("download","Download Results")),
+        tableOutput("contents")
 
     )
   )
@@ -28,11 +30,30 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram ----
 server <- function(input, output) {
 
+    observe({
+        if(!(length(input$dataset) == 0)){
+            enable("download");
+        } else {
+            disable("download");
+        }
+    });
+
     output$contents <- renderTable({
         req(input$dataset);
         df <- val_read_csv(input$dataset$datapath);
         validate_generic(df)$messages;
     });
+
+    output$download <- downloadHandler(
+        filename="results.csv",
+        contentType="text/csv",
+        content=function(file){
+            req(input$dataset);
+            df <- val_read_csv(input$dataset$datapath);
+            out <- validate_generic(df)$messages;
+            write_csv(out, file);
+        }
+    );
 }
 
 args <- commandArgs(trailingOnly=TRUE);

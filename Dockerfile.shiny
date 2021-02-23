@@ -2,5 +2,6 @@ FROM val-dev
 COPY val_0.0.0.9000.tar.gz /
 RUN R -e "devtools::install_local('/val_0.0.0.9000.tar.gz');"
 RUN R -e "install.packages('shiny')"
+RUN R -e "install.packages('shinyjs')"
 COPY scripts/shiny-app.R /
 CMD Rscript /shiny-app.R $PORT
