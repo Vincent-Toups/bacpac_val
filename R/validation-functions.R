@@ -36,6 +36,7 @@ column_is_iso8601_duration <- function(column){
 #'
 #' @param column - the column to check
 #' @return the state function which performs the check
+#' @export 
 column_is_iso8601_date <- function(column){
     s <- sprintf;
     p <- paste;

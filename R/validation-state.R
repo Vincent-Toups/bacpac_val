@@ -167,6 +167,7 @@ validation_chain_builder <- function(short_circut_test){
 #' @return a new validation function which performs the checks in ... until one fails or halts.
 #' @examples
 #' bailout_validation_chain(c1,c2,c3) - c # if c2 fails c3 is never evaluated.
+#' @export
 bailout_validation_chain <- validation_chain_builder(short_circut_test=
                                                          function(state) {
                                                              identical(state$status,"halted") || identical(validation_last_check(state), F);
