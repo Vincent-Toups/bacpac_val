@@ -181,7 +181,9 @@ column_is_specified_decimal <- function(column, spec){
                                   ifelse(all_ok,
                                          "All values in spec.",
                                          "Some rows are out of spec."),
-                                  collapse_commas(bad_indices %>% sort() %>% head(10))));
+                                  ifelse(all_ok,
+                                         NA,
+                                         collapse_commas(bad_indices %>% sort() %>% head(10)))));
     }
 }
 
