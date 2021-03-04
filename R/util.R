@@ -89,10 +89,8 @@ column_to_codelist_order <- function(code){
     }
 }
 
-
-
 collapse_commas <- function(s){
-    paste(s,collapse=",");
+    paste(s,collapse=", ");
 }
 
 downcase_names <- function(o){
