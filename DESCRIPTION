@@ -32,7 +32,9 @@ Imports:
     stringr,
     magrittr,
     dplyr,
-    Rcpp
+    Rcpp,
+    rjson,
+    rlang
 Depends: 
     R (>= 2.10)
 Suggests: 
