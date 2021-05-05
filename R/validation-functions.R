@@ -400,8 +400,10 @@ column_covers_codelist <- function(column, codelist=column_to_codelist(column), 
 #' @param column - the column to check
 #' @param codelist - the codelist to check against (defaults to the codelist implied by the column)
 #' @return a state function to perform the check
-column_in_codelist<-function(column, codelist=column_to_codelist(column), codelist_name=FALSE){
-    function(state){
+column_in_codelist<-function(column, codelist=FALSE, codelist_name=FALSE, specification=bt_specification){
+    codelist <- ifelse(codelist, codelist,
+                       column_to_codelist(column,specification=specification));
+    function(state){        
         the_col <- state$data[[column]];
         the_col <- the_col[!is.na(the_col)]
         check <- the_col %in% codelist
@@ -788,10 +790,10 @@ check_simple_dependent_column <- function(key_column,
 #'    `[[`("term");
 #' Fetches the codelist terms for the QSSTRESC column for value = 'EDANX01' in QSTESTCD.
 #' 
-key_column_to_codelists <- function(key_column){
-    expand_where_clauses(bt_specification$WhereClauses) %>%
+key_column_to_codelists <- function(key_column, specification=bt_specification){
+    expand_where_clauses(specification$WhereClauses) %>%
         dplyr::filter(Variable==key_column) %>%
-        dplyr::left_join(bt_specification$ValueLevel, by=(c("ID"="Where Clause")), suffix=c("_wc","_vl")) %>%
+        dplyr::left_join(specification$ValueLevel, by=(c("ID"="Where Clause")), suffix=c("_wc","_vl")) %>%
         transmute(dataset=Dataset_wc,
                   key_column=Variable_wc,
                   value=Value,
@@ -799,7 +801,7 @@ key_column_to_codelists <- function(key_column){
                   value_column=Variable_vl,
                   text_format=Format,
                   codelist=Codelist) %>%
-        dplyr::left_join(bt_specification$Codelists, by=c("codelist"="ID")) %>%
+        dplyr::left_join(specification$Codelists, by=c("codelist"="ID")) %>%
         transmute(dataset=dataset,
                   key_column=key_column,
                   value=value,
