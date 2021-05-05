@@ -57,8 +57,8 @@ val_read_csv <- function(filename){
 #'
 #' @param column - the column ID to get the codelist for.
 #' @return a character array of code list values.
-column_to_codelist <- function(column){
-    sf <- bt_specification$Codelists %>% dplyr::filter(ID==column) %>% dplyr::arrange(Order);
+column_to_codelist <- function(column, specification=bt_specification){
+    sf <- specification$Codelists %>% dplyr::filter(ID==column) %>% dplyr::arrange(Order);
     lst <- sf$Term;
     if(identical(length(lst),0)){
         stop(sprintf("Tried to get the codelist for %s but it was empty.", column))
