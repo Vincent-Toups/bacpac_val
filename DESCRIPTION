@@ -20,6 +20,7 @@ Collate:
     'validate-sc.R'
     'validate-dm.R'
     'validate-qsmd.R'
+    'validate-ex.R'
     'validate-generic.R'
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license

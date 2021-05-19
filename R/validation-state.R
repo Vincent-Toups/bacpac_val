@@ -26,7 +26,7 @@ fresh_state <- function(data, status="ok", messages=NULL, warnings=NULL){
 #' @export
 #' @examples
 #' check_report("all columns present",T,"All columns are present.")
-check_report <- function(check_name, pass, message, row_numbers){
+check_report <- function(check_name, pass, message, row_numbers=""){
     tibble::tibble(check_name=check_name, pass=pass, message=message, row_numbers=row_numbers);
 }
 

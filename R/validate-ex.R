@@ -1,4 +1,4 @@
-validate_qsmd <- block({
+validate_ex <- block({
     build_validation_table <- function(key_column, check_column){
         key_column <- key_column;
         check_column <- check_column;
@@ -92,7 +92,7 @@ validate_qsmd <- block({
 
     check_studyid  <- textual_homogeneous("STUDYID");
     check_domain   <- bchain(textual_homogeneous("DOMAIN"),
-                             check_domain_known(domains="DEV"));
+                             check_domain_known(domains="EX"));
     check_usubjid  <- textual_complete("USUBJID");
     check_exseq    <- integer_complete("EXSEQ");
     check_excat    <- codelist_complete("EXCAT");
