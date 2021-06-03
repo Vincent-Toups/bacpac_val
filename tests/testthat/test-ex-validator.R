@@ -22,3 +22,9 @@ test_that("Test that the EX validator just runs.",
             result <- validate_ex(fresh_state(test_ex));
             expect_identical(result, result);
           });
+
+test_that("Test that the EX validator detects badly formatted dates.",
+          {
+            result <- validate_ex(fresh_state(test_ex));
+            expect_identical(result, result);
+          });

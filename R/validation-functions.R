@@ -91,7 +91,7 @@ column_is_iso8601_date <- function(column){
                                 "continuable",
                                 check_report(s("Column %s is ISO8601 date compliant.", column),
                                              F,
-                                             s("Some dates, while syntactically valid, encode invalid calendar dates in %s", column),
+                                             s("Some dates, while syntactically valid, encode invalid calendar dates in %s. This is often caused by dates in MM/DD/YYYY format.", column),
                                              whichcc(!day_ok))));
         }
         extend_state(state,
@@ -401,8 +401,12 @@ column_covers_codelist <- function(column, codelist=column_to_codelist(column), 
 #' @param codelist - the codelist to check against (defaults to the codelist implied by the column)
 #' @return a state function to perform the check
 column_in_codelist<-function(column, codelist=FALSE, codelist_name=FALSE, specification=bt_specification){
-    codelist <- ifelse(codelist, codelist,
-                       column_to_codelist(column,specification=specification));
+    ## print(column)
+    ## print(codelist)
+    if(identical(codelist,FALSE)){
+        codelist <- column_to_codelist(column,specification=specification);
+    }
+    ## print(codelist)
     function(state){        
         the_col <- state$data[[column]];
         the_col <- the_col[!is.na(the_col)]
@@ -426,7 +430,7 @@ column_in_codelist<-function(column, codelist=FALSE, codelist_name=FALSE, specif
                                       extended_message,
                                       NA));
         } else{
-            #print(codelist_name);
+            ##print(codelist);
             msg <- if(!identical(codelist_name,FALSE)){
                        sprintf("The column %s has values that are not in the codelist named %s. These values were not in the codelist: (%s). The codelist: (%s)", 
                                column,

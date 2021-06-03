@@ -97,7 +97,7 @@ validate_ex <- block({
     check_exseq    <- integer_complete("EXSEQ");
     check_excat    <- codelist_complete("EXCAT");
     check_extrt    <- codelist_complete("EXTRT");
-    check_extrtoth <- textual_complete("EXTRTOTH");
+    check_extrtoth <- textual_optional("EXTRTOTH");
     check_exacn    <- codelist_optional("EXACN");
     check_exadj    <- codelist_optional("EXADJ");
     

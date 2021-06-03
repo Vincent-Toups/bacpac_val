@@ -187,7 +187,7 @@ specification$scstresn_codelists <- where %>%
     select(id, codelist, type)
 
 
-set_names <- c("DM","QSMD","SC","EX");
+set_names <- c("DM","QSMD","SC","EX_bad_dates","EX");
 
 test_data <- list()
 
