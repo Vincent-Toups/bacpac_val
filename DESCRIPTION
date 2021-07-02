@@ -9,7 +9,6 @@ Authors@R:
 Description: Given a specification of a set of valid data sets, build (and then execute) a validator on tabular data.
 Collate:
     'utils-pipe.R'
-    'spec-json.R'
     'prep-spec.R'
     'val-package.R'
     'RcppExports.R'
