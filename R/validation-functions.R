@@ -750,22 +750,29 @@ validate_on_subsets <- function(validation_table, check_name=""){
 #'     to the resulting sub data frames before merging the results.
 check_simple_dependent_column <- function(key_column,
                                           check_column,
-                                          check_name=sprintf("Check that %s is consistent with %s.", check_column, key_column)){
+                                          check_name=sprintf("Check that %s is consistent with %s.", check_column, key_column),
+                                          specification=bt_specification){
     key_column <- key_column;
     check_column <- check_column;
-    rows <- key_column_to_codelists(key_column) %>%
+    rows <- key_column_to_codelists(key_column, specification=bt_specification) %>%
         dplyr::filter(value_column == check_column) %>%
         dplyr::select(value, codelist, data_type, text_format) %>% 
         dplyr::distinct();
+    
     validation_table <- do.call(rbind, Map(function(i){
         l <- list();
         l[[key_column]] <- rows$value[[i]];
         codelist <- rows$codelist[[i]];
-        codelist_vals <- get_codelist(codelist);
+        codelist_vals <- get_codelist(codelist, specification=specification);
         text_format <- rows$text_format[[i]];
-        l$validation_function__ <- list(ifelse(!is.na(codelist),
-                                               column_in_codelist(check_column, codelist_vals, codelist),
-                                               text_column_matches_format(check_column,text_format)))
+        vf <- if(is.na(text_format)){
+                  #print("Generated codelist checker");
+                  column_in_codelist(check_column, codelist_vals, codelist)
+              } else {
+                  #print("Generated text_column_matches_format call");
+                  text_column_matches_format(check_column,text_format)
+              }
+        l$validation_function__ <- list(vf);
         as_tibble(l);        
     }, seq(nrow(rows))));
     validate_on_subsets(validation_table, check_name);
