@@ -2,6 +2,7 @@ library(shiny);
 library(shinyjs);
 library(val);
 library(readr);
+library(dplyr);
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
@@ -19,7 +20,10 @@ ui <- fluidPage(
                          ".csv")),
     mainPanel(
 
-      # Output: Histogram ----
+                                        # Output: Histogram ----
+        checkboxGroupInput("checkOptions",
+                           "",
+                           c("Only Failed Validations?"="tidy")),
         disabled(downloadButton("download","Download Results")),
         tableOutput("contents")
 
@@ -41,7 +45,17 @@ server <- function(input, output) {
     output$contents <- renderTable({
         req(input$dataset);
         df <- val_read_csv(input$dataset$datapath);
-        validate_generic(df)$messages;
+        out <- validate_generic(df)$messages;
+        print(names(out))
+        print(input$checkOptions)
+        out <- if("tidy" %in% input$checkOptions){
+                   print("Filtering.")
+                   out %>% filter(pass==FALSE)
+               } else {
+                   print(sprintf("No filter %d rows.", nrow(out)));
+                   out
+               }
+        out %>% head(100)
     });
 
     output$download <- downloadHandler(
@@ -51,6 +65,15 @@ server <- function(input, output) {
             req(input$dataset);
             df <- val_read_csv(input$dataset$datapath);
             out <- validate_generic(df)$messages;
+            print(names(out))
+            print(input$checkOptions)
+            out <- if("tidy" %in% input$checkOptions){
+                       print("Filtering")
+                       out %>% filter(pass==FALSE)
+                   } else {
+                       print(sprintf("No filter %d rows.", nrow(out)));
+                       out
+                   }
             write_csv(out, file);
         }
     );
