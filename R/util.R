@@ -208,3 +208,32 @@ expand_where_clauses <- function(where_clauses){
             },
             split(where_clauses, where_clauses$ID)) %>% unname())
 }
+
+deep_index <- function(o,...){
+    indexers <- list(...);
+    output <- o;
+    for(ii in indexers){
+        output <- output[[ii]];
+    }
+    output
+}
+
+to_readable_string <- function(data){
+    thing <- data;
+    o <- capture.output(print(body(eval(substitute(function(){x},list(x=thing))))))
+    o <- o[2:(length(o)-1)];
+    stringr::str_trim(paste(o,collapse=" "));
+}
+
+create_data_source_file <- function(filename, lst){
+    file.remove(filename);
+    cat("# created automatically, don't edit",file=filename,sep="\n");
+    for(n in names(lst)){
+        cat(sprintf("%s <- %s;", n, to_readable_string(lst[[n]])), file=filename, sep="\n",append=TRUE);
+        if(tibble::is_tibble(lst[[n]])){
+            cat(sprintf("%s <- tibble::as_tibble(%s);", n, n), file=filename, sep="\n",append=TRUE);
+        }
+        cat("", file=filename, sep="\n",append=TRUE);
+    }
+    filename
+}
