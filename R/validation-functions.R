@@ -78,7 +78,7 @@ column_is_iso8601_date <- function(column){
                                 check_report(s("Column %s is ISO8601 date compliant.", column),
                                              F,
                                              s("There were these issues in %s: Dates must be encoded per ISO8601 (YYYY-MM-DD or YYYYMMDD)", column),
-                                             message)));
+                                             whichcc(!year_len_checks | !month_len_checks | !day_len_checks))));
         }
         year <- as.numeric(year_str);
         month <- as.numeric(month_str);
