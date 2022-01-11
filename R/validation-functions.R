@@ -173,6 +173,7 @@ column_is_specified_decimal <- function(column, spec){
         b <- Map(function(x){ifelse(length(x)>1,x[[2]],0)}, colinfo);
         check <- a <= la && b <= lb && valid_piece_lengths;
         bad_indices <- state$data[["index__"]][which(check == FALSE)];
+        check <- check[complete.cases(check)];
         all_ok <- sum(check) == length(check);
         extend_state(state,
                      ifelse(all_ok, "ok", "continuable"),

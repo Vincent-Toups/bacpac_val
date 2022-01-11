@@ -39,7 +39,7 @@ Command Line Interface
 There is a dockerified command line interface. To build the CLI you
 first need to build the package itself as above and then:
 
-    > docker build . -f Dockerfile.cli -t valci
+    > docker build . -f Dockerfile.cli -t valcli
     
 You can invoke this at the command line like this:
 
