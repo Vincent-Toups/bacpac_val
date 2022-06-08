@@ -5,7 +5,9 @@ ARG linux_user_pwd
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN echo "rstudio:$linux_user_pwd" | chpasswd
 RUN adduser rstudio sudo
-RUN apt update && apt install -y emacs
+RUN apt update && apt install -y software-properties-common
+RUN add-apt-repository ppa:kelleyk/emacs
+RUN DEBIAN_FRONTEND=noninteractive apt update && DEBIAN_FRONTEND=noninteractive apt install -y emacs28
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y xfce4-terminal
 RUN R -e "install.packages('readODS')"
 RUN apt update && apt-get -y install build-essential wget

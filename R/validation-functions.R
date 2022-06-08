@@ -294,7 +294,8 @@ column_is_integer <- function(column){
     s <- sprintf;
     function(state){
         the_col <- state$data[[column]];
-        test_vec <- the_col %% 1 == 0
+        asints <- as.integer(the_col);       
+        test_vec <- asints == the_col;
         falses <- which(test_vec==FALSE)
         if(FALSE %in% test_vec){
             extend_state(state,

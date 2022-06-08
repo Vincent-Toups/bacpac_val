@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source aliases.sh
+source docker-aliases.sh
 bu
 
 build_package
