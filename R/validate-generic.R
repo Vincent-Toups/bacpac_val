@@ -11,12 +11,16 @@ validation_function_dispatch_table <-
 #'     $warnings. If $messages is empty then the set passes.
 #' @export
 validate_generic <- function(dataset){
-    if(!("DOMAIN" %in% names(dataset))){
-        stop("Can't validate a data set which does not have a DOMAIN column.")
+    if(mode(dataset) == "character") {
+        validate_generic(val_read_data(dataset));
+    } else {
+        if(!("DOMAIN" %in% names(dataset))){
+            stop("Can't validate a data set which does not have a DOMAIN column.")
+        }
+        domain <- dataset$DOMAIN[[1]];
+        if(!(domain %in% names(validation_function_dispatch_table))){
+            stop(sprintf("Can't validate a data set from DOMAIN: %s", domain));
+        }
+        validation_function_dispatch_table[[domain]](fresh_state(dataset));
     }
-    domain <- dataset$DOMAIN[[1]];
-    if(!(domain %in% names(validation_function_dispatch_table))){
-        stop(sprintf("Can't validate a data set from DOMAIN: %s", domain));
-    }
-    validation_function_dispatch_table[[domain]](fresh_state(dataset));
 }
