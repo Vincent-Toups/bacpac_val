@@ -46,11 +46,52 @@ unparsed_column_name <- function(name){
 #' @param filename - file to load
 #' @return a data frame with twice the columns indicated in the file, half of which are unparsed duplicates.
 #' @export
-val_read_csv <- function(filename){
-    parsed <- readr::read_csv(filename);
+val_read_csv <- function(filename,col_types=NULL){
+    parsed <- if(is.null(col_types)) { 
+                  readr::read_csv(filename, guess_max=100000);
+              } else {
+                  readr::read_csv(filename, col_types=col_types);
+              }
     unparsed <- readr::read_csv(filename, col_types = readr::cols(.default = "c"))
     names(unparsed) <- unparsed_column_name(names(unparsed));
     cbind(parsed, unparsed) %>% dplyr::mutate(index__=seq(nrow(parsed)));
+}
+
+#' Load a data frame from an xpt but keep both a parsed and unparsed
+#' version of each column (unparsed columns are preceeded in their
+#' name by "unparsed__")
+#'
+#' For xpt files this entails reading them in and then writing them out again to CSV
+#' with the correct spec and then reading back in with val_read_csv.
+#'
+#' @param filename - file to load
+#' @return a data frame with twice the columns indicated in the file, half of which are unparsed duplicates.
+#' @export
+val_read_xpt <- function(filename){
+    data <- haven::read_xpt(filename) %>% as_tibble();
+    spec <- spec(data);
+    tmpfn <- tempfile();
+    readr::write_csv(data, tmpfn);
+    out <- val_read_csv(tmpfn, col_types=spec);
+    file.remove(tmpfn);
+    out
+}
+
+#' val_read_data: load either a csv or xpt file and save unparsed rows
+#' 
+#' @param filename - file to load (either csv or xpt extension)
+#' @return a data frame with both parsed and unparsed columns
+#' @export
+val_read_data <- function(filename){
+    strReverse <- function(x) sapply(lapply(strsplit(x, NULL), rev), paste, collapse="");
+    ext <- strReverse(filename) %>% stringr::str_sub(1,4) %>% strReverse();
+    out <- switch(ext,
+           ".csv"=val_read_csv(filename),
+           ".xpt"=val_read_xpt(filename));
+    if(is.null(out)){
+        stop(sprintf("Unrecognized file extension-like part of input file %s, %s. We support only xpt and csv files.", filename, ext));
+    }
+    out
 }
 
 #' Returns the codelist (from the specification) for a given column id.

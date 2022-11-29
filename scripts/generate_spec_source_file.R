@@ -25,10 +25,12 @@ Documents","
 
 specification <- load_a_spec("source_data/STDSPECS_MinimumDataset.ods");
 specification_ex <- load_a_spec("source_data/STDSPECS_EX.ods");
+specification_ft <- load_a_spec("source_data/STDSPECS_FT.ods");
 
 create_data_source_file("R/prep-spec.R", list("bt_specification"=specification,
-                                              "bt_specification_ex"=specification_ex));
-for(v in c("bt_specification","bt_specification_ex")){
+                                              "bt_specification_ex"=specification_ex,
+                                              "bt_specification_ft"=specification_ft));
+for(v in c("bt_specification","bt_specification_ex","bt_specification_ft")){
     cat(sprintf("for(n in names(%s)){
        %s[[n]] = tibble::as_tibble(%s[[n]])
 }", v, v, v), file="R/prep-spec.R", append=TRUE, sep="\n");
