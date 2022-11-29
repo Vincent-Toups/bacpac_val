@@ -408,6 +408,9 @@ column_in_codelist<-function(column, codelist=FALSE, codelist_name=FALSE, specif
     if(identical(codelist,FALSE)){
         codelist <- column_to_codelist(column,specification=specification);
     }
+    codelist <- stringr::str_replace_all(codelist,"[’‘]","'");
+    #codelist <- stringr::str_replace_all(codelist,'[“‟”❝❞]',"\"");
+    
     ## print(codelist)
     function(state){        
         the_col <- state$data[[column]];
@@ -531,13 +534,21 @@ check_domain_known <- function(domains=c("QS","DM","SC")){
     }
 }
 
-mandatory_codelist_column <- function(col){
+mandatory_codelist_column <- function(col,specification=bt_specification){
         bailout_validation_chain(
             column_exists(col),
             column_is_textual(col),
             column_is_complete(col),
-            column_in_codelist(col));
+            column_in_codelist(col,specification=specification));
 }
+
+mandatory_codelist_column <- function(col,specification=bt_specification){
+        bailout_validation_chain(
+            column_exists(col),
+            column_is_textual(col),
+            column_in_codelist(col,specification=specification));
+}
+
 
 #' build_subset_key_info given a validation_table return a useful
 #' breakdown of information therein.
@@ -692,12 +703,14 @@ validate_on_subsets <- function(validation_table, check_name=""){
     keys <- info$keys;
     key_names <- info$key_names;
     key_summaries <- info$key_summaries;
+    print("in validate_on_subsets outer");
+    print(key_names);
     
     function(state){
         ## join the validation table to the data table so we can easily
         ## access each validation function from the split we are about
         ## to perform
-
+        print(key_names);
         key_names <- key_names;
         validation_table <- validation_table;
         keys <- keys;
@@ -756,7 +769,7 @@ check_simple_dependent_column <- function(key_column,
                                           specification=bt_specification){
     key_column <- key_column;
     check_column <- check_column;
-    rows <- key_column_to_codelists(key_column, specification=bt_specification) %>%
+    rows <- key_column_to_codelists(key_column, specification=specification) %>%
         dplyr::filter(value_column == check_column) %>%
         dplyr::select(value, codelist, data_type, text_format) %>% 
         dplyr::distinct();
@@ -767,7 +780,17 @@ check_simple_dependent_column <- function(key_column,
         codelist <- rows$codelist[[i]];
         codelist_vals <- get_codelist(codelist, specification=specification);
         text_format <- rows$text_format[[i]];
-        vf <- if(is.na(text_format)){
+        vf <- if (is.na(text_format) && is.na(codelist)) {
+                  function(state) {
+                      extend_state(state,
+                                   "ok",
+                                   check_report(sprintf("Null check of column %s for key %s in column %s.", check_column, rows$value[[i]], key_column),
+                                                T,
+                                               "No check indicated by specification.",
+                                               NA),
+                                   warnings=sprintf("Null check of column %s for key %s in column %s. This may indicate that a format specification like integer or float is missing in the spec.", check_column, rows$value[[i]], key_column));
+                  };
+              } else if(is.na(text_format)){
                   #print("Generated codelist checker");
                   column_in_codelist(check_column, codelist_vals, codelist)
               } else {

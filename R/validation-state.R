@@ -190,6 +190,8 @@ validation_chain <- validation_chain_builder(short_circut_test=
 #' @param prefix - the message to prefix the strings with
 #' @return a new validation state
 prefix_messages <- function(validation_state, prefix){
-    validation_state$messages <- validation_state$messages %>% dplyr::mutate(message=paste(prefix,message,sep=" "));
+    if(!is.null(validation_state$messages)){        
+        validation_state$messages <- validation_state$messages %>% dplyr::mutate(message=if (is.null(message)) {prefix} else {paste(prefix,message,sep=" ")});
+    }
     validation_state    
 }

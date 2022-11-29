@@ -1,6 +1,6 @@
 Package: val
 Title: Validator for the BACPAC Minimum Data Set
-Version: 0.0.0.9000
+Version: 0.0.1.0000
 Authors@R: 
     person(given = "Vincent",
            family = "Toups",
@@ -20,6 +20,7 @@ Collate:
     'validate-dm.R'
     'validate-qsmd.R'
     'validate-ex.R'
+    'validate-ft.R'
     'validate-generic.R'
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
@@ -34,7 +35,8 @@ Imports:
     dplyr,
     Rcpp,
     rjson,
-    rlang
+    rlang,
+    haven
 Depends: 
     R (>= 2.10)
 Suggests: 

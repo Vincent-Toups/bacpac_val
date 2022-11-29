@@ -2,7 +2,8 @@ validation_function_dispatch_table <-
     list("DM"=validate_dm,
          "SC"=validate_sc,
          "QS"=validate_qsmd,
-         "EX"=validate_ex);
+         "EX"=validate_ex,
+         "FT"=validate_ft);
 
 #' validate a dataset from the set of known set types
 #' @param - dataset - a dataset (data frame) with a DOMAIN column
